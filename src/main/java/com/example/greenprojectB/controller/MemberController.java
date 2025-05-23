@@ -97,12 +97,7 @@ public class MemberController {
     log.info("====================>> 회원 등급 : " + strLevel + " , sName : " + member.getName());
     session.setAttribute("strLevel", strLevel);
 
-    return "redirect:/member/memberMain";
-  }
-
-  @GetMapping("/memberMain")
-  public String memberMainGet() {
-    return "member/memberMain";
+    return "redirect:/testHome";
   }
 
   @GetMapping("/memberLogout")

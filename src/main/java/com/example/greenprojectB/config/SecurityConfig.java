@@ -29,6 +29,7 @@ public class SecurityConfig {
             .requestMatchers("/images/**").permitAll()
             .requestMatchers("/member/accessPhoneNum").permitAll()
             .requestMatchers("/").permitAll()
+            .requestMatchers("/member/memberJoin").permitAll()
             .requestMatchers("/data/**").authenticated()
             .requestMatchers("/admin/**").hasRole("ADMIN")
             .anyRequest().authenticated());

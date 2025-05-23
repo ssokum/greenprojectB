@@ -4,14 +4,6 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/exampleLayout}">
 
-<th:block layout:fragment="css">
-  <style>
-    .fieldError {
-        color: #bd2130;
-    }
-  </style>
-</th:block>
-
 <th:block layout:fragment="script">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
@@ -177,7 +169,7 @@
       <button type="button" th:onclick="|location.href='@{/member/memberLogin}'|" class="btn btn-warning">돌아가기</button>
       <button type="button" onclick="document.getElementById('telAuthentication').style.display='block'" class="btn btn-success">전화인증</button>
     </div>
-    <th:block th:if="${ != authentication'ok'}"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf?.token}" /></th:block>
+    <th:block th:if="${authentication != 'ok'}"><input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf?.token}" /></th:block>
   </form>
 
   <!-- 아래로 핸드폰 인증 부분 -->

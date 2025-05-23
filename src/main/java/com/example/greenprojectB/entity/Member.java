@@ -8,7 +8,7 @@ import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
-@Table(name = "member2")
+@Table(name = "member")
 @Getter
 @Setter
 @ToString
