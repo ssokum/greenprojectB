@@ -25,7 +25,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/greenprojectB
     username: root
-    password: 0519
+    password: 1234
 
   # JPA Setting
   jpa:
