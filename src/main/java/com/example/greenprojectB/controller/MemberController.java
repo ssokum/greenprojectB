@@ -127,6 +127,7 @@ public class MemberController {
       memberService.setDeleteMember(email);
 
       rttr.addFlashAttribute("message", name + "님 회원탈퇴 되었습니다.");
+      new SecurityContextLogoutHandler().logout(request, response, authentication);
       //session.invalidate();
     }
 
