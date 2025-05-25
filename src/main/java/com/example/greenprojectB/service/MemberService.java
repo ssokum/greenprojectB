@@ -56,4 +56,11 @@ public class MemberService implements UserDetailsService {
             .build();
   }
 
+  public void setDeleteMember(String email) {
+    Optional<Member> member = memberRepository.findByEmail(email);
+
+    if (member.isPresent()) {
+      memberRepository.delete(member.get());
+    }
+  }
 }

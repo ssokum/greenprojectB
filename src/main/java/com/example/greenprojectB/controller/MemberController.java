@@ -116,4 +116,21 @@ public class MemberController {
     return "redirect:/member/memberLogin";
   }
 
+  @GetMapping("/memberResign")
+  public String memberResignGet(HttpServletRequest request, HttpServletResponse response,
+                                RedirectAttributes rttr) {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if(authentication != null) {
+      String email = authentication.getName().toString();
+      String name = memberService.getMemberDto(email).getName();
+      memberService.setDeleteMember(email);
+
+      rttr.addFlashAttribute("message", name + "님 회원탈퇴 되었습니다.");
+      //session.invalidate();
+    }
+
+    return "redirect:/testHome";
+  }
+
 }

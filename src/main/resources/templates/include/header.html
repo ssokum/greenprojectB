@@ -2,6 +2,8 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="header">
   <th:block th:insert="~{/include/nav}" />
-  <div><img src="/images/17.jpg" width="100%" height="200px"/></div>
+  <th:block th:insert="~{/include/bs5}" />
+  <div><a th:href="@{/}"><img src="/images/16.jpg" width="100%" height="250px" /></a></div>
 </div>
+
 </html>
