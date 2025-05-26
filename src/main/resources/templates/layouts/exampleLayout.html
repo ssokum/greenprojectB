@@ -3,21 +3,33 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-  <meta charset="UTF-8">
-  <title>layout.html</title>
-  <th:block th:insert="~{/include/bs5.html}"></th:block>
- <!-- <link rel="stylesheet" type="text/css" th:href="@{/css/example.css}">-->
+    <meta charset="UTF-8">
+    <title>layout.html</title>
+    <th:block th:insert="~{/include/bs5.html}"></th:block>
 
-  <!-- js파일, css파일을 아래쪽으로 처리하는 영역 -->
-  <th:block layout:fragment="script"></th:block>
-  <th:block layout:fragment="css"></th:block>
+    <!-- 모든페이지에 적용될 공통 css와 js 는 여기에 -->
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <script th:src="@{/js/header.js}"></script>
+
+
+    <!-- 각 페이지별 적용될 css와 js가 이곳에 들어가는거임
+    각 페이지에서 layout:fragment="script or css" 태그를 쓰면 밑의 안에 들어가게되는식임-->
+    <th:block layout:fragment="css"></th:block>
+    <th:block layout:fragment="script"></th:block>
 </head>
 <body>
-  <div th:replace="~{include/header::header}"></div>
-    <p><br/></p>
-      <div layout:fragment="content" class="content">
-      </div>
-    <p><br/></p>
-  <div th:replace="~{include/footer::footer}"></div>
+<div id="container">
+    <div th:replace="~{include/header::header}"></div>
+    <!---->
+    <section>
+        <div layout:fragment="content"></div>
+
+    </section>
+
+    <div class="" style="height:500px; width: 100%;"></div><!-- 테스트여백 -->
+    <!---->
+    <div th:replace="~{include/footer::footer}"></div>
+</div>
 </body>
 </html>

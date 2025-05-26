@@ -8,12 +8,7 @@ public class TestController {
 
   @GetMapping({"/", "/testHome"})
   public String homeGet() {
-    return "testHome";
-  }
-
-  @GetMapping("/admin/adminHome")
-  public String adminMenuGet() {
-    return "admin/adminHome";
+    return "main";
   }
 
   @GetMapping("/error/accessDenied")

@@ -1,9 +1,73 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="header">
-  <th:block th:insert="~{/include/nav}" />
-  <th:block th:insert="~{/include/bs5}" />
-  <div><a th:href="@{/}"><img src="/images/16.jpg" width="100%" height="250px" /></a></div>
-</div>
+
+
+<header id="header" class="open" th:fragment="header">
+    <div class="lang_word">
+        <div class="lang_box">
+            <ul>
+                <li><a href="#">공지사항</a></li>
+                <li><a href="#">제휴문의</a></li>
+                <li><a href="#">도움말</a></li>
+                <li><a href="#">고객센터</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="static">
+        <h1 class="logo"><a href="#">로고</a></h1>
+        <nav id="gnb">
+            <ul>
+                <li class="">
+                    <a href="#" class="nav_title">회사소개</a>
+                    <ul>
+                        <li class=""><a href="#">인사말</a></li>
+                        <li class=""><a href="#">공지사항</a></li>
+                        <li class=""><a href="#">조직도</a></li>
+                        <li class=""><a href="#">찾아오시는 길</a></li>
+                    </ul>
+                </li>
+                <li class="">
+                    <a href="#" class="nav_title">참여기업</a>
+                    <ul>
+                        <li class=""><a href="#">회사1</a></li>
+                        <li class=""><a href="#">회사2</a></li>
+                        <li class=""><a href="#">회사3</a></li>
+                        <li class=""><a href="#">회사4</a></li>
+                    </ul>
+                </li>
+                <li class="">
+                    <a href="#" class="nav_title">인재채용</a>
+                    <ul>
+                        <li class=""><a href="#">link1</a></li>
+                        <li class=""><a href="#">link1</a></li>
+                        <li class=""><a href="#">link1</a></li>
+                        <li class=""><a href="#">link1</a></li>
+                    </ul>
+                </li>
+                <li class="">
+                    <a href="#" class="nav_title">Membership</a>
+                    <ul>
+                        <li class=""><a href="#">등급&혜택</a></li>
+                        <li class=""><a href="#">가입방법안내</a></li>
+                        <li class=""><a href="#">서비스</a></li>
+                        <li class=""><a href="#">FAQ</a></li>
+                    </ul>
+                </li>
+                <li class="">
+                    <a href="#" class="nav_title">Global</a>
+                    <ul>
+                        <li class=""><a href="#">해외매장안내</a></li>
+                        <li class=""><a href="#">해외사업소개</a></li>
+                        <li class=""><a href="/member/memberLogin">유통문의</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div id="asdqwe"></div>
+        </nav>
+    </div>
+
+</header>
+
 
 </html>

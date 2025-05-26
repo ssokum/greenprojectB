@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+
 
 @Controller
 @RequiredArgsConstructor
@@ -30,9 +33,15 @@ public class MemberController {
   private final MemberService memberService;
   private final PasswordEncoder passwordEncoder;
 
+
   @GetMapping("/memberJoin")
   public String memberJoinGet(Model model) {
     model.addAttribute("memberDto", new MemberDto());
+
+    // 코드 추가
+//    CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+//    model.addAttribute("_csrf", csrfToken);
+
     return "member/memberJoin";
   }
 
@@ -54,7 +63,7 @@ public class MemberController {
       return "redirect:/member/memberLogin";
     } catch (IllegalStateException e) {
       System.out.println(e.getMessage());
-      rttr.addFlashAttribute("message", "이미 가입된 회원입니다.(이메일 중복!)");
+      rttr.addFlashAttribute("message", "이미 가입된 회원입니다.(아이디 중복!)");
       return "redirect:/member/memberJoin";
     }
   }
@@ -76,15 +85,15 @@ public class MemberController {
                                  Authentication authentication,
                                  RedirectAttributes rttr) {
     // Spring Security에서 사용자 정보를 가져온다.
-    String email = authentication.getName();
-    System.out.println("================> 로그인post통과(email) : " + email);
-    Member member = memberService.getMemberDto(email);
+    String id = authentication.getName().toString();
+    System.out.println("================> 로그인post통과(id) : " + id);
+    Member member = memberService.getMemberDto(id);
     System.out.println("================> 로그인post통과(dto) : " + member);
-    rttr.addFlashAttribute("message", member.getName() + "님 로그인 되었습니다.");
+    rttr.addFlashAttribute("message", member.getMemberName() + "님 로그인 되었습니다.");
 
     // 세션처리....
     HttpSession session = request.getSession();
-    session.setAttribute("sName", member.getName());
+    session.setAttribute("sName", member.getMemberName());
 
     // 쿠키처리....
 
@@ -94,10 +103,10 @@ public class MemberController {
     else if(strLevel.equals("OPERATOR")) strLevel = "운영자";
     else if(strLevel.equals("USER")) strLevel = "정회원";
 
-    log.info("====================>> 회원 등급 : " + strLevel + " , sName : " + member.getName());
+    log.info("====================>> 회원 등급 : " + strLevel + " , sName : " + member.getMemberName());
     session.setAttribute("strLevel", strLevel);
 
-    return "redirect:/testHome";
+    return "redirect:/";
   }
 
   @GetMapping("/memberLogout")
@@ -105,11 +114,11 @@ public class MemberController {
                                 RedirectAttributes rttr) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     if(authentication != null) {
-      String email = authentication.getName().toString();
-      log.info("=================>> email : " + email);
-      Member member = memberService.getMemberDto(email);
+      String id = authentication.getName().toString();
+      log.info("=================>> email : " + id);
+      Member member = memberService.getMemberDto(id);
       log.info("==============>> member : " + member);
-      rttr.addFlashAttribute("message", member.getName() + "님 로그아웃 되었습니다.");
+      rttr.addFlashAttribute("message", member.getMemberName() + "님 로그아웃 되었습니다.");
       new SecurityContextLogoutHandler().logout(request, response, authentication);
       //session.invalidate();
     }
@@ -122,16 +131,16 @@ public class MemberController {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     if(authentication != null) {
-      String email = authentication.getName().toString();
-      String name = memberService.getMemberDto(email).getName();
-      memberService.setDeleteMember(email);
+      String id = authentication.getName().toString();
+      String name = memberService.getMemberDto(id).getMemberName();
+      memberService.setDeleteMember(id);
 
       rttr.addFlashAttribute("message", name + "님 회원탈퇴 되었습니다.");
       new SecurityContextLogoutHandler().logout(request, response, authentication);
       //session.invalidate();
     }
 
-    return "redirect:/testHome";
+    return "redirect:/";
   }
 
 }
