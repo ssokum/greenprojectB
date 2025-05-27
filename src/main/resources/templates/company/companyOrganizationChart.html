@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/exampleLayout}">
+<head>
+  <link rel="stylesheet" th:href="@{/css/companyOrganizationChart.css}">
+</head>
+
+<div layout:fragment="content" class="container text-center">
+  <h2><b>조직도</b></h2>
+
+  <div class="system">
+    <ul class="noDot">
+      <li><p><b>그린컴퍼니</b></p></li>
+      <ul>
+          <li><p><b>대표이사<em>(CEO)</em></b></p></li>
+        <li><span><b>금융소비자보호협의회</b></span></li>
+        <li><p><b>소비자 보호파트</b></p></li>
+        <ul class="depth3">
+          <li>
+            <strong>소비자제도 기획</strong>
+            <div>
+              소비자 보호 관련 업무기획<br>
+              상품개발 및 판매 시 사전협의 및 모니터링 <br>
+              민원분석을 통한 제도 개선
+            </div>
+          </li>
+          <li>
+            <strong>VOC 및 민원 업무</strong>
+            <div>
+              고객의 소리 접수 및 처리<br>
+              대내외 민원 접수 및 처리 <br>
+              보이스피싱 피해 등 소비자 피해 보상의<br>
+              접수 및 처리
+            </div>
+          </li>
+          <li>
+            <strong>피해 예방 모니터링</strong>
+            <div>
+              보이스피싱 및 해킹에 의한<br>
+              이상금융거래 등 소비자피해 <br>
+              예방을 위한 모니터링 및 조치
+            </div>
+          </li>
+        </ul>
+      </ul>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/exampleLayout}">
+<th:block layout:fragment="script">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+  <script th:inline="javascript">
+    $(document).ready(function(){
+      let message = [[${message}]];
+      if(message != null){
+        alert(message);
+      }
+    });
+  </script>
+</th:block>
+<th:block layout:fragment="css">
+  <style>
+  .table {
+    margin-top:20px;
+    padding:20px;
+  }
+
+  .general tr th {
+    background-color:#4E71FF;
+    font-weight: bold;
+    color: white;
+  }
+
+  </style>
+</th:block>
+
+<div layout:fragment="content" class="container">
+  <h2 class="mb-5 text-center"><b>일반현황 및 연혁</b></h2>
+  <form class="form text-center">
+    <h5 class="text-start"><b>일반현황</b></h5>
+    <p></p>
+    <table class="table table-bordered general shadow-lg p-3 mb-5 bg-body-tertiary">
+      <tr>
+        <th scope="row">회사명</th>
+        <td>주식회사 그린컴퍼니</td>
+        <th scope="row">대표자</th>
+        <td>김말숙</td>
+      </tr>
+      <tr>
+        <th scope="row">사업분야</th>
+        <td>데이터종합관리</td>
+        <th scope="row">직원수</th>
+        <td>1000명</td>
+      </tr>
+      <tr>
+        <th scope="row">주소</th>
+        <td colspan="3">충북 청주시 서원구 사직대로 109 4층</td>
+      </tr>
+      <tr>
+        <th scope="row">전화번호</th>
+        <td>043 - 230 - 7048</td>
+        <th scope="row">회사 설립년도</th>
+        <td>2020년 5월</td>
+      </tr>
+    <p></p>
+    </table>
+  </form>
+
+  <h5 class="text-start"><b>연혁</b></h5>
+  <p></p>
+
+  <div class="row mb-5">
+    <th:block th:each="dto : ${historyByYear}">
+      <hr/>
+      <div class="col"><h3><b th:text="${dto.key} + '년'"></b></h3></div> <!--연도는 한번만 출력-->
+        <ul>
+          <li th:each="h : ${dto.value}">
+            <span th:text="${#temporals.format(h.historyDate, 'MM월')}"></span>
+            <span th:text="${h.content}"></span>
+          </li>
+        </ul>
+    </th:block>
+  </div>
+
+  <p></p>
+  <form role="form" method="post">
+    <div>
+      <div>연도/월</div>
+      <label>
+        <select name="year">
+          <th:block th:each="y : ${years}">
+            <option th:value="${y}" th:text="${y} + '년'" th:selected="${y} == ${thisYear}"></option>
+          </th:block>
+        </select>
+      </label>
+      /
+      <label>
+        <select name="month">
+          <th:block th:each="m : ${months}">
+            <option th:value="${m}" th:text="${m} + '월'" th:selected="${m} == ${thisMonth}"></option>
+          </th:block>
+        </select>
+      </label>
+      <p></p>
+      <div>내용</div>
+      <label>
+        <textarea name="content" id="content" cols="70" rows="7"></textarea>
+      </label>
+      <br/>
+      <th:block><input type="submit" value="작성완료" class="btn btn-success"></th:block>
+      <th:block><input type="reset" value="취소" class="btn btn-warning"></th:block>
+    </div>
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf?.token}" />
+  </form>
+  <p></p>
+  <a th:href="@{/}" class="btn btn-success">홈으로</a>
+
+</div>
+
+</html>

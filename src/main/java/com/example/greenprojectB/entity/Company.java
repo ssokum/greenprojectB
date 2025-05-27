@@ -92,7 +92,7 @@ public class Company {
             .is_deleted(dto.getIs_deleted())
             .created_at(dto.getCreated_at())
             .update_at(dto.getUpdate_at())
-            .role(Role.OPERATOR)
+            .role(Role.ENTERPRISE)
             .build();
   }
 }
