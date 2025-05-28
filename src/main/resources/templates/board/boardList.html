@@ -27,13 +27,20 @@
       <td class="text-start">
         <a th:href="@{/board/boardDetail/{id}(id=${board.boardIdx})}"
            class="text-decoration-none text-dark fw-semibold">
+
+          <!-- 제목 표시 -->
           <span th:text="${board.title}">게시글 제목</span>
-          <!-- 댓글 수 표시 -->
+
+          <!-- 이미지 포함 여부 확인 후 이모지 표시 -->
+          <span th:if="${#strings.contains(board.content, '<img')}" title="이미지 포함"> 🖼️</span>
+
+          <!-- 댓글 수가 있다면 [n] 표시 -->
           <span class="text-danger" th:if="${#lists.size(board.comments) > 0}">
-              [<span th:text="${#lists.size(board.comments)}"></span>]
-            </span>
+      [<span th:text="${#lists.size(board.comments)}"></span>]
+    </span>
         </a>
       </td>
+
       <td th:text="${board.member.memberName}">작성자</td>
       <td th:text="${#temporals.format(board.createdAt, 'MM-dd HH:mm')}">등록일</td>
       <td th:text="${board.viewCount}">0</td>

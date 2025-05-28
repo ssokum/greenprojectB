@@ -4,7 +4,6 @@ import com.example.greenprojectB.dto.CompanyDto;
 import com.example.greenprojectB.dto.HistoryDto;
 import com.example.greenprojectB.entity.Company;
 import com.example.greenprojectB.entity.History;
-import com.example.greenprojectB.repository.CompanyRepository;
 import com.example.greenprojectB.repository.HistoryRepository;
 import com.example.greenprojectB.service.CompanyService;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -33,10 +34,13 @@ public class CompanyController {
 
   private final CompanyService companyService;
   private final HistoryRepository historyRepository;
-  private final CompanyRepository companyRepository;
+  //private final CompanyRepository companyRepository;
   private final PasswordEncoder passwordEncoder;
 
+  // 내용 - 회사소개(이하메뉴) + 참여기업(이하메뉴) + 기업회원가입기능
 
+
+  // 회사소개 -
   // 인사말
   @GetMapping("/companyGreeting")
   public String companyGreetingGet() {
@@ -108,20 +112,35 @@ public class CompanyController {
 
   // 기업 회원가입 처리
   @PostMapping("/companyJoin")
-  public String companyJoinPost(CompanyDto dto, MultipartFile sFile) {
-    String oFileName =sFile.getOriginalFilename();
-    System.out.println("oFileName ; " + oFileName);
-    String filePath = null;
-    if(sFile != null && !sFile.isEmpty()) {
-      filePath = companyService.setFileUpload(sFile);
-    }
-
-    Company company = Company.createCompany(dto, passwordEncoder, filePath);
-    companyRepository.save(company);
+  public String companyJoinPost(CompanyDto dto) {
+    System.out.println("com : " + dto);
+    Company company = Company.createCompany(dto, passwordEncoder);
+    companyService.setCompanyInput(company);
     return "member/memberLogin";
   }
 
+  // 기업 소개 -
+  // 레드라이즈(기업1) 상세보기
+    @GetMapping("/enterprise/enterprise1")
+  public String enterprise1Get() {
+    return "enterprise/enterprise1";
+  }
 
+  // 화이트서버(기업2) 상세보기
+  @GetMapping("/enterprise/enterprise2")
+  //public String companyJoinGet(Model model) {
+  public String enterprise2Get() {
+    //model.addAttribute("companyDto", new CompanyDto());
+    return "enterprise/enterprise2";
+  }
+
+  // 블루와이즈(기업3) 상세보기
+  @GetMapping("/enterprise/enterprise3")
+  //public String enterprise(Model model) {
+  public String enterprise3Get() {
+    //model.addAttribute("companyDto", new CompanyDto());
+    return "enterprise/enterprise3";
+  }
 
 
 

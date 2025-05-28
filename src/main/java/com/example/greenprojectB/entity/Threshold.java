@@ -4,6 +4,7 @@ package com.example.greenprojectB.entity;
 import com.example.greenprojectB.dto.ThresholdDto;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -39,7 +40,7 @@ public class Threshold {
     @Column(name = "max")
     private double max;
 
-    @Column(name = "updated_at", nullable = false)
+    @CreatedDate
     private LocalDateTime updatedAt;
 
     @Column(name = "updated_by", length = 50,nullable = false)

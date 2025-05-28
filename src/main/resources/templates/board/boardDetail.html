@@ -7,11 +7,13 @@
 <head>
   <meta name="_csrf" th:content="${_csrf.token}" />
   <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <th:block layout:fragment="script">
   <script th:inline="javascript">
-    function addComment(boardId) {
+    // 댓글 등록
+    window.addComment = function(boardId) {
       const content = $("#commentContent").val().trim();
       if (!content) {
         alert("댓글 내용을 입력하세요.");
@@ -31,16 +33,22 @@
         },
         success: function(data) {
           if (data.success) {
-            const newComment = `
-              <li class="list-group-item border-0 border-bottom">
+            const commentHtml = `
+              <li class="list-group-item border-0 border-bottom" id="comment-${data.comment.id}">
                 <div class="d-flex justify-content-between mb-1">
                   <strong>${data.comment.memberName}</strong>
                   <small class="text-muted">${data.comment.createdAt}</small>
                 </div>
-                <div class="ms-1">${data.comment.content}</div>
+                <div class="ms-1 comment-content">${data.comment.content}</div>
+                <div class="text-end mt-2">
+                  <button class="btn btn-sm btn-outline-danger me-1"
+                          onclick="deleteComment(${data.comment.id})">삭제</button>
+                  <button class="btn btn-sm btn-outline-secondary"
+                          onclick="editComment(${data.comment.id})">수정</button>
+                </div>
               </li>
             `;
-            $("#commentList").append(newComment);
+            $("#commentList").append(commentHtml);
             $("#commentContent").val("");
           } else {
             alert("댓글 등록 실패");
@@ -51,8 +59,96 @@
           alert("오류가 발생했습니다.");
         }
       });
-    }
+    };
 
+    // 댓글 삭제
+    window.deleteComment = function(commentId) {
+      if (!confirm("정말 삭제하시겠습니까?")) return;
+
+      const csrfToken = $("meta[name='_csrf']").attr("content");
+      const csrfHeader = $("meta[name='_csrf_header']").attr("content");
+
+      $.ajax({
+        url: "/board/comment/delete/" + commentId,
+        method: "POST",
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader(csrfHeader, csrfToken);
+        },
+        success: function(data) {
+          if (data.success) {
+            $("#comment-" + commentId).remove();
+            alert("삭제되었습니다.");
+          } else {
+            alert("삭제 실패");
+          }
+        },
+        error: function() {
+          alert("오류 발생");
+        }
+      });
+    };
+
+    // 댓글 수정모드
+    window.editComment = function(commentId) {
+      const commentItem = $("#comment-" + commentId);
+      const contentDiv = commentItem.find(".comment-content");
+      const originalContent = contentDiv.text().trim();
+
+      // 이미 수정 중이면 return
+      if (commentItem.find("textarea").length > 0) return;
+
+      contentDiv.html(`
+        <textarea class="form-control mb-2" id="editContent-${commentId}">${originalContent}</textarea>
+        <div class="text-end">
+          <button class="btn btn-sm btn-outline-primary me-1" onclick="submitUpdate(${commentId})">저장</button>
+          <button class="btn btn-sm btn-outline-secondary" onclick="cancelEdit(${commentId}, '${originalContent.replace(/'/g, "\\'")}')">취소</button>
+        </div>
+      `);
+    };
+
+    // 댓글 수정 저장
+    window.submitUpdate = function(commentId) {
+      const content = $("#editContent-" + commentId).val().trim();
+      if (!content) {
+        alert("댓글 내용을 입력하세요.");
+        return;
+      }
+
+      if (!confirm("수정하신 내용을 저장하시겠습니까?")) {
+        return;
+      }
+
+      const csrfToken = $("meta[name='_csrf']").attr("content");
+      const csrfHeader = $("meta[name='_csrf_header']").attr("content");
+
+      $.ajax({
+        url: "/board/comment/update/" + commentId,
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({ content: content }),
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader(csrfHeader, csrfToken);
+        },
+        success: function(data) {
+          if (data.success) {
+            const contentDiv = $("#comment-" + commentId).find(".comment-content");
+            contentDiv.text(content);
+            alert("수정되었습니다.");
+          } else {
+            alert("수정 실패");
+          }
+        },
+        error: function() {
+          alert("오류 발생");
+        }
+      });
+    };
+
+    // 댓글 수정 취소
+    window.cancelEdit = function(commentId, originalContent) {
+      const contentDiv = $("#comment-" + commentId).find(".comment-content");
+      contentDiv.text(originalContent);
+    };
   </script>
 </th:block>
 
@@ -61,13 +157,21 @@
   <div class="mb-2 text-muted">
     조회수: <span th:text="${board.viewCount}"></span>
   </div>
-  <div class="border p-3 mb-3" style="white-space: pre-wrap;" th:text="${board.content}">
+  <!--<div class="border p-3 mb-3" style="white-space: pre-wrap;" th:text="${board.content}">-->
+  <div class="border p-3 mb-3" style="white-space: pre-wrap;" th:utext="${board.content}">
     게시글 내용
   </div>
 
-  <!-- 목록 / 삭제 버튼 -->
+  <!-- 목록 / 수정 / 삭제 버튼 -->
   <div class="text-end d-flex justify-content-end gap-2">
     <a th:href="@{/board/boardList}" class="btn btn-secondary">목록</a>
+
+    <!-- 수정 버튼: 작성자 본인만 가능 -->
+    <th:block th:if="${loginId == board.member.memberId}">
+      <a th:href="@{'/board/boardUpdate/' + ${board.boardIdx}}" class="btn btn-warning">수정</a>
+    </th:block>
+
+    <!-- 삭제 버튼: 작성자 또는 관리자 -->
     <th:block th:if="${loginId == board.member.memberId or loginRole == 'ADMIN'}">
       <form th:action="@{'/board/boardDelete/' + ${board.boardIdx}}" method="post"
             onsubmit="return confirm('정말 삭제하시겠습니까?')">
@@ -81,12 +185,25 @@
   <div class="mt-5">
     <h5>댓글</h5>
     <ul class="list-group mb-3" id="commentList">
-      <li class="list-group-item border-0 border-bottom" th:each="comment : ${board.comments}">
+      <li class="list-group-item border-0 border-bottom"
+          th:each="comment : ${board.comments}"
+          th:id="'comment-' + ${comment.commentIdx}">
         <div class="d-flex justify-content-between mb-1">
           <strong th:text="${comment.member.memberName}">작성자</strong>
           <small class="text-muted" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</small>
         </div>
-        <div class="ms-1" th:text="${comment.content}">댓글 내용</div>
+        <div class="ms-1 comment-content" th:text="${comment.content}">댓글 내용</div>
+        <div class="text-end mt-2">
+          <!-- 본인 또는 관리자만 삭제/수정 -->
+          <th:block th:if="${loginId == comment.member.memberId or loginRole == 'ADMIN'}">
+            <button class="btn btn-sm btn-outline-danger me-1"
+                    th:onclick="'deleteComment(' + ${comment.commentIdx} + ')'">삭제</button>
+          </th:block>
+          <th:block th:if="${loginId == comment.member.memberId}">
+            <button class="btn btn-sm btn-outline-secondary"
+                    th:onclick="'editComment(' + ${comment.commentIdx} + ')'">수정</button>
+          </th:block>
+        </div>
       </li>
     </ul>
 

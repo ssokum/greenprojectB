@@ -156,7 +156,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-xl-6">
+                            <div class="col-xl-6" style="width: 1000px;">
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <div class="left">
@@ -164,15 +164,16 @@
                                             <span class="card-title"></span>
                                         </div>
                                         <div class="right">
+                                            [[${summarySensors[0].sensorName}]]
                                             <select class="card-select">
-                                                <option th:each="sVal : ${sensorValue}" th:value="${sVal}" th:text="${sVal}"></option>
+                                                <option th:each="smySensor : ${summarySensors}" th:value="${smySensor.sensorName}" th:text="${smySensor.sensorName}"></option>
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+                                    <div class="card-body"><canvas id="myAreaChart" width="100%" height="40px"></canvas></div>
                                 </div>
                             </div>
-                            <div class="col-xl-6">
+                            <!--<div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-bar me-1"></i>
@@ -180,7 +181,7 @@
                                     </div>
                                     <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
                                 </div>
-                            </div>
+                            </div>-->
                         </div>
                         <div class="card mb-4">
                             <div class="card-header">
@@ -210,21 +211,13 @@
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        <tr th:each="data : ${summarySensor}">
-                                            <td th:text="${}"></td>
-                                            <td th:text="${}"></td>
-                                            <td th:text="${}"></td>
-                                            <td th:text="${}"></td>
-                                            <td th:text="${}"></td>
-                                            <td th:text="${}"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Tiger Nixon</td>
-                                            <td>System Architect</td>
-                                            <td>Edinburgh</td>
-                                            <td>61</td>
-                                            <td>2011/04/25</td>
-                                            <td>$320,800</td>
+                                        <tr th:each="sensor : ${summarySensors}">
+                                            <td th:text="1"></td>
+                                            <td th:text="${sensor.sensorName}">[[${sensor.sensorName}]]</td>
+                                            <td th:text="${sensor.min}"></td>
+                                            <td th:text="${sensor.mean}"></td>
+                                            <td th:text="${sensor.max}"></td>
+                                            <td th:text="${sensor.eventCnt}"></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -248,7 +241,6 @@
         </div>
         <script src="/js/scripts.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="/assets/demo/chart-area-demo.js"></script>
         <script src="/assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="/js/datatables-simple-demo.js"></script>
@@ -256,39 +248,128 @@
             <script>
                 var token;
                 var header;
+                var myLineChart = null; // 전역 Chart 인스턴스
+                let allSensorData = [];
 
+                let 0
 
-                $(document).ready(function() {
+\\
+
+                $(document).ready(function () {
                     token = document.getElementById('csrfToken').value;
                     header = document.getElementById('csrfHeader').value;
 
+                    $('.card-select').on('change', function() {
+                        updateChart();  // 타입 바뀌면 기존 데이터로 다시 그리기
+                    });
 
-                    const begin = Date.now(); // 측정 시작
+                    const begin = Date.now();  // 시작 시간
 
-                    setInterval(function(){
-                        const end = Date.now(); // 현재 시간 (밀리초)
-                        const time = Math.floor((end - begin) / 1000); // 초 단위 시간 차이
+                    setInterval(function () {
+                        const end = Date.now();
+                        const time = Math.floor((end - begin) / 1000);
 
                         $.ajax({
-                            url : "/admin/updateSensorChart",
-                            type : "post",
-                            data : { time: time },
-                            beforeSend : function(xhr) { xhr.setRequestHeader(header, token); },
-                            success : function(sensors) {
+                            url: "/admin/updateSensorData",
+                            type: "post",
+                            data: { time: time },
+                            beforeSend: function (xhr) { xhr.setRequestHeader(header, token); },
+                            success: function (sensors) {
+                                <!--  Table  -->
+
+
+
+                                <!--  Chart  -->
                                 let type = $('.card-select').val();
 
-                                console.log(sensors);
+                                allSensorData.push(...sensors);
 
-                                SensorlineChart(type, sensors);
+                                // 데이터 준비
+                                let dates = [];
+                                let values = [];
+
+                                // 차트가 이미 있다면 데이터만 업데이트
+                                if (myLineChart) {
+                                    allSensorData.forEach(function (sensor) {
+                                        let datetime = new Date(sensor.measureDatetime);
+                                        let timeLabel = datetime.toLocaleTimeString();
+
+                                        myLineChart.data.labels.push(timeLabel);
+                                        myLineChart.data.datasets[0].data.push(sensor[type]);
+
+                                        // 100개 넘으면 앞에서 제거
+                                        if (myLineChart.data.labels.length > 80) {
+                                            myLineChart.data.labels.shift();
+                                            myLineChart.data.datasets[0].data.shift();
+                                        }
+                                    });
+
+                                } else {
+                                    var ctx = document.getElementById("myAreaChart");
+                                    myLineChart = new Chart(ctx, {
+                                        type: 'line',
+                                        data: {
+                                            labels: dates,
+                                            datasets: [{
+                                                label: type,
+                                                data: values,
+                                                lineTension: 1,
+                                                backgroundColor: "rgba(2,117,216,0.2)",
+                                                borderColor: "rgba(2,117,216,1)",
+                                                pointRadius: 0,
+                                                pointBackgroundColor: "rgba(2,117,216,1)",
+                                                pointBorderColor: "rgba(255,255,255,0.8)",
+                                                pointHoverRadius: 5,
+                                                pointHoverBackgroundColor: "rgba(2,117,216,1)",
+                                                pointHitRadius: 50,
+                                                pointBorderWidth: 2
+                                            }]
+                                        },
+                                        options: {
+                                            tooltips: {
+                                                mode: 'nearest',
+                                                intersect: true
+                                            },
+                                            animation: {
+                                                duration: 0,     // 0이면 애니메이션 없음
+                                            },
+                                            scales: {
+                                                xAxes: [{
+                                                    type: 'category',
+                                                    gridLines: { display: false },
+                                                    ticks: {
+                                                        minRotation: 0,
+                                                        maxRotation: 0,
+                                                        maxTicksLimit: 7
+                                                    }
+                                                }],
+                                                yAxes: [{
+                                                    ticks: {
+                                                        min: 0,
+                                                        max: 6000,
+                                                        maxTicksLimit: 5
+                                                    },
+                                                    gridLines: {
+                                                        color: "rgba(0, 0, 0, .125)",
+                                                    }
+                                                }],
+                                            },
+                                            legend: {
+                                                display: true
+                                            }
+                                        }
+                                    });
+                                }
+
+                                myLineChart.data.datasets[0].label = type;
+                                myLineChart.update();
                             },
-                            error : function() {
-                              alert("차트 데이터 전송 실패");
+                            error: function () {
+                                console.log("차트 데이터 전송 실패");
                             }
                         });
-                    }, 5000);
-
+                    }, 3000);
                 });
-
             </script>
         </th:block>
     </body>

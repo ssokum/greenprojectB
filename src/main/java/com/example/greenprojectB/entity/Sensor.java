@@ -56,19 +56,19 @@ public class Sensor {
     private double pm10;
 
     @Column(name = "floor_1")//1층 온도
-    private double floor1;
+    private double floor_1;
 
     @Column(name = "floor_2")//2층 온도
-    private double floor2;
+    private double floor_2;
 
     @Column(name = "floor_3")//3층 온도
-    private double floor3;
+    private double floor_3;
 
     @Column(name = "noise")//소음
     private double noise;
 
     @Column(name = "no_touch_temp")//메인홀 온도(비접촉)
-    private double noTouchTemp;
+    private double no_touch_temp;
 
     @Column(name = "illuminance")//조도
     private double illuminance;
@@ -108,11 +108,11 @@ public class Sensor {
                 .pm1_0(dto.getPm1_0())
                 .pm2_5(dto.getPm2_5())
                 .pm10(dto.getPm10())
-                .floor1(dto.getFloor1())
-                .floor2(dto.getFloor2())
-                .floor3(dto.getFloor3())
+                .floor_1(dto.getFloor1())
+                .floor_2(dto.getFloor2())
+                .floor_3(dto.getFloor3())
                 .noise(dto.getNoise())
-                .noTouchTemp(dto.getNoTouchTemp())
+                .no_touch_temp(dto.getNoTouchTemp())
                 .illuminance(dto.getIlluminance())
                 .carbon(dto.getCarbon())
                 .so2(dto.getSo2())

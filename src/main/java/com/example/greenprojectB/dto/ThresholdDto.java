@@ -1,5 +1,7 @@
 package com.example.greenprojectB.dto;
 
+import com.example.greenprojectB.entity.History;
+import com.example.greenprojectB.entity.Threshold;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -21,4 +23,17 @@ public class ThresholdDto {
     private LocalDateTime updatedAt;        // 수정날짜
     private String updatedBy;        // 임계값을 변경한 대상
 
+    // Entity to DTO
+    public ThresholdDto createThresholdDto(Threshold threshold) {
+        return ThresholdDto.builder()
+                .idx(threshold.getIdx())
+                .companyId(threshold.getCompanyId())
+                .deviceCode(threshold.getDeviceCode())
+                .max(threshold.getMax())
+                .min(threshold.getMin())
+                .sensor(threshold.getSensor())
+                .updatedAt(threshold.getUpdatedAt())
+                .updatedBy(threshold.getUpdatedBy())
+                .build();
+    }
 }

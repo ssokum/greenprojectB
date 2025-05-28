@@ -29,6 +29,8 @@ public class SecurityConfig {
                     .csrfTokenRequestHandler(requestHandler)
                     // /register 경로에 대해 CSRF 보호 비활성화
                     .ignoringRequestMatchers("/register")
+                    .ignoringRequestMatchers("/company/**")
+                    .ignoringRequestMatchers("/ckeditor/**") // CKEditor 업로드 경로 제외
                     // CSRF 토큰을 쿠키로 저장, HttpOnly 설정 비활성화
                     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
             .formLogin(form -> form
@@ -45,7 +47,9 @@ public class SecurityConfig {
             .requestMatchers("/member/accessPhoneNum").permitAll()
             .requestMatchers("/", "/css/**", "/js/**").permitAll()
             .requestMatchers("/member/memberJoin").permitAll()
-            .requestMatchers("/member/memberLogin").permitAll()
+            .requestMatchers("/ckeditor/**").permitAll()
+            .requestMatchers("/company/**").permitAll()
+            .requestMatchers("/board/**").permitAll()
             .requestMatchers("/data/**").authenticated()
             .requestMatchers("/admin/**").hasRole("ADMIN")
             .anyRequest().authenticated());
@@ -58,12 +62,9 @@ public class SecurityConfig {
     // 기본 로그아웃 처리
     http.logout(Customizer.withDefaults());
 
-    // CSRF 보호 기능을 활성화하고, CSRF 토큰을 쿠키에 저장하도록 구성
-//    http
-//            .csrf(csrf -> csrf
-//                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-//            );
-//    return http.build();
+    // Spring Security에 iframe 허용 설정 추가
+    http.headers(headers -> headers
+            .frameOptions(frame -> frame.sameOrigin())); // same-origin 허용
 
     return http.build();
   }

@@ -1,5 +1,6 @@
 package com.example.greenprojectB.service;
 
+import com.example.greenprojectB.entity.Company;
 import com.example.greenprojectB.entity.History;
 import com.example.greenprojectB.repository.CompanyRepository;
 import com.example.greenprojectB.repository.HistoryRepository;
@@ -58,5 +59,7 @@ public class CompanyService {
   }
 
 
-
+  public void setCompanyInput(Company company) {
+    companyRepository.save(company);
+  }
 }

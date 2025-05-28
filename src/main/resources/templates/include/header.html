@@ -1,14 +1,24 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <th:block layout:fragment="script">
     <script src="/js/header.js"></script>
 </th:block>
-<header id="header" class="open" th:fragment="header">
 
+
+<header id="header" th:fragment="header">
+    <th:block th:insert="~{/include/messageTest}" />
     <div class="lang_word">
         <div class="lang_box">
             <ul>
                 <li><a th:href="@{/member/memberLogin}">로그인</a></li>
+                <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/member/memberLogout}">로그아웃</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a onclick="deleteMember()">탈퇴</a>
+                </li>
                 <li><a href="#">공지사항</a></li>
                 <li><a href="#">제휴문의</a></li>
                 <li><a href="#">도움말</a></li>
@@ -33,13 +43,18 @@
                 </li>
                 <li class="">
                     <a href="#" class="nav_title">참여기업</a>
+                    <ul>
+                        <li class=""><a th:href="@{/company/enterprise/enterprise1}">레드라이즈</a></li>
+                        <li class=""><a th:href="@{/company/enterprise/enterprise2}">화이트서버</a></li>
+                        <li class=""><a th:href="@{/company/enterprise/enterprise3}">블루와이즈</a></li>
+                    </ul>
                 </li>
                 <li class="">
                     <a href="#" class="nav_title">Membership</a>
                     <ul>
                         <li class=""><a href="#">인재채용</a></li>
                         <li class=""><a href="#">ConnectorGallery</a></li>
-                        <li class=""><a href="#">고객커뮤니티</a></li>
+                        <li class=""><a href="/board/boardList">고객커뮤니티</a></li>
                         <li class=""><a href="#">프로페셔널서비스</a></li>
                         <li class=""><a href="#">FAQ</a></li>
                     </ul>

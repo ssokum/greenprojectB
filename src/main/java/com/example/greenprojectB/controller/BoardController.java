@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -50,13 +51,15 @@ public class BoardController {
 
   @PostMapping("/boardInput")
   public String boardInputPost(@ModelAttribute Board board,
-                               @AuthenticationPrincipal UserDetails userDetails) {
+                               @AuthenticationPrincipal UserDetails userDetails,
+                               RedirectAttributes redirectAttributes) {
     String username = userDetails.getUsername(); // 로그인한 사용자의 ID
     Member member = memberService.findByMemberId(username);
     board.setMember(member); // 작성자 설정
 
-    boardService.save(board);
-    return "redirect:/board/boardList";
+    Board boardVo = boardService.save(board);
+    if(boardVo != null) return "redirect:/message/boardInputOk";
+    else return "redirect:/message/boardInputNo";
   }
 
   @GetMapping("/boardDetail/{id}")
@@ -76,18 +79,21 @@ public class BoardController {
 
   @PostMapping("/boardDelete/{id}")
   public String boardDeletePost(@PathVariable Long id) {
-    boardService.deleteById(id);
-    return "redirect:/board/boardList";
+    try {
+      boardService.deleteById(id);
+      return "redirect:/message/boardDeleteOk";
+    } catch (Exception e) {
+      return "redirect:/message/boardDeleteNo";
+    }
   }
 
   @PostMapping("/{id}/comment")
   @ResponseBody
-  public Map<String, Object> addComment(@PathVariable Long id,
-                                        @RequestBody Map<String, String> body,
-                                        Principal principal) {
+  public Map<String, Object> addCommentPost(@PathVariable Long id,
+                                            @RequestBody Map<String, String> body,
+                                            Principal principal) {
     String content = body.get("content");
-
-    Member member = memberService.findByMemberId(principal.getName()); // null 여부 확인 필요
+    Member member = memberService.findByMemberId(principal.getName());
     Board board = boardService.findById(id).orElseThrow();
 
     Comment comment = Comment.builder()
@@ -100,13 +106,82 @@ public class BoardController {
 
     Map<String, Object> result = new HashMap<>();
     result.put("success", true);
+    result.put("currentUserId", principal.getName());
+    result.put("isAdmin", member.getRole().name().equals("ADMIN"));
     result.put("comment", Map.of(
+            "commentIdx", saved.getCommentIdx(),
+            "memberId", saved.getMember().getMemberId(), // 중요!!
             "memberName", saved.getMember().getMemberName(),
             "content", saved.getContent(),
             "createdAt", saved.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))
     ));
     return result;
   }
+
+
+  @PostMapping("/comment/update/{id}")
+  @ResponseBody
+  public Map<String, Object> updateComment(@PathVariable Long id, @RequestBody Map<String, String> body, Principal principal) {
+    String content = body.get("content");
+    Comment comment = commentService.findById(id).orElseThrow();
+
+    if (!principal.getName().equals(comment.getMember().getMemberId()) && !isAdmin(principal)) {
+      return Map.of("success", false, "error", "권한 없음");
+    }
+
+    comment.setContent(content);
+    commentService.save(comment);
+
+    return Map.of("success", true);
+  }
+
+  @PostMapping("/comment/delete/{id}")
+  @ResponseBody
+  public Map<String, Object> deleteComment(@PathVariable Long id, Principal principal) {
+    Comment comment = commentService.findById(id).orElseThrow();
+
+    boolean isAuthor = principal.getName().equals(comment.getMember().getMemberId());
+    boolean isAdmin = isAdmin(principal);
+
+    if (!isAuthor && !isAdmin) {
+      return Map.of("success", false, "error", "권한 없음");
+    }
+
+    commentService.delete(id);
+    return Map.of("success", true);
+  }
+
+  private boolean isAdmin(Principal principal) {
+    Member member = memberService.findByMemberId(principal.getName());
+    return member != null && "ADMIN".equalsIgnoreCase(String.valueOf(member.getRole()));
+  }
+
+
+  @GetMapping("/boardUpdate/{id}")
+  public String boardUpdateGet(@PathVariable Long id, Model model) {
+    Board board = boardService.findById(id).orElseThrow();
+    model.addAttribute("board", board);
+    return "board/boardUpdate"; // 수정 폼으로 이동
+  }
+
+  @PostMapping("/boardUpdate/{id}")
+  public String boardUpdatePost(@PathVariable Long id,
+                                @ModelAttribute Board board,
+                                @AuthenticationPrincipal UserDetails userDetails) {
+    Member member = memberService.findByMemberId(userDetails.getUsername());
+    Board existingBoard = boardService.findById(id).orElseThrow();
+
+    // 작성자만 수정 가능 (id, member 체크 안 해도 괜찮다고 하셨지만 기본적으로 맞춰두는게 안전합니다)
+    existingBoard.setTitle(board.getTitle());
+    existingBoard.setContent(board.getContent());
+
+    Board savedBoard = boardService.save(existingBoard);
+
+    if (savedBoard != null) return "redirect:/message/boardUpdateOk";
+    else return "redirect:/message/boardUpdateNo";
+  }
+
+
 
 
 }

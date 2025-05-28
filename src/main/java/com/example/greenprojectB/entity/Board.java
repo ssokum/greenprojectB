@@ -46,6 +46,7 @@ public class Board {
 
   @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
   @OrderBy("createdAt ASC")
+  @Builder.Default
   private List<Comment> comments = new ArrayList<>();
 
 }

@@ -43,6 +43,8 @@ spring:
   # File Upload MaxSize Setting
   servlet:
     multipart:
+      enabled: true
       maxFileSize: 10MB
       maxRequestSize: 30MB
+
 

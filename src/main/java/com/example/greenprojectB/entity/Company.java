@@ -5,10 +5,10 @@ import com.example.greenprojectB.dto.CompanyDto;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@DynamicInsert
 @EntityListeners(value = {AuditingEntityListener.class})
 public class Company {
 
@@ -29,8 +30,8 @@ public class Company {
   @Column(name = "company_idx")
   private Long company_idx;
 
-  @Column(length = 20, nullable = false, columnDefinition = "int default 1000003")
-  private int company_id;
+  @Column(length = 20, nullable = false, unique = true)
+  private String company_id;
 
   @NotNull
   private String password;
@@ -59,7 +60,7 @@ public class Company {
   @Column(unique = true, length = 50)
   private String fax_number;
 
-  @Column(name = "company_content")
+  @Lob
   private String company_content;
 
   @Column(name = "is_deleted")
@@ -76,7 +77,7 @@ public class Company {
 
 
   // dto to Entity
-  public static Company createCompany(CompanyDto dto, PasswordEncoder passwordEncoder, String filePath) {
+  public static Company createCompany(CompanyDto dto, PasswordEncoder passwordEncoder) {
 //    Member member = Member.builder()
 //            .build();
 
@@ -94,7 +95,7 @@ public class Company {
             .company_homepage(dto.getCompany_homepage())
             .phone_number(dto.getBusiness_number())
             .fax_number(dto.getFax_number())
-            .company_content(filePath)
+            .company_content(dto.getCompany_content())
             .is_deleted(0)
             .created_at(null)
             .update_at(null)

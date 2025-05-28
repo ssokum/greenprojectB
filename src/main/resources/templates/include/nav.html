@@ -2,7 +2,6 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<include
 
 <th:block layout:fragment="script">
   <script th:inline="javascript">
@@ -12,8 +11,8 @@
     function deleteMember() {
       if (confirm("정말 회원탈퇴 하시겠습니까?")) {
         location.href = "/member/memberResign";
+      }
     }
-}
   </script>
 </th:block>
 

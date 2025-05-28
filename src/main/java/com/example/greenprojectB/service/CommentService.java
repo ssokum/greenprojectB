@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +23,11 @@ public class CommentService {
     return commentRepository.save(comment);
   }
 
-  public void deleteById(Long id) {
+  public void delete(Long id) {
     commentRepository.deleteById(id);
+  }
+
+  public Optional<Comment> findById(Long id) {
+    return commentRepository.findById(id);
   }
 }

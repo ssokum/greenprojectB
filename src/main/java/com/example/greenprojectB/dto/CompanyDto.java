@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -23,7 +22,7 @@ public class CompanyDto {
   private Long companyIdx;
 
   @NotEmpty(message = "아이디는 필수입력 입니다.")
-  private int companyId;
+  private String companyId;
 
   @NotEmpty(message = "비밀번호는 필수입력 입니다.")
   @Length(min = 4, max = 20, message = "비밀번호는 4~20 이하로 입력해 주세요")
@@ -51,7 +50,7 @@ public class CompanyDto {
   @NotEmpty(message = "팩스 번호는 필수입력 입니다.")
   private String fax_number;
 
-  private MultipartFile company_content;
+  private String company_content;
   private int is_deleted;
   private LocalDateTime created_at;
   private LocalDateTime update_at;

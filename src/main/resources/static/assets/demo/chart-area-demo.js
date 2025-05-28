@@ -7,10 +7,13 @@ function SensorlineChart(type, sensors){
     let dates = [];
     let values = [];
 
-        sensors.forEach(function(sensor) {
-            dates.push(sensor.measureDatetime.split("T")[1]);
-            values.push(sensor.co2); // co2, ammonia 등 원하는 센서값 접근
-       });
+      sensors.forEach(function(sensor) {
+          dates.push(sensor.measureDatetime.split("T")[1].substring(0, 5));
+//          let datetime = new Date(sensor.measureDatetime.split("T")[1].substring(0, 5));
+//          dates.push(datetime.toLocaleTimeString()); // 중복 방지
+          values.push(sensor[type]); // 동적 타입 지원
+      });
+
 
     var ctx = document.getElementById("myAreaChart");
     var myLineChart = new Chart(ctx, {
@@ -36,13 +39,18 @@ function SensorlineChart(type, sensors){
         scales: {
           xAxes: [{
             time: {
-              unit: 'date'
+              parser: 'HH:mm',     // 입력 데이터 시간 포맷
+              tooltipFormat: 'HH:mm',  // 툴팁에 보여줄 포맷
+              unit: 'minute',      // 눈금 단위 (hour, minute, day 등)
+              displayFormats: {
+                minute: 'HH:mm'    // 축 눈금 표시 포맷
+              }
             },
             gridLines: {
               display: false
             },
             ticks: {
-              maxTicksLimit: 7
+              maxTicksLimit: 6
             }
           }],
           yAxes: [{
@@ -56,6 +64,10 @@ function SensorlineChart(type, sensors){
             }
           }],
         },
+         tooltips: {
+            mode: 'nearest', // 가장 가까운 포인트 하나만 표시
+            intersect: true
+          },
         legend: {
           display: false
         }
