@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/exampleLayout}">
+
+<div layout:fragment="content" class="container mt-4" style="max-width: 700px;">
+  <h2 class="mb-4">글쓰기</h2>
+  <form th:action="@{/board/boardInput}" th:object="${board}" method="post">
+    <div class="mb-3">
+      <label for="title" class="form-label">제목</label>
+      <input type="text" th:field="*{title}" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label for="content" class="form-label">내용</label>
+      <textarea th:field="*{content}" class="form-control" rows="10" required></textarea>
+    </div>
+    <div class="text-end">
+      <button type="submit" class="btn btn-primary">등록</button>
+      <a th:href="@{/board/boardList}" class="btn btn-secondary">목록</a>
+    </div>
+  </form>
+</div>
+
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layouts/exampleLayout}">
+
+<th:block layout:fragment="css">
+  <style>
+    ul.org-tree, ul.org-tree ul {
+      list-style-type: none;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    ul.org-tree ul::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-left: 1px solid #ccc;
+      height: 100%;
+    }
+    ul.org-tree li {
+      margin: 0.5rem 0;
+      padding-left: 1rem;
+      position: relative;
+    }
+    ul.org-tree li::before {
+      content: '';
+      position: absolute;
+      top: 0.7rem;
+      left: 0;
+      width: 1rem;
+      height: 1px;
+      background: #ccc;
+    }
+    .org-title {
+      font-weight: bold;
+      color: #005bac;
+    }
+  </style>
+</th:block>
+
+<div layout:fragment="content" class="container">
+  <h2 class="text-center my-4">📂 회사 조직도</h2>
+  <ul class="org-tree">
+    <li><span class="org-title">대표이사</span>
+      <ul>
+        <li><span class="org-title">고문</span>
+          <ul>
+            <li><span class="org-title">관리부문</span>
+              <ul>
+                <li>총무부</li>
+                <li>경리부</li>
+                <li>구매자재부</li>
+              </ul>
+            </li>
+            <li><span class="org-title">기술부문</span>
+              <ul>
+                <li>품질관리부</li>
+              </ul>
+            </li>
+            <li><span class="org-title">생산부문</span>
+              <ul>
+                <li>생산1팀</li>
+                <li>생산2팀</li>
+                <li>상품관리부</li>
+                <li>기술부</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><span class="org-title">총괄임원</span>
+          <ul>
+            <li><span class="org-title">영업부문</span>
+              <ul>
+                <li>해외영업부</li>
+                <li>국내영업부</li>
+                <li>고객관리부</li>
+              </ul>
+            </li>
+            <li><span class="org-title">개발부문</span>
+              <ul>
+                <li>개발부</li>
+                <li>부설연구소</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+</html>

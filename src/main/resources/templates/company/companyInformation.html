@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layouts/exampleLayout}">
+
+<th:block layout:fragment="css">
+    <style>
+        th {
+          background-color: #f8f9fa !important;
+          width: 25%;
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content" class="container my-5">
+    <h2 class="text-center mb-4">🏢 기업 정보</h2>
+    <table class="table table-bordered">
+        <tr>
+            <th>회사명</th>
+            <td th:text="${company.companyName}">회사명</td>
+        </tr>
+        <tr>
+            <th>사업자등록번호</th>
+            <td th:text="${company.businessNumber}">123-45-67890</td>
+        </tr>
+        <tr>
+            <th>대표자명</th>
+            <td th:text="${company.ceoName}">홍길동</td>
+        </tr>
+        <tr>
+            <th>주소</th>
+            <td th:text="${company.address}">서울특별시 강남구 ...</td>
+        </tr>
+        <tr>
+            <th>대표 이메일</th>
+            <td th:text="${company.companyEmail}">contact@company.com</td>
+        </tr>
+        <tr>
+            <th>홈페이지</th>
+            <td>
+                <a th:href="${company.companyHomepage}" th:text="${company.companyHomepage}" target="_blank">홈페이지</a>
+            </td>
+        </tr>
+        <tr>
+            <th>대표 전화번호</th>
+            <td th:text="${company.phoneNumber}">02-1234-5678</td>
+        </tr>
+        <tr>
+            <th>팩스번호</th>
+            <td th:text="${company.faxNumber}">02-8765-4321</td>
+        </tr>
+        <tr th:if="${company.companyContent != null}">
+            <th>회사 소개</th>
+            <td th:text="${company.companyContent}">회사 소개 텍스트</td>
+        </tr>
+    </table>
+
+    <div class="text-center mt-4">
+        <input type="button" value="돌아가기" th:onclick="|location.href='@{/}'|" class="btn btn-primary"/>
+    </div>
+</div>
+
+</html>

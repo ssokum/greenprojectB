@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/exampleLayout}"> <!-- 이 코드로 exampleLayout.html에 설정한 레이아웃 불러오기-->
+<th:block layout:fragment="css">
+    <style>
+        .fieldError {
+            color: #bd2130;
+        }
+    </style>
+</th:block>
+
+<!--<th:block layout:fragment="script">-->
+<!--    <script th:inline="javascript">-->
+<!--        $(document).ready(function(){-->
+<!--            let message = [[${message}]];-->
+<!--            if(message != null){-->
+<!--                alert(message);-->
+<!--            }-->
+<!--        });-->
+<!--    </script>-->
+<!--</th:block>-->
+<!--exampleLayout.html 레이아웃에서 컨텐츠 부분에 이걸 대입 -->
+<div layout:fragment="content" class="container text-center">
+    <h2>회원전용방</h2>
+    <h4>현재 <span th:text="${session.sName}"></span>회원님의 등급은 <span th:text="${session.strLevel}"></span>입니다</h4>
+    <div>
+        <a th:href="@{/}" class="btn btn-success">홈으로</a>
+    </div>
+</div>
+
+</html>

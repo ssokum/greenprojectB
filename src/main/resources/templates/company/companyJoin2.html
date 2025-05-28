@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/exampleLayout}">
+
+<th:block layout:fragment="script">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+
+
+  <script>
+    var token;
+    var header;
+
+    $(document).ready(function() {
+      token = document.getElementById('csrfToken').value;
+      header = document.getElementById('csrfHeader').value;
+    });
+
+    var timer;
+    var timeLeft = 180; // 3분
+
+    function enableVerificationInputs() {
+      document.getElementById('verifyCode').disabled = false;
+      document.getElementById('verificationCode').disabled = false;
+    }
+
+    function startTimer() {
+      clearInterval(timer);
+      timeLeft = 180;
+      timer = setInterval(function() {
+        if(timeLeft <= 0) {
+          showModal("시간이 만료되었습니다. \n 다시 인증번호을 발급해주시길 바랍니다.")
+          clearInterval(timer);
+          document.getElementById('timer').textContent = " 시간 만료 ";
+          document.getElementById('verifyCode').disabled = true;
+          document.getElementById('verificationCode').disabled = true;
+          expireVerification();
+        } else {
+          let minutes = Math.floor(timeLeft / 60);
+          let seconds = timeLeft % 60;
+          document.getElementById('timer').textContent = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+        }
+        timeLeft -= 1;
+      }, 1000);
+    }
+
+    function expireVerification() {
+      const phoneNum = document.getElementById('phone').value;
+      $.ajax({
+        url: "/member/expireVerification",
+        type: "post",
+        data: { phoneNum: phoneNum },
+        beforeSend : function(xhr) { xhr.setRequestHeader(header, token); },
+        success: function(res) {
+          console.log("Verification expired");
+        },
+        error: function(xhr) {
+          console.error("Error expiring verification:", xhr.responseText);
+        }
+      });
+    }
+
+    $(document).ready(function() {
+      document.getElementById('sendVerification').addEventListener('click', function() {
+        const phoneInput = document.getElementById('phone');
+        if (phoneInput.checkValidity()) {
+          let phoneNum = phoneInput.value;
+          document.getElementById('verificationCodeGroup').style.display = 'block';
+
+          // 이전 타이머 초기화 및 새 타이머 시작
+          clearInterval(timer);
+          startTimer();
+
+          // 입력 필드와 버튼 활성화
+          enableVerificationInputs();
+          $.ajax({
+            url : "/member/accessPhoneNum",
+            type : "post",
+            data : {phoneNum : phoneNum},
+            beforeSend : function(xhr) { xhr.setRequestHeader(header, token); },
+            success : function(res) {
+              showModal('인증번호가 전송되었습니다..');
+            },
+            error : function() {
+              showModal("전송오류");
+            }
+          });
+        } else {
+          showModal('올바른 휴대폰 번호를 입력해주세요.');
+        }
+      });
+
+      document.getElementById('verifyCode').addEventListener('click', function() {
+        const phoneNum = document.getElementById('phone').value;
+        const inputCode = document.getElementById('verificationCode').value;
+
+        $.ajax({
+          url: "/member/verifyCode",
+          type: "post",
+          data: {
+            phoneNum: phoneNum,
+            inputCode: inputCode
+          },
+          beforeSend : function(xhr) { xhr.setRequestHeader(header, token); },
+          success: function(res) {
+            if(res === "1") {
+              isPhoneVerified = true;
+              $('#phoneVerificationResult').html('<span class="text-success"><i class="fas fa-check"></i> 인증 완료</span>');
+
+              clearInterval(timer);
+              document.getElementById('verificationSuccess').style.display = 'block';
+              document.getElementById('verificationCode').disabled = true;
+              document.getElementById('verifyCode').disabled = true;
+              document.getElementById('sendVerification').disabled = true;
+              document.getElementById('phone').disabled = true;
+              document.getElementById('timer').style.display = 'none';
+              document.getElementById('verificationCodeGroup').style.display = 'none';
+            } else {
+              showModal("인증 번호가 맞지 않습니다. \n 다시 입력해주세요.");
+            }
+          },
+          error: function(xhr) {
+            showModal(xhr.responseText);
+          }
+        });
+      });
+    });
+
+    function showModal(message, icon = 'warning') {
+      Swal.fire({
+        icon: icon,
+        text: message,
+        confirmButtonText: '확인',
+        customClass: {
+          confirmButton: 'btn btn-primary'
+        },
+        buttonsStyling: false
+      });
+    }
+
+
+
+          // 싱글파일 업로드 체크
+      function fCheck() {
+        let fName = document.getElementById("sFile").value;
+        let maxSize = 1024 * 1024 * 10;   // 저장파일 최대용량을 10MByte까지로 제한
+        let ext = fName.substring(fName.lastIndexOf(".")+1).toLowerCase();
+
+        if(fName.trim() == "") {
+          alert("업로드할 파일을 선택하세요");
+          return false;
+        }
+
+        let fileSize = document.getElementById("sFile").files[0].size;
+        if(fileSize > maxSize) {
+          alert("업로드할 파일의 최대용량은 10MByte 입니다.");
+        }
+        else if(ext != 'jpg' && ext != 'gif' && ext != 'png' && ext != 'hwp' && ext != 'zip' && ext != 'ppt' && ext != 'pptx') {
+          alert("업로드 가능한 파일은 'jpg/gif/png/hwp/zip/ppt/pptx/'만 가능합니다.")
+        }
+        else {
+          form.submit();
+        }
+      }
+
+  </script>
+</th:block>
+
+
+<div layout:fragment="content" class="container">
+  <h2 class="text-center mb-4">(기업)회 원 가 입</h2>
+  <form role="form" name="form" method="post" th:object="${companyDto}" enctype="multipart/form-data" >
+    <div class="form-group mb-3">
+      <label th:for="company_id">아이디</label>
+      <input type="text" th:field="*{company_id}" class="form-control" placeholder="아이디를 입력해주세요">
+      <p th:if="${#fields.hasErrors('company_id')}" th:errors="*{company_id}" class="fieldError">Incorrect data</p>
+    </div>
+    <div class="form-group mb-3">
+      <label th:for="password">비밀번호</label>
+      <input type="password" th:field="*{password}" class="form-control" placeholder="비밀번호 입력">
+      <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError">Incorrect data</p>
+    </div>
+
+    <div class="form-group mb-3">
+      <label th:for="company_name">회사이름</label>
+      <input type="text" th:field="*{company_name}" class="form-control" placeholder="이름을 입력해주세요">
+      <p th:if="${#fields.hasErrors('company_name')}" th:errors="*{company_name}" class="fieldError">Incorrect data</p>
+    </div>
+    <div class="form-group mb-3">
+      <label th:for="business_number">사업자번호</label>
+      <input type="text" th:field="*{business_number}" class="form-control" placeholder="이름을 입력해주세요">
+      <p th:if="${#fields.hasErrors('business_number')}" th:errors="*{business_number}" class="fieldError">Incorrect data</p>
+    </div>
+    <div class="form-group mb-3">
+      <label th:for="ceo_name">대표자이름</label>
+      <input type="text" th:field="*{ceo_name}" class="form-control" placeholder="이름을 입력해주세요">
+      <p th:if="${#fields.hasErrors('ceo_name')}" th:errors="*{ceo_name}" class="fieldError">Incorrect data</p>
+    </div>
+    <div class="form-group mb-3">
+      <label th:for="address">주소</label>
+      <input type="text" th:field="*{address}" class="form-control" placeholder="이름을 입력해주세요">
+      <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="fieldError">Incorrect data</p>
+    </div>
+
+
+    <div class="form-group mb-3">
+      <label th:for="company_email">이메일주소</label>
+      <input type="email" th:field="*{company_email}" class="form-control" placeholder="이메일을 입력해주세요">
+      <p th:if="${#fields.hasErrors('company_email')}" th:errors="*{company_email}" class="fieldError">Incorrect data</p>
+    </div>
+    <div class="form-group mb-3">
+      <label th:for="company_homepage">홈페이지주소</label>
+      <input type="email" th:field="*{company_homepage}" class="form-control" placeholder="이메일을 입력해주세요">
+      <p th:if="${#fields.hasErrors('company_homepage')}" th:errors="*{company_homepage}" class="fieldError">Incorrect data</p>
+    </div>
+
+    <div class="form-group mb-3">
+      <label th:for="phone_number">연락처</label>
+      <input type="text" th:field="*{phone_number}" class="form-control" placeholder="번호를 입력해주세요">
+      <p th:if="${#fields.hasErrors('phone_number')}" th:errors="*{phone_number}" class="fieldError">Incorrect data</p>
+    </div>
+    <div class="form-group mb-3">
+      <label th:for="fax_number">팩스번호</label>
+      <input type="text" th:field="*{fax_number}" class="form-control" placeholder="번호를 입력해주세요">
+      <p th:if="${#fields.hasErrors('fax_number')}" th:errors="*{fax_number}" class="fieldError">Incorrect data</p>
+    </div>
+    <div class="form-group mb-3">
+      <label th:for="company_content"></label>
+      <input type="file" name="sFile" id="sFile" accept=".jpg,.gif,.png,.zip,.hwp,.ppt,.ppx" th:field="*{company_content}" class="form-control">
+    </div>
+
+
+
+
+    <div class="mb-3" style="text-align: center">
+      <button type="button" onclick="fCheck()" class="btn btn-primary">회원가입</button>
+      <button type="button" th:onclick="|location.href='@{/member/memberLogin}'|" class="btn btn-warning">돌아가기</button>
+      <button type="button" onclick="document.getElementById('telAuthentication').style.display='block'" class="btn btn-success">전화인증</button>
+    </div>
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf?.token}" />
+  </form>
+
+  <!-- 아래로 핸드폰 인증 부분 -->
+  <input type="hidden" th:value="${_csrf.token}" name="csrfToken" id="csrfToken"/>
+  <input type="hidden" th:value="${_csrf.headerName}" name="csrfHeader" id="csrfHeader"/>
+
+  <div id="telAuthentication" style="display:none;">
+    <h4>전화번호 인증하기</h4>
+    <div class="mb-3">
+      <label for="phone" class="form-label required">휴대폰 번호</label>
+      <div class="input-group">
+        <input type="tel" class="form-control" id="phone" name="phone" required>
+        <button class="btn btn-outline-secondary" type="button" id="sendVerification">인증번호 전송</button>
+      </div>
+      <div id="phoneVerificationResult" class="form-text">인증 필요</div>
+    </div>
+  </div>
+
+  <div class="mb-3" id="verificationCodeGroup" style="display: none;">
+    <label for="verificationCode" class="form-label">인증번호</label>
+    <div class="input-group">
+      <input type="text" class="form-control" id="verificationCode" placeholder="인증번호 6자리" required pattern="[0-9]{6}">
+      <span id="timer"></span>
+      <button class="btn btn-success btn-sm" type="button" id="verifyCode">확인</button>
+    </div>
+    <div id="verificationSuccess" class="verification-check">
+      <i class="fas fa-check-circle"></i>
+    </div>
+  </div>
+</div>
+
+<hr/>
+
+<hr/>
+
+
+</html>

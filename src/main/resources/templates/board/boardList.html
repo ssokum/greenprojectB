@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/exampleLayout}">
+
+<div layout:fragment="content" class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">자유게시판</h2>
+    <a th:href="@{/board/boardInput}" class="btn btn-outline-primary">글쓰기</a>
+  </div>
+
+  <!-- 게시판 테이블 -->
+  <table class="table table-hover text-center align-middle">
+    <thead class="table-light">
+    <tr>
+      <th style="width: 80px;">번호</th>
+      <th class="text-start">제목</th>
+      <th style="width: 150px;">글쓴이</th>
+      <th style="width: 100px;">등록일</th>
+      <th style="width: 80px;">조회수</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="board : ${boardPage.content}">
+      <td th:text="${board.boardIdx}">1</td>
+      <td class="text-start">
+        <a th:href="@{/board/boardDetail/{id}(id=${board.boardIdx})}"
+           class="text-decoration-none text-dark fw-semibold">
+          <span th:text="${board.title}">게시글 제목</span>
+          <!-- 댓글 수 표시 -->
+          <span class="text-danger" th:if="${#lists.size(board.comments) > 0}">
+              [<span th:text="${#lists.size(board.comments)}"></span>]
+            </span>
+        </a>
+      </td>
+      <td th:text="${board.member.memberName}">작성자</td>
+      <td th:text="${#temporals.format(board.createdAt, 'MM-dd HH:mm')}">등록일</td>
+      <td th:text="${board.viewCount}">0</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- 페이징 -->
+  <nav th:if="${boardPage.totalPages > 1}">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" th:classappend="${boardPage.first} ? 'disabled'">
+        <a class="page-link" th:href="@{/board/boardList(page=${boardPage.number - 1})}">이전</a>
+      </li>
+      <li class="page-item"
+          th:each="i : ${#numbers.sequence(0, boardPage.totalPages - 1)}"
+          th:classappend="${boardPage.number == i} ? 'active'">
+        <a class="page-link" th:href="@{/board/boardList(page=${i})}" th:text="${i + 1}">1</a>
+      </li>
+      <li class="page-item" th:classappend="${boardPage.last} ? 'disabled'">
+        <a class="page-link" th:href="@{/board/boardList(page=${boardPage.number + 1})}">다음</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+</html>
