@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -13,9 +13,11 @@
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
+        <input type="hidden" th:value="${_csrf.token}" name="csrfToken" id="csrfToken"/>
+        <input type="hidden" th:value="${_csrf.headerName}" name="csrfHeader" id="csrfHeader"/>
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="index.html">Start Bootstrap</a>
+            <a class="navbar-brand ps-3" href="index.html">Green Company</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -157,8 +159,15 @@
                             <div class="col-xl-6">
                                 <div class="card mb-4">
                                     <div class="card-header">
-                                        <i class="fas fa-chart-area me-1"></i>
-                                        Area Chart Example
+                                        <div class="left">
+                                            <i class="fas fa-chart-area me-1"></i>
+                                            <span class="card-title"></span>
+                                        </div>
+                                        <div class="right">
+                                            <select class="card-select">
+                                                <option th:each="sVal : ${sensorValue}" th:value="${sVal}" th:text="${sVal}"></option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
                                 </div>
@@ -243,5 +252,44 @@
         <script src="/assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="/js/datatables-simple-demo.js"></script>
+        <th:block layout:fragment="script">
+            <script>
+                var token;
+                var header;
+
+
+                $(document).ready(function() {
+                    token = document.getElementById('csrfToken').value;
+                    header = document.getElementById('csrfHeader').value;
+
+
+                    const begin = Date.now(); // 측정 시작
+
+                    setInterval(function(){
+                        const end = Date.now(); // 현재 시간 (밀리초)
+                        const time = Math.floor((end - begin) / 1000); // 초 단위 시간 차이
+
+                        $.ajax({
+                            url : "/admin/updateSensorChart",
+                            type : "post",
+                            data : { time: time },
+                            beforeSend : function(xhr) { xhr.setRequestHeader(header, token); },
+                            success : function(sensors) {
+                                let type = $('.card-select').val();
+
+                                console.log(sensors);
+
+                                SensorlineChart(type, sensors);
+                            },
+                            error : function() {
+                              alert("차트 데이터 전송 실패");
+                            }
+                        });
+                    }, 5000);
+
+                });
+
+            </script>
+        </th:block>
     </body>
 </html>

@@ -102,7 +102,7 @@ caption, legend {
     display: block;
     width: 132px;
     height: 64px;
-    background: url("../img/카페로고이미지_임시.png") no-repeat;
+  /*  background: url("../img/카페로고이미지_임시.png") no-repeat;*/
     font-size: 0;
     background-size: cover;/* 이미지에 따라 조정필요 */
 }
@@ -238,7 +238,7 @@ a:visited {
     display: block;
     width: 226px;
     height: 33px;
-    background: url(../img/헤더로고이미지_임시.png) no-repeat 0 0;
+    /*background: url(../img/헤더로고이미지_임시.png) no-repeat 0 0;*/
 }
 a {
     color: #222;

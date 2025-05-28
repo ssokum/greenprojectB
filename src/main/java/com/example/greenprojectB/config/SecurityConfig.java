@@ -45,6 +45,7 @@ public class SecurityConfig {
             .requestMatchers("/member/accessPhoneNum").permitAll()
             .requestMatchers("/", "/css/**", "/js/**").permitAll()
             .requestMatchers("/member/memberJoin").permitAll()
+            .requestMatchers("/member/memberLogin").permitAll()
             .requestMatchers("/data/**").authenticated()
             .requestMatchers("/admin/**").hasRole("ADMIN")
             .anyRequest().authenticated());

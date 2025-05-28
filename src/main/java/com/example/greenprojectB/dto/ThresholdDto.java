@@ -2,6 +2,8 @@ package com.example.greenprojectB.dto;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @ToString
@@ -9,13 +11,14 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ThresholdDto {
-    // 센서 데이터 종합 정리
-
+    
     private int idx;    // 번호
-    private String companyId;       // 회사ID
-    private String divceCode;        // 위치
-    private String sensor;          // 센서 종류
+    private int companyId;       // 회사ID
+    private String deviceCode;        // 위치
+    private double sensor;          // 센서값
     private double min;        // 최솟값
     private double max;        // 최댓값
+    private LocalDateTime updatedAt;        // 수정날짜
+    private String updatedBy;        // 임계값을 변경한 대상
 
 }

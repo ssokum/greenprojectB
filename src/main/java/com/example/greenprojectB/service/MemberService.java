@@ -63,4 +63,9 @@ public class MemberService implements UserDetailsService {
       memberRepository.delete(member.get());
     }
   }
+
+  public Member findByMemberId(String memberId) {
+    return memberRepository.findByMemberId(memberId)
+            .orElseThrow(() -> new RuntimeException("해당 사용자를 찾을 수 없습니다."));
+  }
 }

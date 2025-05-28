@@ -25,7 +25,7 @@ public class Sensor {
     @Column(name = "sensor_id") //센서 번호
     private int sensorId;
 
-    @NotNull
+    @Column(name = "company_id")
     private int companyId;
 
     @Column(name = "device_code", length = 20)// 기기 번호

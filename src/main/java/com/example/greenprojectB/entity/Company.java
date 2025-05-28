@@ -6,6 +6,9 @@ import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
@@ -18,6 +21,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EntityListeners(value = {AuditingEntityListener.class})
 public class Company {
 
   @Id
@@ -25,7 +29,7 @@ public class Company {
   @Column(name = "company_idx")
   private Long company_idx;
 
-  @Column(length = 20, nullable = false)
+  @Column(length = 20, nullable = false, columnDefinition = "int default 1000003")
   private int company_id;
 
   @NotNull
@@ -62,16 +66,17 @@ public class Company {
   private int is_deleted;
 
   @CreatedDate
+  @Column(name = "created_at", updatable = false)
   private LocalDateTime created_at;
 
-  @CreatedDate
+  @LastModifiedDate
   private LocalDateTime update_at;
 
   private Role role;
 
 
   // dto to Entity
-  public static Company createMember(CompanyDto dto, PasswordEncoder passwordEncoder) {
+  public static Company createCompany(CompanyDto dto, PasswordEncoder passwordEncoder, String filePath) {
 //    Member member = Member.builder()
 //            .build();
 
@@ -86,12 +91,13 @@ public class Company {
             .ceo_name(dto.getCeo_name())
             .address(dto.getAddress())
             .company_email(dto.getCompany_email())
+            .company_homepage(dto.getCompany_homepage())
             .phone_number(dto.getBusiness_number())
             .fax_number(dto.getFax_number())
-            .company_content(dto.getCompany_content())
-            .is_deleted(dto.getIs_deleted())
-            .created_at(dto.getCreated_at())
-            .update_at(dto.getUpdate_at())
+            .company_content(filePath)
+            .is_deleted(0)
+            .created_at(null)
+            .update_at(null)
             .role(Role.ENTERPRISE)
             .build();
   }
