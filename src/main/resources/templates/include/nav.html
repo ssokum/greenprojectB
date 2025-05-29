@@ -82,9 +82,11 @@
         <div class="top-member ml-auto">
           <nav class="navbar navbar-light navbar-expand-xl">
 
-            <a href="/member/memberLogin" class="nav-link text-white"><i
+            <a href="/member/memberLogin" class="nav-link text-white" sec:authorize="isAnonymous()"><i
                     class="fa-regular fa-user me-1" aria-hidden="true"></i>로그인</a>
-            <a href="/member/memberJoin" class="nav-link text-white">회원가입</a>
+            <a href="/member/memberJoin" class="nav-link text-white" sec:authorize="isAnonymous()">회원가입</a>
+            <a href="/member/memberLogout" class="nav-link text-white" sec:authorize="isAuthenticated()">로그아웃</a>
+            <a href="/admin/index" class="nav-link text-white" sec:authorize="isAuthenticated()">관리자 페이지</a>
 
 
 <!--            <a href="/shop/cartList" class="nav-link text-white"><i

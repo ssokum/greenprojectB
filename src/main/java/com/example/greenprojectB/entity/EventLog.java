@@ -1,16 +1,12 @@
 package com.example.greenprojectB.entity;
 
 import com.example.greenprojectB.dto.EventLogDto;
-import com.example.greenprojectB.dto.ThresholdDto;
 import jakarta.persistence.*;
-import jdk.jfr.Name;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "eventLog")

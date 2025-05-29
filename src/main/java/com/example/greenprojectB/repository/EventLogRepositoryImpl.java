@@ -2,8 +2,6 @@ package com.example.greenprojectB.repository;
 
 import com.example.greenprojectB.entity.EventLog;
 import com.example.greenprojectB.entity.QEventLog;
-import com.example.greenprojectB.entity.QSensor;
-import com.example.greenprojectB.entity.Threshold;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

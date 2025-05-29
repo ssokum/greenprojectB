@@ -1,6 +1,7 @@
 package com.example.greenprojectB.entity;
 
 
+import com.example.greenprojectB.dto.SummarySensorDto;
 import com.example.greenprojectB.dto.ThresholdDto;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,17 +37,20 @@ public class Threshold {
     private String deviceCode;
 
 
-    @Column(name = "min")
-    private double min;
+    @Column(name = "low")
+    private double low;
 
-    @Column(name = "max")
-    private double max;
+    @Column(name = "high")
+    private double high;
 
     @CreatedDate
     private LocalDateTime updatedAt;
 
     @Column(name = "updated_by", length = 50,nullable = false)
     private String updatedBy;
+
+    @Transient
+    private SummarySensorDto summarySensor;
 
 
 
@@ -57,10 +61,11 @@ public class Threshold {
                 .company(dto.getCompany())
                 .sensorName(dto.getSensorName())
                 .deviceCode(dto.getDeviceCode())
-                .min(dto.getMin())
-                .max(dto.getMax())
+                .low(0)
+                .high(0)
                 .updatedAt(dto.getUpdatedAt())
                 .updatedBy(dto.getUpdatedBy())
+                .summarySensor(null)
                 .build();
     }
 

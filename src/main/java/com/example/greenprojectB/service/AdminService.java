@@ -85,7 +85,6 @@ public class AdminService {
     }
 
     public ArrayList<Threshold> getThreshold(String companyId, String deviceCode){
-        //return thresholdRepository.findByCompany_CompanyIdAndDeviceCode(companyId, deviceCode);
-        return null;
+        return thresholdRepository.findByCompany_CompanyIdAndDeviceCode(companyId, deviceCode);
     }
 }

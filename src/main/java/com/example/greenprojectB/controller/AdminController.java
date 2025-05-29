@@ -69,7 +69,18 @@ public class AdminController {
     @ResponseBody
     @PostMapping("/getThreshold")
     public ArrayList<Threshold> getThresholdPost(String companyId, String deviceCode) {
-        //return adminService.getThreshold(companyId, deviceCode);
-        return null;
+        ArrayList<Threshold> thresholds = adminService.getThreshold(companyId, deviceCode);
+        ArrayList<SummarySensorDto> summarySensors = adminService.getSummarySensors();
+        for (Threshold threshold : thresholds) {
+            for (SummarySensorDto summarySensor : summarySensors) {
+                if (threshold.getSensorName().equals(summarySensor.getSensorName())) {
+                    threshold.setSummarySensor(summarySensor);
+                    break;
+                }
+            }
+        }
+
+        return adminService.getThreshold(companyId, deviceCode);
     }
+
 }

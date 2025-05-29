@@ -228,7 +228,7 @@
               xhr.setRequestHeader(header, token);
             },
             success: function(deviceCode) {
-              console.log(deviceCode);
+              console.log("deviceCode : " + deviceCode);
 
               if (!deviceCode || deviceCode.length === 0) {
                 $("#device-nav").html('').hide();
@@ -264,7 +264,7 @@
               xhr.setRequestHeader(header, token);
             },
             success: function(thresholds) {
-                console.log(thresholds);
+                console.log("thresholds : " +thresholds);
 
               if (!thresholds || thresholds.length === 0) {
                 $("#table_threshold tbody").html('');
@@ -273,12 +273,12 @@
                     let html = '';
 
                     thresholds.forEach(function(threshold) {
-                      html += `<tr>
-                                 <th scope="row">${threshold.sensorName}</th>
-                                 <td>${threshold.mean}</td>
-                                 <td>${threshold.max}</td>
-                                 <td>${threshold.row}</td>
-                               </tr>`;
+                        html += `<tr>
+                                    <td>${threshold.sensorName}</td>
+                                    <td>${threshold.summarySensor.mean}</td>
+                                    <td>${threshold.high}</td>
+                                    <td>${threshold.low}</td>
+                                </tr>`;
                     });
 
                     $("#table_threshold tbody").html(html);
