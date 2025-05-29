@@ -5,31 +5,42 @@
 <head>
     <meta charset="UTF-8">
     <title>layout.html</title>
-    <th:block th:insert="~{/include/bs5.html}"></th:block>
+    <!-- 모든페이지에 적용될 공통 css와 js 는 레이아웃 본체인 이곳에 주입-->
+    <!--◆주의◆ 동적인것들은 th인설트로 주입하면 안먹으니까 여기다가 직접주입필요-->
+    <!--th:insert는 정적인 HTML 조각으로 삽입하기에 페이지가 렌더링될 때는 단순히
+    HTML 코드가 복사되어 들어오는 것이지 JavaScript처럼 "즉시 실행"되지는 않음,
+    그렇기에 즉시실행되어야할 제이쿼리와 부트스트랩js를 jslib.html에서 따로 빼서 위에서 주입시킨것-->
+<!-- 제이쿼리와 부트스트랩 이 둘은 제일 먼저 실행되어야하는 스크립트 라이브러리기 때문에 인설트문으로 넣으면
+    인설트문으로 넣은 html 파일에서 첫줄에 넣었다고 하더라도 html은 정적리소스라 즉시실행이 안됨,
+    그렇기에 직접 레이아웃에 하나하나 넣어줘야함 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><!--중요=>부트스트랩 css와 버전 일치해야함-->
+    <!-- 정적인것들은 lib에 담아서 한꺼번에 라이브러리 주입 -->
+    <th:block th:insert="~{/include/csslib.html}"></th:block>
 
-    <!-- 모든페이지에 적용될 공통 css와 js 는 여기에 -->
-    <link rel="stylesheet" th:href="@{/css/header.css}">
-    <link rel="stylesheet" th:href="@{/css/main.css}">
-    <script th:src="@{/js/header.js}"></script>
+    <!-- 각 페이지별 적용될 css가 이곳에 들어가는거임
+    각 페이지에서 layout:fragment="css" 태그를 쓰면-->
+    <th:block layout:fragment="css"></th:block><!-- 그 페이지가 실행될때 이 안에 들어감-->
 
-
-    <!-- 각 페이지별 적용될 css와 js가 이곳에 들어가는거임
-    각 페이지에서 layout:fragment="script or css" 태그를 쓰면 밑의 안에 들어가게되는식임-->
-    <th:block layout:fragment="css"></th:block>
-    <th:block layout:fragment="script"></th:block>
 </head>
 <body>
 <div id="container">
-    <div th:replace="~{include/header::header}"></div>
+   <div th:replace="~{include/header::header}"></div>
     <!---->
     <section>
         <div layout:fragment="content"></div>
-
     </section>
-
-    <div class="" style="height:500px; width: 100%;"></div><!-- 테스트여백 -->
     <!---->
-    <div th:replace="~{include/footer::footer}"></div>
+  <div th:replace="~{include/footer::footer}"></div>
 </div>
+
+<!-- 스크립트는 페이지로딩이 끝난후에 실행이 되어야하기때문에 css와같이 헤더에 위치하면 안되고
+맨 밑에 위치해야 정상작동함-->
+<th:block th:insert="~{/include/jslib.html}"></th:block>
+
+<!-- 각 페이지별 적용될 js가 이곳에 들어가는거임
+각 페이지에서 layout:fragment="script" 태그를 쓰면-->
+<th:block layout:fragment="script"></th:block><!-- 그 페이지가 실행될때 이 안에 들어감-->
+
 </body>
 </html>

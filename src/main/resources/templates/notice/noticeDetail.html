@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/exampleLayout}">
+
+    <div layout:fragment="content" class="container mt-5">
+        <h4 class="mb-4 border-bottom pb-2 fw-bold">공지사항 </h4>
+
+        <table class="table table-bordered align-middle">
+            <tbody>
+            <tr>
+                <th class="bg-light text-center" style="width: 150px;">제목</th>
+                <td colspan="3" th:text="${notice.title}"></td>
+            </tr>
+            <tr>
+                <th class="bg-light text-center">작성일자</th>
+                <td th:text="${#temporals.format(notice.createDate, 'yyyy.MM.dd HH:mm')}"></td>
+                <th class="bg-light text-center">작성자</th>
+                <td th:text="${notice.writer}"></td>
+            </tr>
+            <tr>
+                <th class="bg-light text-center">조회수</th>
+                <td th:text="${notice.viewCount}"></td>
+            </tr>
+            <tr>
+                <th class="bg-light text-center">첨부 파일</th>
+                <td colspan="3">
+                    <!-- 파일이 없는 경우 -->
+                    <!--
+                    <th:block th:if="${fileList == null or #lists.isEmpty(fileList)}">
+                        <span class="text-muted">첨부 파일 없음</span>
+                    </th:block>
+                    -->
+
+                    <!-- 파일이 있는 경우 -->
+                    <th:block th:if="${fileList != null and not #lists.isEmpty(fileList)}">
+                    <!--<th:block th:unless="${#lists.isEmpty(fileList)}">-->
+                        <th:block th:each="file, iterStat : ${fileList}">
+                            <div class="d-inline-block me-3 mb-2">
+                                <!-- 파일 다운로드 링크 -->
+                                <a th:href="@{/upload/{file}(file=${file})}"
+                                   th:text="${file}"
+                                   th:download="${file}"
+                                   th:title="'파일 다운로드: ' + ${file}"
+                                   class="text-decoration-none text-primary me-2">
+                                    <span th:text="${file}"></span>
+                                </a>
+
+
+                                <!-- 삭제 버튼 -->
+                                <!--
+                                <button type="button"
+                                        th:onclick="'fileDeleteCheck(' + \'' + ${file} + '\'' + ')'"
+                                        class="badge bg-danger border-0 ms-2">
+                                    삭제
+                                </button>
+                                -->
+                            </div>
+                        </th:block>
+                    </th:block>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="p-4 bg-white" th:utext="${#strings.replace(notice.content, newLine, '<br/>')}"></div>
+
+        <div class="mt-4 text-end">
+            <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+               th:href="@{/notice/noticeCheck(idx=${notice.idx}, action='update')}" class="btn btn-outline-primary me-2">수정</a>
+            <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+               th:href="@{/notice/noticeCheck(idx=${notice.idx}, action='delete')}" class="btn btn-outline-danger me-2">삭제</a>
+            <a th:href="@{/notice/noticeMain}" class="btn btn-secondary">목록</a>
+        </div>
+    </div>
+</html>

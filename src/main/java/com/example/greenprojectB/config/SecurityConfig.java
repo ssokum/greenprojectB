@@ -30,27 +30,41 @@ public class SecurityConfig {
                     // /register 경로에 대해 CSRF 보호 비활성화
                     .ignoringRequestMatchers("/register")
                     .ignoringRequestMatchers("/company/**")
+                    .ignoringRequestMatchers("/admin/**")
+                    .ignoringRequestMatchers("/faq/**")
+                    .ignoringRequestMatchers("/recruit/**")
                     .ignoringRequestMatchers("/ckeditor/**") // CKEditor 업로드 경로 제외
                     // CSRF 토큰을 쿠키로 저장, HttpOnly 설정 비활성화
                     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
-            .formLogin(form -> form
-            .loginPage("/member/memberLogin")
-            .defaultSuccessUrl("/member/memberLoginOk", true)
-            .failureUrl("/member/login/error")
-            .usernameParameter("memberId")
-            //.passwordParameter("pwd")
-            .permitAll());
+          .formLogin(form -> form
+                  .loginPage("/member/memberLogin")
+                  //.loginPage("/company/companyLogin")
+                  .defaultSuccessUrl("/member/memberLoginOk", true)
+                  //.defaultSuccessUrl("/company/companyLoginOk", true)
+                  .failureUrl("/member/login/error")
+                  //.failureUrl("/company/companyLogin/error")
+                  .usernameParameter("memberId")
+                  //.usernameParameter("companyId")
+                  .permitAll());
 
     // 각 페이지 접근권한설정
     http.authorizeHttpRequests(request -> request
             .requestMatchers("/images/**").permitAll()
             .requestMatchers("/member/accessPhoneNum").permitAll()
             .requestMatchers("/", "/css/**", "/js/**").permitAll()
+            .requestMatchers("/include/**", "/lib/**").permitAll()
             .requestMatchers("/member/memberJoin").permitAll()
+            .requestMatchers("/board/**").permitAll()
+            .requestMatchers("/faq/faqList").permitAll()
+            .requestMatchers("/faqImage").permitAll()
+            .requestMatchers("/recruit/**").permitAll()
+            .requestMatchers("/writing/get_template_list").permitAll()
             .requestMatchers("/ckeditor/**").permitAll()
             .requestMatchers("/company/**").permitAll()
-            .requestMatchers("/board/**").permitAll()
-            .requestMatchers("/data/**").authenticated()
+            .requestMatchers("/company/companyLogin").permitAll()
+            .requestMatchers("/notice/**").permitAll()
+            .requestMatchers("/recruit/recruitInput").hasRole("ENTERPRISE")
+            .requestMatchers("/notice/noticeWrite", "/notice/noticeUpdate","/faq/**").hasRole("ADMIN")
             .requestMatchers("/admin/**").hasRole("ADMIN")
             .anyRequest().authenticated());
 

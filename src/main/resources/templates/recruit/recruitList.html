@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/exampleLayout}">
+
+<div layout:fragment="content" class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">인재채용 게시판</h2>
+
+    <!-- ENTERPRISE만 글쓰기 버튼 보이게 -->
+    <th:block th:if="${loginRole == 'ENTERPRISE'}">
+      <a th:href="@{/recruit/recruitInput}" class="btn btn-outline-primary">글쓰기</a>
+    </th:block>
+  </div>
+
+  <!-- 게시판 테이블 -->
+  <table class="table table-hover text-center align-middle">
+    <thead class="table-light">
+    <tr>
+      <th style="width: 80px;">번호</th>
+      <th class="text-start">제목</th>
+      <th style="width: 150px;">작성자</th>
+      <th style="width: 150px;">등록일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="recruit : ${recruitPage.content}">
+      <td th:text="${recruit.recruitIdx}">1</td>
+      <td class="text-start">
+        <a th:href="@{/recruit/recruitDetail/{id}(id=${recruit.recruitIdx})}"
+           class="text-decoration-none text-dark fw-semibold"
+           th:text="${recruit.title}">채용 공고 제목</a>
+      </td>
+      <td th:text="${recruit.member.memberName}">작성자</td>
+      <td th:text="${#temporals.format(recruit.createdAt, 'yyyy-MM-dd HH:mm')}">등록일</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- 페이징 -->
+  <nav th:if="${recruitPage.totalPages > 1}">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" th:classappend="${recruitPage.first} ? 'disabled'">
+        <a class="page-link" th:href="@{/recruit/recruitList(page=${recruitPage.number - 1})}">이전</a>
+      </li>
+      <li class="page-item"
+          th:each="i : ${#numbers.sequence(0, recruitPage.totalPages - 1)}"
+          th:classappend="${recruitPage.number == i} ? 'active'">
+        <a class="page-link" th:href="@{/recruit/recruitList(page=${i})}" th:text="${i + 1}">1</a>
+      </li>
+      <li class="page-item" th:classappend="${recruitPage.last} ? 'disabled'">
+        <a class="page-link" th:href="@{/recruit/recruitList(page=${recruitPage.number + 1})}">다음</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+</html>

@@ -25,14 +25,16 @@ public class Threshold {
     @Column(name = "idx") //센서 번호
     private int idx;
 
-    @Column(name = "company_id")
-    private int companyId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id", referencedColumnName = "company_id", nullable = false)
+    private Company company;
+
+    @Column(name = "sensor_name", length = 50, nullable = false)
+    private String sensorName;
 
     @Column(name = "device_code", length = 20)// 기기 번호
     private String deviceCode;
 
-    @Column(name = "sensor", length = 30, nullable = false)
-    private double sensor;
 
     @Column(name = "min")
     private double min;
@@ -52,13 +54,13 @@ public class Threshold {
     public  static Threshold toEntity(ThresholdDto dto){
         return Threshold.builder()
                 .idx(dto.getIdx())
-                .companyId(dto.getCompanyId())
+                .company(dto.getCompany())
+                .sensorName(dto.getSensorName())
                 .deviceCode(dto.getDeviceCode())
-                .sensor(dto.getSensor())
                 .min(dto.getMin())
                 .max(dto.getMax())
-                .updatedAt((dto.getUpdatedAt()))
-                .updatedBy((dto.getUpdatedBy()))
+                .updatedAt(dto.getUpdatedAt())
+                .updatedBy(dto.getUpdatedBy())
                 .build();
     }
 

@@ -1,6 +1,6 @@
 package com.example.greenprojectB.dto;
 
-import com.example.greenprojectB.entity.History;
+import com.example.greenprojectB.entity.Company;
 import com.example.greenprojectB.entity.Threshold;
 import lombok.*;
 
@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
 public class ThresholdDto {
     
     private int idx;    // 번호
-    private int companyId;       // 회사ID
+    private Company company;       // 회사ID
+    private String sensorName;      // 센서 이름
     private String deviceCode;        // 위치
-    private double sensor;          // 센서값
     private double min;        // 최솟값
     private double max;        // 최댓값
     private LocalDateTime updatedAt;        // 수정날짜
@@ -27,11 +27,11 @@ public class ThresholdDto {
     public ThresholdDto createThresholdDto(Threshold threshold) {
         return ThresholdDto.builder()
                 .idx(threshold.getIdx())
-                .companyId(threshold.getCompanyId())
+                .company(threshold.getCompany())
+                .sensorName(threshold.getSensorName())
                 .deviceCode(threshold.getDeviceCode())
                 .max(threshold.getMax())
                 .min(threshold.getMin())
-                .sensor(threshold.getSensor())
                 .updatedAt(threshold.getUpdatedAt())
                 .updatedBy(threshold.getUpdatedBy())
                 .build();

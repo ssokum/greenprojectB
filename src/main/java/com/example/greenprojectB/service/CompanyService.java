@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -61,5 +62,11 @@ public class CompanyService {
 
   public void setCompanyInput(Company company) {
     companyRepository.save(company);
+  }
+
+  public Optional<Company> findByCompanyId(Long company_idx) { return companyRepository.findById(company_idx); }
+
+  public Company getCompanyDto(String id) {
+    return companyRepository.findByCompanyId(id).orElseThrow(() -> new RuntimeException("해당 사용자를 찾을 수 없습니다."));
   }
 }

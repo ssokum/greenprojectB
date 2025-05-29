@@ -28,50 +28,52 @@ public class Company {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "company_idx")
-  private Long company_idx;
+  private Long companyIdx;
 
-  @Column(length = 20, nullable = false, unique = true)
-  private String company_id;
+  @Column(name = "company_id", length = 20, nullable = false, unique = true)
+  private String companyId;
 
   @NotNull
   private String password;
 
-  @Column(length = 255, nullable = false)
-  private String company_name;
+  @Column(name = "company_name",length = 255, nullable = false)
+  private String companyName;
 
-  @Column(length = 20, nullable = false)
-  private String business_number;
+  @Column(name = "business_number", length = 20, nullable = false)
+  private String businessNumber;
 
-  @Column(length = 20, nullable = false)
-  private String ceo_name;
+  @Column(name = "ceo_name",length = 20, nullable = false)
+  private String ceoName;
 
   @Column(length = 255, nullable = false)
   private String address;
 
-  @Column(unique = true, length = 50)
-  private String company_email;
+  @Column(name = "company_email",unique = true, length = 50)
+  private String companyEmail;
 
-  @Column(length = 50, nullable = false)
-  private String company_homepage;
+  @Column(name = "company_homepage",length = 50, nullable = false)
+  private String companyHomepage;
 
-  @Column(unique = true, length = 50)
-  private String phone_number;
+  @Column(name = "phone_number",unique = true, length = 50)
+  private String phoneNumber;
 
-  @Column(unique = true, length = 50)
-  private String fax_number;
+  @Column(name = "fax_number",unique = true, length = 50)
+  private String faxNumber;
 
   @Lob
-  private String company_content;
+  @Column(name = "company_content",nullable = false, columnDefinition = "TEXT")
+  private String companyContent;
 
   @Column(name = "is_deleted")
-  private int is_deleted;
+  private int isDeleted;
 
   @CreatedDate
   @Column(name = "created_at", updatable = false)
-  private LocalDateTime created_at;
+  private LocalDateTime createdAt;
 
   @LastModifiedDate
-  private LocalDateTime update_at;
+  @Column(name = "update_at")
+  private LocalDateTime updateAt;
 
   private Role role;
 
@@ -84,21 +86,21 @@ public class Company {
 //    String password = passwordEncoder.encode(dto.getPassword());
 
     return Company.builder()
-            .company_idx(dto.getCompanyIdx())
-            .company_id(dto.getCompanyId())
+            .companyIdx(dto.getCompanyIdx())
+            .companyId(dto.getCompanyId())
             .password(passwordEncoder.encode(dto.getPassword()))
-            .company_name(dto.getCompany_name())
-            .business_number(dto.getBusiness_number())
-            .ceo_name(dto.getCeo_name())
+            .companyName(dto.getCompanyName())
+            .businessNumber(dto.getBusinessNumber())
+            .ceoName(dto.getCeoName())
             .address(dto.getAddress())
-            .company_email(dto.getCompany_email())
-            .company_homepage(dto.getCompany_homepage())
-            .phone_number(dto.getBusiness_number())
-            .fax_number(dto.getFax_number())
-            .company_content(dto.getCompany_content())
-            .is_deleted(0)
-            .created_at(null)
-            .update_at(null)
+            .companyEmail(dto.getCompanyEmail())
+            .companyHomepage(dto.getCompanyHomepage())
+            .phoneNumber(dto.getPhoneNumber())
+            .faxNumber(dto.getFaxNumber())
+            .companyContent(dto.getCompanyContent())
+            .isDeleted(0)
+            .createdAt(null)
+            .updateAt(null)
             .role(Role.ENTERPRISE)
             .build();
   }

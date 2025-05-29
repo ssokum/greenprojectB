@@ -1,16 +1,20 @@
 package com.example.greenprojectB.controller;
 
 import com.example.greenprojectB.dto.SummarySensorDto;
+import com.example.greenprojectB.entity.Company;
 import com.example.greenprojectB.entity.Sensor;
+import com.example.greenprojectB.entity.Threshold;
 import com.example.greenprojectB.service.AdminService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 @lombok.extern.slf4j.Slf4j
 @Controller
@@ -40,7 +44,32 @@ public class AdminController {
         return sensors;
     }
 
+    @GetMapping("/register-device")
+    public String adminRegisterDeviceGet(Model model) {
+        return "admin/register-device";
+    }
 
+    @GetMapping("/setup-device")
+    public String adminSetupDeviceGet(Model model) {
+        return "admin/setup-device";
+    }
 
+    @ResponseBody
+    @PostMapping("/getCompany")
+    public Company getCompanyPost(String companyId) {
+        return adminService.getCompany(companyId);
+    }
 
+    @ResponseBody
+    @PostMapping("/getDeviceCode")
+    public List<String> getDeviceCodePost(String companyId) {
+        return adminService.getDeviceCode(companyId);
+    }
+
+    @ResponseBody
+    @PostMapping("/getThreshold")
+    public ArrayList<Threshold> getThresholdPost(String companyId, String deviceCode) {
+        //return adminService.getThreshold(companyId, deviceCode);
+        return null;
+    }
 }

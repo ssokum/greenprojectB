@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/exampleLayout}">
+
+
+<div layout:fragment="content" class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-start">공지사항<small>새로운 소들과 유용한 정보들을 한곳에서 확인하세요.</small></h2>
+    </div>
+
+    <!-- 📑 공지사항 테이블 -->
+    <table class="table table-hover text-center align-middle">
+        <thead class="table-dark">
+        <tr>
+            <th>No.</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="notice : ${noticeList}">
+            <td th:text="${notice.idx}">1</td>
+            <td class="text-start">
+                <a th:href="@{'/notice/detail/' + ${notice.idx}}" th:text="${notice.title}"></a>
+            </td>
+            <td th:text="${notice.writer}"></td>
+            <td th:text="${#temporals.format(notice.createDate, 'yyyy-MM-dd')}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(noticeList.content)}">
+            <td colspan="4">공지사항이 없습니다.</td>
+        </tr>
+        </tbody>
+    </table>
+    <!-- 검색바 + 공지 작성-->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <!-- 검색바 -->
+        <form id="searchForm" class="d-flex align-items-center" method="get" th:action="@{/notice/noticeMain}">
+            <div class="input-group" style="min-width: 300px; max-width: 500px;">
+                <input id="keywordInput" type="text" class="form-control" name="keyword"
+                       placeholder="제목 또는 내용을 입력하세요"
+                       th:value="${keyword}">
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form>
+
+        <!-- SweetAlert2 CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <script>
+            document.getElementById('searchForm').addEventListener('submit', function(e) {
+                const keyword = document.getElementById('keywordInput').value.trim();
+                if (!keyword) {
+                    e.preventDefault();  // 폼 제출 막기
+                    Swal.fire({
+                        text: '검색어를 입력해 주세요.',
+                        confirmButtonText: '확인',
+                        customClass: {
+                            popup: 'my-popup',
+                            confirmButton: 'my-confirm-button',
+                            actions: 'my-actions',
+                            closeButton: 'my-close-button'
+                        },
+                        showCloseButton: true,
+                        backdrop: true,
+                        allowOutsideClick: true
+                    });
+                }
+            });
+        </script>
+
+        <!-- 공지 작성 버튼 (관리자만 표시) -->
+        <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+           th:href="@{/notice/noticeWrite}" class="btn btn-primary ms-3">
+            공지 작성
+        </a>
+    </div>
+
+    <!-- 페이지 네이션 -->
+    <div class="text-center">
+        <ul class="pagination justify-content-center">
+            <th:block th:if="${pag > 1}"><li class="page-item"><a class="page-link text-secondary" th:href="@{noticeMain(pageSize=${pageSize},pag=0)}">첫페이지</a></li></th:block>
+            <th:block th:if="${curBlock > 0}"><li class="page-item"><a class="page-link text-secondary" th:href="@{noticeMain(pageSize=${pageSize},pag=${(curBlock-1)*blockSize+1-1})}">이전블록</a></li></th:block>
+            <th:block th:each="i: ${#numbers.sequence((curBlock*blockSize)+1,(curBlock*blockSize)+blockSize)}">
+                <th:block th:if="${i <= totPage && i == pag}"><li class="page-item active"><a class="page-link bg-secondary border-secondary" th:href="@{noticeMain(pageSize=${pageSize},pag=${i-1})}" th:text="${i}"></a></li></th:block>
+                <th:block th:if="${i <= totPage && i != pag}"><li class="page-item"><a class="page-link text-secondary" th:href="@{noticeMain(pageSize=${pageSize},pag=${i-1})}" th:text="${i}"></a></li></th:block>
+            </th:block>
+            <th:block th:if="${curBlock < lastBlock}"><li class="page-item"><a class="page-link text-secondary" th:href="@{noticeMain(pageSize=${pageSize},pag=${(curBlock+1)*blockSize+1-1})}">다음블록</a></li></th:block>
+            <th:block th:if="${pag < totPage}"><li class="page-item"><a class="page-link text-secondary" th:href="@{noticeMain(pageSize=${pageSize},pag=${totPage-1})}">마지막페이지</a></li></th:block>
+        </ul>
+    </div>
+</div>
+</html>

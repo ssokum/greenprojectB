@@ -4,10 +4,15 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/exampleLayout}">
 <head>
-  <link rel="stylesheet" th:href="@{/css/companyOrganizationChart.css}">
-</head>
+<!--
+  <link rel="stylesheet" th:href="@{/css/companyOrganizationChart.css}">-->
+  <th:block layout:fragment="css">
+    <link rel="stylesheet" th:href="@{/css/companyOrganizationChart.css}">
+  </th:block>
 
-<div layout:fragment="content" class="container text-center">
+</head>
+<!---->
+<div layout:fragment="content" class="container text-center" >
   <h2><b>조직도</b></h2>
 
   <div class="system">

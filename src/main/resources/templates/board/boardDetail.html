@@ -34,7 +34,7 @@
         success: function(data) {
           if (data.success) {
             const commentHtml = `
-              <li class="list-group-item border-0 border-bottom" id="comment-${data.comment.id}">
+              <li class="list-group-item border-0 border-bottom" id="comment-${data.comment.commentIdx}">
                 <div class="d-flex justify-content-between mb-1">
                   <strong>${data.comment.memberName}</strong>
                   <small class="text-muted">${data.comment.createdAt}</small>
@@ -42,9 +42,9 @@
                 <div class="ms-1 comment-content">${data.comment.content}</div>
                 <div class="text-end mt-2">
                   <button class="btn btn-sm btn-outline-danger me-1"
-                          onclick="deleteComment(${data.comment.id})">삭제</button>
+                          onclick="deleteComment(${data.comment.commentIdx})">삭제</button>
                   <button class="btn btn-sm btn-outline-secondary"
-                          onclick="editComment(${data.comment.id})">수정</button>
+                          onclick="editComment(${data.comment.commentIdx})">수정</button>
                 </div>
               </li>
             `;
@@ -63,7 +63,7 @@
 
     // 댓글 삭제
     window.deleteComment = function(commentId) {
-      if (!confirm("정말 삭제하시겠습니까?")) return;
+      if (!confirm("선택하신 댓글을 삭제하시겠습니까?")) return;
 
       const csrfToken = $("meta[name='_csrf']").attr("content");
       const csrfHeader = $("meta[name='_csrf_header']").attr("content");
@@ -77,9 +77,9 @@
         success: function(data) {
           if (data.success) {
             $("#comment-" + commentId).remove();
-            alert("삭제되었습니다.");
+            alert("댓글이 삭제되었습니다.");
           } else {
-            alert("삭제 실패");
+            alert("댓글 삭제 실패");
           }
         },
         error: function() {
@@ -92,16 +92,19 @@
     window.editComment = function(commentId) {
       const commentItem = $("#comment-" + commentId);
       const contentDiv = commentItem.find(".comment-content");
-      const originalContent = contentDiv.text().trim();
+      const originalHtml = contentDiv.html();
+      const originalText = originalHtml.replace(/<br\s*\/?>/gi, '\n').trim();
 
-      // 이미 수정 중이면 return
       if (commentItem.find("textarea").length > 0) return;
 
+      // 원본 HTML 저장
+      contentDiv.attr("data-original", originalHtml);
+
       contentDiv.html(`
-        <textarea class="form-control mb-2" id="editContent-${commentId}">${originalContent}</textarea>
+        <textarea class="form-control mb-2" id="editContent-${commentId}">${originalText}</textarea>
         <div class="text-end">
           <button class="btn btn-sm btn-outline-primary me-1" onclick="submitUpdate(${commentId})">저장</button>
-          <button class="btn btn-sm btn-outline-secondary" onclick="cancelEdit(${commentId}, '${originalContent.replace(/'/g, "\\'")}')">취소</button>
+          <button class="btn btn-sm btn-outline-secondary" onclick="cancelEdit(${commentId})">취소</button>
         </div>
       `);
     };
@@ -114,9 +117,7 @@
         return;
       }
 
-      if (!confirm("수정하신 내용을 저장하시겠습니까?")) {
-        return;
-      }
+      if (!confirm("수정하신 댓글을 저장하시겠습니까?")) return;
 
       const csrfToken = $("meta[name='_csrf']").attr("content");
       const csrfHeader = $("meta[name='_csrf_header']").attr("content");
@@ -132,8 +133,9 @@
         success: function(data) {
           if (data.success) {
             const contentDiv = $("#comment-" + commentId).find(".comment-content");
-            contentDiv.text(content);
-            alert("수정되었습니다.");
+            const formatted = content.replace(/\n/g, "<br/>");
+            contentDiv.html(formatted);
+            alert("댓글이 수정되었습니다.");
           } else {
             alert("수정 실패");
           }
@@ -145,12 +147,16 @@
     };
 
     // 댓글 수정 취소
-    window.cancelEdit = function(commentId, originalContent) {
+    window.cancelEdit = function(commentId) {
       const contentDiv = $("#comment-" + commentId).find(".comment-content");
-      contentDiv.text(originalContent);
+      const originalHtml = contentDiv.attr("data-original");
+      if (originalHtml !== undefined) {
+        contentDiv.html(originalHtml);
+      }
     };
   </script>
 </th:block>
+
 
 <div layout:fragment="content" class="container mt-4" style="max-width: 700px;">
   <h2 class="mb-3" th:text="${board.title}">게시글 제목</h2>
@@ -192,16 +198,16 @@
           <strong th:text="${comment.member.memberName}">작성자</strong>
           <small class="text-muted" th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</small>
         </div>
-        <div class="ms-1 comment-content" th:text="${comment.content}">댓글 내용</div>
+        <div class="ms-1 comment-content" th:utext="${comment.content}">댓글 내용</div>
         <div class="text-end mt-2">
           <!-- 본인 또는 관리자만 삭제/수정 -->
-          <th:block th:if="${loginId == comment.member.memberId or loginRole == 'ADMIN'}">
-            <button class="btn btn-sm btn-outline-danger me-1"
-                    th:onclick="'deleteComment(' + ${comment.commentIdx} + ')'">삭제</button>
-          </th:block>
           <th:block th:if="${loginId == comment.member.memberId}">
             <button class="btn btn-sm btn-outline-secondary"
                     th:onclick="'editComment(' + ${comment.commentIdx} + ')'">수정</button>
+          </th:block>
+          <th:block th:if="${loginId == comment.member.memberId or loginRole == 'ADMIN'}">
+            <button class="btn btn-sm btn-outline-danger me-1"
+            th:onclick="'deleteComment(' + ${comment.commentIdx} + ')'">삭제</button>
           </th:block>
         </div>
       </li>

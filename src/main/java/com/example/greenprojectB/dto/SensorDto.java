@@ -15,7 +15,7 @@ import java.util.Optional;
 public class SensorDto {
 
     private int sensorId;
-    private int companyId;
+    private String companyId;
     private String deviceCode;
     private LocalDateTime measureDatetime;
 

@@ -4,10 +4,15 @@ import com.example.greenprojectB.dto.CompanyDto;
 import com.example.greenprojectB.dto.HistoryDto;
 import com.example.greenprojectB.entity.Company;
 import com.example.greenprojectB.entity.History;
+import com.example.greenprojectB.entity.Member;
 import com.example.greenprojectB.repository.HistoryRepository;
 import com.example.greenprojectB.service.CompanyService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,14 +20,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -122,27 +125,73 @@ public class CompanyController {
   // 기업 소개 -
   // 레드라이즈(기업1) 상세보기
     @GetMapping("/enterprise/enterprise1")
-  public String enterprise1Get() {
+  public String enterprise1Get(@RequestParam("company_idx") Long company_idx, Model model ) {
+    Optional<Company> company = companyService.findByCompanyId(company_idx);
+    CompanyDto dto = CompanyDto.createMemberDto(company);
+
+    model.addAttribute("dto", dto);
     return "enterprise/enterprise1";
   }
 
   // 화이트서버(기업2) 상세보기
   @GetMapping("/enterprise/enterprise2")
-  //public String companyJoinGet(Model model) {
-  public String enterprise2Get() {
-    //model.addAttribute("companyDto", new CompanyDto());
+  public String enterprise2Get(@RequestParam("company_idx") Long company_idx, Model model ) {
+    Optional<Company> company = companyService.findByCompanyId(company_idx);
+    CompanyDto dto = CompanyDto.createMemberDto(company);
+
+    model.addAttribute("dto", dto);
     return "enterprise/enterprise2";
   }
 
+
   // 블루와이즈(기업3) 상세보기
   @GetMapping("/enterprise/enterprise3")
-  //public String enterprise(Model model) {
-  public String enterprise3Get() {
-    //model.addAttribute("companyDto", new CompanyDto());
+  public String enterprise3Get(@RequestParam("company_idx") Long company_idx, Model model ) {
+    Optional<Company> company = companyService.findByCompanyId(company_idx);
+    CompanyDto dto = CompanyDto.createMemberDto(company);
+
+    model.addAttribute("dto", dto);
     return "enterprise/enterprise3";
   }
 
+  // 기업회원 로그인 폼 불러오기
+  @GetMapping("/companyLogin")
+  public String companyLoginGet() {
+    return "company/companyLogin";
+  }
+
+  @GetMapping("/companyLogin/error")
+  public String companyLoginErrorGet(RedirectAttributes rttr) {
+    rttr.addFlashAttribute("cLoginErrorMsg", "기업아이디 또는 비밀번호가 일치하지 않습니다.");
+    return "redirect:/company/companyLogin";
+  }
 
 
+  @GetMapping("/companyLoginOk")
+  public String companyLoginOkPost(HttpServletRequest request, HttpServletResponse response,
+                                 Authentication authentication,
+                                 RedirectAttributes rttr) {
+    // Spring Security에서 사용자 정보를 가져온다.
+    String id = authentication.getName().toString();
+    System.out.println("================> 로그인post통과(id) : " + id);
+    Company company = companyService.getCompanyDto(id);
+    System.out.println("================> 로그인post통과(dto) : " + company);
+    rttr.addFlashAttribute("message", company.getCompanyName() + "님 로그인 되었습니다.");
 
+    // 세션처리....
+    HttpSession session = request.getSession();
+    session.setAttribute("sName", company.getCompanyName());
+
+    // 등급(레벨) 처리
+    String strLevel = company.getRole().toString();
+    System.out.print(strLevel);
+    if(strLevel.equals("ADMIN")) strLevel = "관리자";
+    else if(strLevel.equals("OPERATOR")) strLevel = "운영자";
+    else if(strLevel.equals("USER")) strLevel = "정회원";
+
+    log.info("====================>> 회원 등급 : " + strLevel + " , sName : " + company.getCompanyName());
+    session.setAttribute("strLevel", strLevel);
+
+    return "redirect:/";
+  }
 }

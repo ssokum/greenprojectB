@@ -1,0 +1,26 @@
+
+<!-- JavaScript Libraries 제일 먼저실행되어야할 스크립트 라이브러리 2개(제이쿼리, 부스트르랩)-->
+<!-- html은 정적이라 바로실행이안되기에 모체레이아웃에서 직접주입으로 바꿈-->
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>-->
+
+<!--폰트어썸 라이브러리-->
+<script src="https://kit.fontawesome.com/df66332deb.js" crossorigin="anonymous"></script>
+
+<!--외부라이브러리가 아닌 정적리소스폴더에서 가져올땐 타임리프 써주는게 좋음-->
+<!--기능: 스크롤, 애니메이션의 속도 곡선을 자연스럽게 만들어 줍니다. (easeInOutQuad, easeInExpo 같은 함수 제공)
+용도: animate() 함수에서 easing 옵션 사용할 때 필요-->
+<script th:src="@{/lib/easing/easing.min.js}"></script>
+
+<!--기능: 스크롤 이벤트를 트리거하는 라이브러리
+용도: 특정 요소가 화면에 나타날 때 애니메이션을 작동시키는 데 사용-->
+<script th:src="@{/lib/waypoints/waypoints.min.js}"></script>
+
+<!--반응형 슬라이더(Carousel) UI 구현을 위한 jQuery 기반 플러그인
+   용도: 이미지 슬라이더, 상품 슬라이드 등 만들 때 사용-->
+<script th:src="@{/lib/owlcarousel/owl.carousel.min.js}"></script>
+
+<script th:src="@{/js/main.js}"></script>
+
+<!--카카오 (카카오api 쓸거면 필요하고 안쓸꺼면 필요없긴함)-->
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>

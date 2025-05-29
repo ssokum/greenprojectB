@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/exampleLayout}">
+
+<head>
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+</head>
+
+<div layout:fragment="content" class="container mt-4" style="max-width: 800px;">
+  <h2 class="mb-3" th:text="${recruit.title}">채용 공고 제목</h2>
+  <div class="mb-2 text-muted">
+    작성자: <span th:text="${recruit.member.memberName}">홍길동</span> |
+    등록일: <span th:text="${#temporals.format(recruit.createdAt, 'yyyy-MM-dd HH:mm')}">2025-05-29</span>
+  </div>
+
+  <div class="border p-3 mb-4" style="white-space: pre-wrap;" th:utext="${recruit.content}">
+    채용 공고 내용 출력
+  </div>
+
+  <!-- 목록 및 삭제 버튼 -->
+  <div class="text-end d-flex justify-content-end gap-2">
+    <a th:href="@{/recruit/recruitList}" class="btn btn-outline-secondary">목록</a>
+
+    <!-- 삭제 버튼: 작성자 또는 관리자 -->
+    <th:block th:if="${loginId == recruit.member.memberId or loginRole == 'ADMIN'}">
+      <form th:action="@{'/recruit/delete/' + ${recruit.recruitIdx}}" method="post"
+            onsubmit="return confirm('정말 삭제하시겠습니까?')">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <button type="submit" class="btn btn-outline-danger">삭제</button>
+      </form>
+    </th:block>
+  </div>
+</div>
+</html>

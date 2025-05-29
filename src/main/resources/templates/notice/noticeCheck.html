@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>비밀번호 확인</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+        }
+
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          background-color: #f8f9fa;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+        }
+
+        .container {
+          text-align: center;
+          background-color: white;
+          padding: 40px 30px;
+          border-radius: 12px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          width: 360px;
+        }
+
+        .lock-icon {
+          font-size: 48px;
+          color: #444;
+          margin-bottom: 20px;
+        }
+
+        .message {
+          font-size: 15px;
+          margin-bottom: 25px;
+          color: #555;
+        }
+
+        .input-group {
+          display: flex;
+          margin-bottom: 20px;
+        }
+
+        .input-group input {
+          flex: 1;
+          padding: 10px 12px;
+          font-size: 15px;
+          border: 1px solid #ccc;
+          border-right: none;
+          border-radius: 4px 0 0 4px;
+          outline: none;
+        }
+
+        .input-group button {
+          padding: 10px 16px;
+          font-size: 15px;
+          border: none;
+          background-color: #333;
+          color: white;
+          border-radius: 0 4px 4px 0;
+          cursor: pointer;
+          transition: background-color 0.2s;
+        }
+
+        .input-group button:hover {
+          background-color: #555;
+        }
+
+        .cancel-btn {
+          margin-top: 10px;
+          font-size: 14px;
+          background-color: #aaa;
+          color: white;
+          padding: 8px 16px;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+        }
+
+        .cancel-btn:hover {
+          background-color: #888;
+        }
+
+        /* error 메시지 margin-top 조금 줄임 */
+        .error-message {
+          color: red;
+          margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <i class="fas fa-lock lock-icon"></i>
+    <div class="message">글을 작성할 때 설정한 비밀번호를 입력해주세요.</div>
+
+    <form method="post" th:action="@{/notice/noticeCheck}"  id="passwordCheckForm">
+        <input type="hidden" name="idx" th:value="${param.idx}">
+        <input type="hidden" name="action" th:value="${param.action}">  <!-- 추가 -->
+        <div class="input-group">
+            <input type="password" name="password" placeholder="비밀번호" required>
+            <button type="submit">확인</button>
+        </div>
+    </form>
+
+    <div class="error-message" style="color:red;" id="errorMessage" hidden>
+        <!-- 오류 메시지가 들어갈 자리 -->
+    </div>
+
+    <script>
+        // 에러 메시지 처리 (기존 코드 유지)
+        const params = new URLSearchParams(window.location.search);
+        const error = params.get('error');
+
+        if (error) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = error;
+            errorDiv.hidden = false;
+        }
+
+        // 삭제일 때만 confirm 띄우고 제출 컨트롤
+        document.getElementById('passwordCheckForm').addEventListener('submit', function(event) {
+            const action = document.querySelector('input[name="action"]').value;
+            if (action === 'delete') {
+                event.preventDefault();  // 일단 제출 막기
+                const confirmed = confirm("정말 삭제하시겠습니까?");
+                if (confirmed) {
+                    // 확인 시 다시 제출
+                    event.target.submit();
+                }
+                // 취소 시 아무 동작 없음(제출 안됨)
+            }
+        });
+    </script>
+
+    <a class="cancel-btn" th:href="@{/notice/detail/{idx}(idx=${param.idx})}">취소</a>
+</div>
+</body>
+</html>

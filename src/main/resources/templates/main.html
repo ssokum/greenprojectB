@@ -1,16 +1,102 @@
-<!DOCTYPE html>
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/exampleLayout}">
 
-<div layout:fragment="content" class="container text-center">
-    <h2>섹션 컨텐트부분</h2>
+    <th:block layout:fragment="css">
+        <style th:inline="css">
+            .img-lineTalk {
+                aspect-ratio: 1;
+                object-fit: cover;
+            }
 
-    <div>
+            .knowhowMainImg img {
+                aspect-ratio: 1;
+                object-fit: cover;
+                height: 250px;
+            }
 
+            .h-80 {
+                height: 90px !important;
+                object-fit: cover;
+            }
+
+            .h-300 {
+                height: 400px !important;
+                object-fit: cover;
+            }
+
+            .trandingTags {
+                margin: 0;
+                padding: 0;
+            }
+
+            .trandingTags li {
+                list-style: none;
+                text-align: center;
+                display: inline-block;
+                word-break: keep-all;
+                margin: 12px 5px;
+            }
+
+            .trandingTags li a {
+                color: #333;
+                padding: 10px 15px;
+            }
+        </style>
+    </th:block>
+    <!--<script th:src="@{/js/main.js}"></script>-->
+
+<div class="bodyCenter" layout:fragment="content" >
+<!--<script th:inline="javascript">-->
+
+
+    <!--<script>
+        $(() => {
+            wordCheck();
+        });
+
+        function wordCheck() {
+            let url = "http://localhost:9090/";
+            let selector = "a.h4";
+            // let url = "https://news.naver.com";
+            // let selector = "div.cjs_t";
+            let excludeWord = " ../test"; // 제외할문자열('/'로 구분해서 입력)
+
+            $.ajax({
+                url: "/board/wordcloud/analyzer3",
+                type: "post",
+                data: {
+                    url: url,
+                    selector: selector,
+                    excludeWord: excludeWord
+                },
+                success: function (data) {
+                    let no = 0;
+                    let res = '';
+                    Object.entries(data).forEach(([key, value]) => {
+                        // console.log(key, value);
+                        no++;
+                        res += '<li>';
+                        res += '<a class="bg-light rounded-pill" href="#">';
+                        res += key;
+                        res += '</a>';
+                        res += '</li>';
+                    });
+                    $("#demo").html(res);
+                },
+                error: function () {
+                    alert("전송오류~");
+                }
+            });
+        }
+    </script>-->
+
+    <div style="text-align: center;
+    height: 400px;
+    padding-top: 100px;">
+        <h2>컨텐트 부분</h2>
     </div>
-
 </div>
 
 </html>

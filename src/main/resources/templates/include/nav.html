@@ -1,72 +1,194 @@
-<!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 
 <th:block layout:fragment="script">
   <script th:inline="javascript">
-    let message = [[${message}]];
-    if(message != null) alert(message);
 
-    function deleteMember() {
-      if (confirm("정말 회원탈퇴 하시겠습니까?")) {
-        location.href = "/member/memberResign";
+    //오늘 날짜출력
+    $(document).ready(function () {
+      function convertTime() {
+        var now = new Date();
+        var month = now.getMonth() + 1;
+        var date = now.getDate();
+        return month + '월' + date + '일';
       }
+
+      var currentTime = convertTime();
+      $('.nowtime').append(currentTime);
+    });
+
+    // 날씨 가져오기
+    $.getJSON('https://api.openweathermap.org/data/2.5/weather?q=Cheongju,kr&appid=69d40ef4e9f601efe99d5dd0bcf874cb&units=metric',
+            function (WeatherResult) {
+              // 기온 출력
+              $('.CheongjuNowtemp').append(WeatherResult.main.temp);
+              // $('.CheongjuLowtemp').append(WeatherResult.main.temp_min);
+              // $('.CheongjuHightemp').append(WeatherResult.main.temp_max);
+
+              // 날씨 아이콘 출력
+              var weathericonUrl =
+                      '<img src="http://openweathermap.org/img/wn/' +
+                      WeatherResult.weather[0].icon +
+                      '.png" class="img-fluid w-100 me-2" alt="' + WeatherResult.weather[0].description + '"/>';
+
+              $('.CheongjuIcon').html(weathericonUrl);
+            });
+
+
+    // 자유게시판 검색용 스크립트/ 그에맞게 수정필요
+    function knowhowSearch() {
+      let searchStr = $("#searchStr").val();
+      if (searchStr.trim() == "") {
+        alert("검색어를 입력하세요");
+        return false;
+      }
+
+      $("#knowhowSearch").submit();
     }
+
+/*    // 카카오 로그아웃
+    window.Kakao.init("fde9bae21527997d554b2574bc6ebf80");
+
+    function kakaoLogout() {
+      const accessToken = Kakao.Auth.getAccessToken();
+      if (accessToken) {
+        Kakao.Auth.logout(function () {
+          window.location.href = "https://kauth.kakao.com/oauth/logout?client_id=fde9bae21527997d554b2574bc6ebf80&logout_redirect_uri=http://localhost:9090/member/memberLogout";
+        });
+      }
+    }*/
+
   </script>
 </th:block>
 
-<nav class="navbar navbar-expand-sm bg-light justify-content-center">
-  <ul class="navbar-nav">
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" th:href="@{#}" data-bs-toggle="dropdown" >회사소개</a>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" th:href="@{/company/companyGreeting}">인사말</a></li>
-        <li><a class="dropdown-item" th:href="@{/company/companyHistory}">일반현황 및 연혁</a></li>
-        <li><a class="dropdown-item" th:href="@{/company/companyOrganizationChart}">조직도</a></li>
-        <li><a class="dropdown-item" href="#">찾아오시는 길</a></li>
-      </ul>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" th:href="@{#}">link2</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" th:href="@{#}">link3</a>
-    </li>
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" >link4</a>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#">Link</a></li>
-        <li><a class="dropdown-item" href="#">Another link</a></li>
-        <li><a class="dropdown-item" href="#">A third link</a></li>
-      </ul>
-    </li>
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" sec:authorize="isAuthenticated()">link5</a>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#">Link</a></li>
-        <li><a class="dropdown-item" href="#">Another link</a></li>
-        <li><a class="dropdown-item" href="#">A third link</a></li>
-      </ul>
-    </li>
-
-    <li class="nav-item" sec:authorize="isAnonymous()">
-      <a class="nav-link" th:href="@{/member/memberLogin}">Login</a>
-    </li>
-    <li class="nav-item" sec:authorize="isAuthenticated()">
-      <a class="nav-link" th:href="@{/member/memberLogout}">Logout</a>
-    </li>
-<!--    <li class="nav-item" sec:authorize="isAuthenticated()">-->
-<!--      <a class="nav-link" th:href="@{/member/memberResign}">resign</a>-->
-<!--    </li>-->
-    <li class="nav-item" sec:authorize="isAuthenticated()">
-      <a class="nav-link" onclick="deleteMember()">resign</a>
-    </li>
-    <li class="nav-item" sec:authorize="isAnonymous()">
-      <a class="nav-link" th:href="@{/member/memberJoin}">Join</a>
-    </li>
-  </ul>
-</nav>
 
 
+<!-- Navbar start -->
+<div class="container-fluid sticky-top px-0 shadow-sm" style="top: 0px;">
+  <div class="container-fluid topbar bg-dark d-lg-block">
+    <div class="container px-0">
+      <div class="topbar-top d-flex justify-content-between flex-lg-wrap">
+        <div class="top-link flex-lg-wrap d-none d-lg-block">
+          <div class="d-flex icon">
+            <p class="mb-0 text-white me-2 ml-5"><i class="fas fa-link text-white" aria-hidden="true"></i>
+              Follow Us:</p>
+            <a href="" class="me-2"><i class="fab fa-instagram text-body link-hover" aria-hidden="true"></i></a>
+            <a href="" class="me-2"><i class="fab fa-youtube text-body link-hover"
+                                       aria-hidden="true"></i></a>
+          </div>
+        </div>
+        <div class="top-member ml-auto">
+          <nav class="navbar navbar-light navbar-expand-xl">
+
+            <a href="/member/memberLogin" class="nav-link text-white"><i
+                    class="fa-regular fa-user me-1" aria-hidden="true"></i>로그인</a>
+            <a href="/member/memberJoin" class="nav-link text-white">회원가입</a>
+
+
+<!--            <a href="/shop/cartList" class="nav-link text-white"><i
+                    class="fa-solid fa-basket-shopping" aria-hidden="true"></i></a>-->
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid  bg-light">
+    <div class="container px-0">
+      <nav class="navbar navbar-light navbar-expand-xl">
+        <a href="/main" class="navbar-brand">
+          <img src="/images/임시로고.jpg" alt="임시로고">
+        </a>
+        <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarCollapse">
+          <span class="fa fa-bars text-primary" aria-hidden="true"></span>
+        </button>
+        <div class="collapse navbar-collapse py-3" id="navbarCollapse">
+          <div class="navbar-nav mx-auto border-top">
+            <div class="nav-item dropdown">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">회사소개</a>
+              <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                <a th:href="@{/company/companyGreeting}" class="dropdown-item">인사말</a>
+                <a th:href="@{/company/companyHistory}" class="dropdown-item">일반현황 및 연혁</a>
+                <a th:href="@{/company/companyOrganizationChart}" class="dropdown-item">공지사항</a>
+                <a th:href="@{/company/companyOrganizationChart}" class="dropdown-item">조직도</a>
+                <a th:href="@{/company/companyDirections}"
+                   class="dropdown-item">찾아오시는 길</a>
+              </div>
+            </div>
+            <div class="nav-item dropdown">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">참여기업</a>
+              <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                <a th:href="@{/company/enterprise/enterprise1(company_idx=8)}" class="dropdown-item">레드라이즈</a>
+                <a th:href="@{/company/enterprise/enterprise2(company_idx=9)}" class="dropdown-item">화이트서버</a>
+                <a th:href="@{/company/enterprise/enterprise3(company_idx=10)}" class="dropdown-item">블루와이즈</a>
+              </div>
+            </div>
+            <div class="nav-item dropdown">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Membership<i
+                      class="fa-solid fa-store text-success" aria-hidden="true"></i></a>
+              <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                <a th:href="@{/recruit/recruitList}">인재채용</a>
+                <a th:href="@{/board/boardList}">고객커뮤니티</a>
+                <a href="/shop/productList?cat1=C" class="dropdown-item">프로페셔널서비스</a>
+                <a th:href="@{/faq/faqList}">FAQ</a>
+              </div>
+            </div>
+            <div class="nav-item dropdown">
+              <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Global <i
+                      class="fa-solid fa-robot text-success" aria-hidden="true"></i></a>
+              <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                <a href="/ai" class="dropdown-item">해외매장안내</a>
+                <a href="/pages/movie" class="dropdown-item">해외사업소개</a>
+                <a href="/errorPage/errorMain" class="dropdown-item">유통문의</a>
+
+              </div>
+            </div>
+
+          </div>
+          <div class="d-flex flex-nowrap border-top pt-3 pt-xl-0">
+            <div class="d-flex rounded-pill bg-white">
+              <div class="CheongjuIcon ms-2 pt-1"></div>
+              <div class="text-left my-2 ms-2">
+                <strong class="fs-5 text-secondary"><span class="CheongjuNowtemp"></span>°C</strong>
+                <div class="d-flex flex-column" style="width: 130px;">
+                  <span class="text-body">청주, <span class="nowtime"></span></span>
+                </div>
+              </div>
+            </div>
+            <button class="btn-search btn border border-primary btn-md-square rounded-circle bg-white my-auto"
+                    data-bs-toggle="modal" data-bs-target="#searchModal"><i
+                    class="fas fa-search text-primary" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+</div>
+<!-- Navbar End -->
+
+<!-- Modal Search Start -->
+<div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <form action="/board/knowhowSearch" method="post" name="knowhowSearch" id="knowhowSearch">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content rounded-0">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"><i class="fa-solid fa-magnifying-glass me-1"
+                                                            aria-hidden="true"></i>자유게시판 검색</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body d-flex align-items-center">
+          <div class="input-group w-75 mx-auto d-flex">
+            <input type="search" name="searchStr" id="searchStr" class="form-control p-3"
+                   placeholder="keywords" aria-describedby="search-icon-1">
+            <a href="javascript:knowhowSearch()" class="input-group-text p-3"><i class="fa fa-search"
+                                                                                 aria-hidden="true"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<!-- Modal Search End -->
 </html>

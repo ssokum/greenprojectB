@@ -56,15 +56,15 @@
 
     <div class="form-group mb-3">
       <label>회사이름</label>
-      <input type="text" name="company_name" class="form-control" placeholder="이름을 입력해주세요" required>
+      <input type="text" name="companyName" class="form-control" placeholder="이름을 입력해주세요" required>
     </div>
     <div class="form-group mb-3">
       <label>사업자번호</label>
-      <input type="text" name="business_number" class="form-control" placeholder="사업자번호를 입력해주세요" required>
+      <input type="text" name="businessNumber" class="form-control" placeholder="사업자번호를 입력해주세요" required>
     </div>
     <div class="form-group mb-3">
       <label>대표자이름</label>
-      <input type="text" name="ceo_name" class="form-control" placeholder="이름을 입력해주세요" required>
+      <input type="text" name="ceoName" class="form-control" placeholder="이름을 입력해주세요" required>
     </div>
     <div class="form-group mb-3">
       <label>주소</label>
@@ -74,33 +74,33 @@
 
     <div class="form-group mb-3">
       <label>이메일주소</label>
-      <input type="email" name="company_email" class="form-control" placeholder="이메일을 입력해주세요" >
+      <input type="email" name="companyEmail" class="form-control" placeholder="이메일을 입력해주세요" >
     </div>
     <div class="form-group mb-3">
       <label>홈페이지주소</label>
-      <input type="text" name="company_homepage" class="form-control" placeholder="홈페이지 입력해주세요" required>
+      <input type="text" name="companyHomepage" class="form-control" placeholder="홈페이지 입력해주세요" required>
     </div>
 
     <div class="form-group mb-3">
       <label>연락처</label>
-      <input type="text"  name="phone_number" class="form-control" placeholder="번호를 입력해주세요">
+      <input type="text"  name="phoneNumber" class="form-control" placeholder="번호를 입력해주세요">
     </div>
     <div class="form-group mb-3">
       <label>팩스번호</label>
-      <input type="text" name="fax_number" class="form-control" placeholder="번호를 입력해주세요">
+      <input type="text" name="faxNumber" class="form-control" placeholder="번호를 입력해주세요">
     </div>
 <!--    <div class="form-group mb-3">
       <input type="file" name="sFile" id="sFile" accept=".jpg,.gif,.png,.zip,.hwp,.ppt,.ppx" class="form-control">
     </div>-->
     <div class="form-group mb-3">
       <label>글내용</label>
-      <textarea name="company_content" id="ckeditor" rows="6" class="form-control" placeholder="기업 사진을 올려주세요"></textarea>
+      <textarea name="companyContent" id="ckeditor" rows="6" class="form-control" placeholder="기업 사진을 올려주세요"></textarea>
       <script>
         CKEDITOR.replace("ckeditor", {
           height: 460,
           filebrowserUploadMethod: "form",
-          filebrowserUploadUrl: "/ckeditor/imageUpload",
-          uploadUrl : "/ckeditor/imageUpload"
+          filebrowserUploadUrl: "/ckeditor/imageUploadCompany",
+          uploadUrl : "/ckeditor/imageUploadCompany"
         });
       </script>
     </div>

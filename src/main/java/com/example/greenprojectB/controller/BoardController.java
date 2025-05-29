@@ -102,6 +102,8 @@ public class BoardController {
             .content(content)
             .build();
 
+    comment.setContent(content.replace("\n", "<br/>"));
+
     Comment saved = commentService.save(comment);
 
     Map<String, Object> result = new HashMap<>();
@@ -129,7 +131,8 @@ public class BoardController {
       return Map.of("success", false, "error", "권한 없음");
     }
 
-    comment.setContent(content);
+    comment.setContent(content.replace("\n", "<br/>"));
+
     commentService.save(comment);
 
     return Map.of("success", true);

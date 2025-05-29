@@ -1,78 +1,14 @@
-<!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<th:block layout:fragment="script">
-    <script src="/js/header.js"></script>
-</th:block>
+<div th:fragment="header">
 
+<!-- Spinner Start -->
+<div id="spinner"
+     class="w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-grow text-primary" role="status"></div>
+</div>
+<!-- Spinner End -->
 
-<header id="header" th:fragment="header">
-    <th:block th:insert="~{/include/messageTest}" />
-    <div class="lang_word">
-        <div class="lang_box">
-            <ul>
-                <li><a th:href="@{/member/memberLogin}">로그인</a></li>
-                <li sec:authorize="isAuthenticated()">
-                    <a th:href="@{/member/memberLogout}">로그아웃</a>
-                </li>
-                <li sec:authorize="isAuthenticated()">
-                    <a onclick="deleteMember()">탈퇴</a>
-                </li>
-                <li><a href="#">공지사항</a></li>
-                <li><a href="#">제휴문의</a></li>
-                <li><a href="#">도움말</a></li>
-                <li><a href="#">고객센터</a></li>
-            </ul>
-        </div>
-    </div>
+<!--네비들어갈곳-->
+<th:block th:insert="~{/include/nav}" />
 
-    <div class="static">
-        <h1 class="logo"><a href="#">로고</a></h1>
-        <nav id="gnb">
-            <ul>
-                <li class="">
-                    <a href="#" class="nav_title">회사소개</a>
-                    <ul>
-                        <li class=""><a th:href="@{/company/companyGreeting}">인사말</a></li>
-                        <li class=""><a th:href="@{/company/companyHistory}">일반현황 및 연혁</a></li>
-                        <li class=""><a href="#">공지사항</a></li>
-                        <li class=""><a th:href="@{/company/companyOrganizationChart}">조직도</a></li>
-                        <li class=""><a th:href="@{/company/companyDirections}">찾아오시는 길</a></li>
-                    </ul>
-                </li>
-                <li class="">
-                    <a href="#" class="nav_title">참여기업</a>
-                    <ul>
-                        <li class=""><a th:href="@{/company/enterprise/enterprise1}">레드라이즈</a></li>
-                        <li class=""><a th:href="@{/company/enterprise/enterprise2}">화이트서버</a></li>
-                        <li class=""><a th:href="@{/company/enterprise/enterprise3}">블루와이즈</a></li>
-                    </ul>
-                </li>
-                <li class="">
-                    <a href="#" class="nav_title">Membership</a>
-                    <ul>
-                        <li class=""><a href="#">인재채용</a></li>
-                        <li class=""><a href="#">ConnectorGallery</a></li>
-                        <li class=""><a href="/board/boardList">고객커뮤니티</a></li>
-                        <li class=""><a href="#">프로페셔널서비스</a></li>
-                        <li class=""><a href="#">FAQ</a></li>
-                    </ul>
-                </li>
-                <li class="">
-                    <a href="#" class="nav_title">Global</a>
-                    <ul>
-                        <li class=""><a href="#">해외매장안내</a></li>
-                        <li class=""><a href="/admin/index">해외사업소개</a></li>
-                        <li class=""><a href="/member/memberLogin">유통문의</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <div id="asdqwe"></div>
-        </nav>
-    </div>
-
-</header>
-
-
-</html>
+</div>

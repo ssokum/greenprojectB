@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/exampleLayout}">
+
+<!-- CSRF 설정 -->
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+<div layout:fragment="content" class="container mt-4" style="max-width: 700px;">
+  <h2 class="text-center mb-4">채용 공고 등록</h2>
+
+  <form th:action="@{/recruit/recruitInput}" method="post" th:object="${recruit}">
+    <div class="mb-3">
+      <label for="title" class="form-label">제목</label>
+      <input type="text" th:field="*{title}" id="title" class="form-control" placeholder="채용 공고 제목을 입력하세요" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="content" class="form-label">내용</label>
+      <textarea th:field="*{content}" id="content" class="form-control" rows="10" placeholder="채용 상세 내용을 입력하세요" required></textarea>
+    </div>
+
+    <div class="text-end">
+      <a th:href="@{/recruit/recruitList}" class="btn btn-outline-secondary">목록</a>
+      <button type="submit" class="btn btn-outline-primary">등록</button>
+      <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+    </div>
+  </form>
+</div>
+
+</html>

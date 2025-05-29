@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/exampleLayout}">
+
+<th:block layout:fragment="script">
+
+  <script>
+
+  </script>
+</th:block>>
+<th:block layout:fragment="css">
+  <style>
+    .container {
+      text-align: center;
+      max-width: 1300px;
+    }
+    hr{
+      text-align: center;
+      margin: 0px auto;
+    }
+    .bodyText {
+      text-align: center;
+      margin: 0px auto;
+    }
+  </style>
+</th:block>>
+
+
+<div layout:fragment="content" class="container text-center">
+
+
+  <div class="container text-center">
+    <!-- 헤더 섹션 -->
+    <div class="company-header p-4 mb-4">
+        <div class="col-md-3 text-center">
+          <img src="/images/logo1.jpg" class="company-logo" style="width:1200px" alt="기업 로고">
+        </div>
+    </div>
+    <p></p>
+    <!-- 본문 섹션 -->
+    <div class="p-4">
+      <h3><b>레드라이즈는 기업문화를 선도합니다.</b></h3>
+      <h5><em><span style="color:grey">실시간 데이터 동기화 전문 기업</span></em></h5>
+      <hr style="width:100px">
+      <p><br></p>
+      <div style="font-size:17px;color:#333" class="bodyText">레드라이즈는 DBMS 및 파일 실시간 복제, 빅데이터/클라우드 복제 서비스, 데이터생명주기 관리 서비스를 주 사업으로 하는 실시간 데이터 동기화 전문 기업입니다.
+        설립 이후 CDC 솔루션 시장에 주도적 역할을 해왔으며, 고객 비즈니스와 관련하여 최적의 IT인프라 환경을 구축하여 무장애 서비스를 위한 체계적인 운영 및 유지보수를 통해 고객의 소중한 비즈니스 가치를 향상시키는 최고의 서비스를 제공하고 있습니다. 제조, 공공, 금융, 통신, 교육기관 등 다양한 산업 군의 구축 경험을 바탕으로 고객사의 정보통신 인프라구축에 최고의 가치를 제공합니다.</div>
+    </div>
+    <p><br></p>
+    <div class="row">
+      <div class="col"><img src="/images/logo1-1.jpg" alt="기업이미지" style="width:270px;height:300px"></div>
+      <div class="col"><img src="/images/logo1-1.jpg" alt="기업이미지" style="width:270px;height:300px"></div>
+      <div class="col"><img src="/images/logo1-1.jpg" alt="기업이미지" style="width:270px;height:300px"></div>
+    </div>
+    <p><br></p>
+    <div class="row">
+      <div class="col"><button type="button" class="btn btn-dark">RedRise for CDC</button><br><p></p><span style="color:#222;font-size:15px">실시간 DB 복제 솔루션</span></div>
+      <div class="col"><button type="button" class="btn btn-dark">RedRise for IDL</button><br><p></p><span style="color:#222;font-size:15px">이기종 데이터 이관 솔루션</span></div>
+      <div class="col"><button type="button" class="btn btn-dark">RedRise for ILM</button><br><p></p><span style="color:#222;font-size:15px">데이터 수명주기 관리 솔루션</span></div>
+    </div >
+    <p><br></p>
+    <hr style="width:1000px">
+    <p><br></p>
+
+    <h3 style="margin-top:200px"><b>RedRise 레퍼런스</b></h3>
+    <hr style="width:100px">
+    <p><br></p>
+    <div class="row">
+      <div class="col"><img src="/images/1-1.png" alt="기업이미지" style="width:200px;height:150px"></div>
+      <div class="col"><img src="/images/1-2.png" alt="기업이미지" style="width:200px;height:150px"></div>
+      <div class="col"><img src="/images/1-3.png" alt="기업이미지" style="width:200px;height:150px"></div>
+      <div class="col"><img src="/images/1-4.png" alt="기업이미지" style="width:200px;height:150px"></div>
+      <div class="col"><img src="/images/1-5.png" alt="기업이미지" style="width:200px;height:150px"></div>
+    </div>
+    <p><br></p>
+    <hr style="width:1000px">
+    <p><br></p>
+
+    <h2 style="color:grey;margin-top:100px"><b>Request More Information</b></h2>
+    <div class="list-group justify-content-center" style="margin-top:100px;max-width:1300px">
+      <a href="#" class="list-group-item" aria-current="true">
+        <div class="justify-content-between">
+          <h5 class="mb-1">CEO</h5>
+          <small></small>
+        </div>
+        <p class="mb-1">홍길동</p>
+        <small>chief executive officer</small>
+      </a>
+      <a href="#" class="list-group-item">
+        <div class="justify-content-between">
+          <h5 class="mb-1">Address</h5>
+          <small class="text-body-secondary"></small>
+        </div>
+        <p class="mb-1">제주시 향단로 25-35</p>
+        <small class="text-body-secondary"></small>
+      </a>
+      <a href="#" class="list-group-item">
+        <div class="justify-content-between">
+          <h5 class="mb-1">HomePage</h5>
+          <small class="text-body-secondary"></small>
+        </div>
+        <p class="mb-1">RedDate.everkipp.com</p>
+        <small class="text-body-secondary"></small>
+      </a>
+      <a href="#" class="list-group-item">
+        <div class="justify-content-between">
+          <h5 class="mb-1">Email</h5>
+          <small class="text-body-secondary"></small>
+        </div>
+        <p class="mb-1">RedDate@gmail.com</p>
+        <small class="text-body-secondary"></small>
+      </a>
+      <a href="#" class="list-group-item">
+        <div class="justify-content-between">
+          <h5 class="mb-1">PhoneNumber</h5>
+          <small class="text-body-secondary"></small>
+        </div>
+        <p class="mb-1">전화번호가 들어갈 자리</p>
+        <small class="text-body-secondary"></small>
+      </a>
+      <a href="#" class="list-group-item">
+        <div class="justify-content-between">
+          <h5 class="mb-1">faxNumber</h5>
+          <small class="text-body-secondary"></small>
+        </div>
+        <p class="mb-1">팩스번호가 들어갈 자리</p>
+        <small class="text-body-secondary"></small>
+      </a>
+      <a href="#" class="list-group-item">
+        <div class="justify-content-between">
+          <h5 class="mb-1">Contact time</h5>
+          <small class="text-body-secondary">lunchTime : PM 1:00~2:00</small>
+        </div>
+        <p class="mb-1">AM 10:00 ~ PM 6:00</p>
+        <small class="text-body-secondary"></small>
+      </a>
+    </div>
+    <!-- 푸터 섹션 -->
+    <div class="company-footer text-center" style="background-color:#AF3E3E;color:white;margin-top:200px;padding:150px">
+      <div class="">
+        <p>제품 상담, 소개자료, 데모 요청 등 X-LOG에 대한 문의사항을 남겨주세요.</p>
+        <button type="button" class="btn btn-outline-danger">문의하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+</html>
