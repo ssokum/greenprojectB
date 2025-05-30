@@ -15,6 +15,11 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -66,12 +71,17 @@ public class NoticeController {
 
         noticeDto.setWriter("관리자");
 
-        int res = noticeService.setMultiFileUpload(workFile);
+
+        // 파일 업로드와 DTO에 정보 저장
+        noticeService.setMultiFileUpload(workFile, noticeDto);
+
+        System.out.println("▶ DTO 저장 전 oFileNames: " + noticeDto.getOFileNames());
+        System.out.println("▶ DTO 저장 전 sFileNames: " + noticeDto.getSFileNames());
 
         noticeService.saveNotice(noticeDto);
 
-        if(res != 0) return "redirect:/notice/noticeMain";
-        else return "redirect:/message/fileUploadNo";
+
+        return "redirect:/notice/noticeMain";
     }
 
     @GetMapping("/detail/{idx}")
@@ -80,11 +90,20 @@ public class NoticeController {
         if (notice == null) {
             return "redirect:/notice/noticeMain"; // 존재하지 않으면 목록으로
         }
-        String realPath = request.getServletContext().getRealPath("/upload/");
-        String[] files = new File(realPath).list();
-        //System.out.println("filesl : " + files[0]);
-        model.addAttribute("fileList", files);
-        model.addAttribute("fileCnt", files.length);
+
+        // DB에 저장된 서버 저장용 파일명 가져오기 (예: "file1_1234.jpg/file2_5678.png")
+        String sFileNames = notice.getSFileNames();
+
+        List<String> fileList;
+        if (sFileNames != null && !sFileNames.trim().isEmpty()) {
+            // "/" 로 나누어서 리스트로 변환
+            fileList = Arrays.asList(sFileNames.split("/"));
+        } else {
+            fileList = Collections.emptyList();
+        }
+
+        model.addAttribute("fileList", fileList);
+        model.addAttribute("fileCnt", fileList.size());
         model.addAttribute("notice", notice);
         model.addAttribute("newLine", System.lineSeparator());
 
@@ -126,18 +145,41 @@ public class NoticeController {
     }
     @GetMapping("/noticeUpdate")
     public String noticeUpdateGet(@RequestParam("idx") Long idx, Model model) {
-        // idx에 해당하는 공지사항 데이터 조회
         Notice notice = noticeService.getNoticeByIdx(idx);
+
+        if (notice == null) {
+            return "redirect:/notice/noticeMain"; // 존재하지 않으면 목록으로
+        }
+
+        // DB에 저장된 서버 저장용 파일명 가져오기 (예: "file1_1234.jpg/file2_5678.png")
+        String sFileNames = notice.getSFileNames();
+
+        List<String> fileList;
+        if (sFileNames != null && !sFileNames.trim().isEmpty()) {
+            // "/" 로 나누어서 리스트로 변환
+            fileList = Arrays.asList(sFileNames.split("/"));
+        } else {
+            fileList = Collections.emptyList();
+        }
+
+        model.addAttribute("fileList", fileList);
+        model.addAttribute("fileCnt", fileList.size());
         model.addAttribute("notice", notice);
-        return "notice/noticeUpdate";  // templates/notice/updateForm.html 뷰를 리턴
+        model.addAttribute("newLine", System.lineSeparator());
+
+        return "notice/noticeUpdate";
     }
 
     @PostMapping("/noticeUpdate")
     public String noticeUpdatePost(@ModelAttribute NoticeDto noticeDto) {
         Long idx = noticeDto.getIdx(); // NoticeDto에 idx 필드가 있다고 가정
+
         noticeService.updateNotice(idx, noticeDto);
+
         return "redirect:/notice/detail/" + idx;
     }
+
+
 
     @GetMapping("/delete")
     public String deleteNoticeGet(@RequestParam Long idx) {

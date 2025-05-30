@@ -58,6 +58,10 @@ public class AdminService {
         return null;
     }
 
+    public ArrayList<Sensor> getChartSensors(LocalDateTime begin, LocalDateTime end){
+        return sensorRepository.findByMeasureDatetimeBetween(begin, end);
+    }
+
     public ArrayList<SummarySensorDto> getSummarySensors(){
         ArrayList<SummarySensorDto> list = new ArrayList<>();
 

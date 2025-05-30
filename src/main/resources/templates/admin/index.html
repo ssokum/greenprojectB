@@ -8,9 +8,14 @@
         <meta name="author" content="" />
         <title>Dashboard - SB Admin</title>
         <th:block th:insert="~{/include/bs5.html}"></th:block>
-        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
+        <link th:href="@{https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css}" rel="stylesheet" />
         <link th:href="@{/css/styles.css}" rel="stylesheet" />
-        <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <script th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}" crossorigin="anonymous"></script>
+        <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js}"></script>
+        <script th:src="@{/js/scripts.js}"></script>
+        <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js}" crossorigin="anonymous"></script>
+        <script th:src="@{https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js}" crossorigin="anonymous"></script>
+        <script th:src="@{/js/datatables-simple-demo.js}"></script>
     </head>
     <body class="sb-nav-fixed">
         <input type="hidden" th:value="${_csrf.token}" name="csrfToken" id="csrfToken"/>
@@ -167,6 +172,15 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div id="date-filter">
+                                <label for="startDate">시작일:</label>
+                                <input type="datetime-local" id="df_start-date" name="startDate">
+
+                                <label for="lastDate">종료일:</label>
+                                <input type="datetime-local" id="df_end-date" name="lastDate">
+
+                                <button type="button" onclick="getChart()" class="btn btn-outline-success">조회</button>
+                            </div>
                             <div class="col-xl-6" style="width: 100%;">
                                 <div class="card mb-4">
                                     <div class="card-header">
@@ -250,137 +264,224 @@
                 </footer>
             </div>
         </div>
-        <script th:src="@{/js/scripts.js}"></script>
-        <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js}" crossorigin="anonymous"></script>
-        <script th:src="@{https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js}" crossorigin="anonymous"></script>
-        <script th:src="@{/js/datatables-simple-demo.js}"></script>
         <th:block layout:fragment="script">
             <script>
                 var token;
                 var header;
+                let intervalId;
+
                 var myLineChart = null; // 전역 Chart 인스턴스
+                let chartToggle = true;
                 let allSensorData = [];
+
+                function updateSensorData(begin) {
+                    if (!chartToggle) {
+                        clearInterval(intervalId);
+                        return;
+                    }
+
+                    let end = Date.now();
+                    const time = Math.floor((end - begin) / 1000);
+
+                $.ajax({
+                    url: "/admin/updateSensorData",
+                    type: "post",
+                    data: { time: time },
+                    beforeSend: function (xhr) { xhr.setRequestHeader(header, token); },
+                    success: function (sensors) {
+                        if (!sensors) {
+                            $(".chart-failed").text("센서를 등록해주세요.").show();
+                        } else {
+                            let type = $('.card-select').val();
+
+                            allSensorData.push(...sensors);
+
+                            if (myLineChart) {
+                                allSensorData.forEach(function (sensor) {
+                                    let datetime = new Date(sensor.measureDatetime);
+                                    let timeLabel = datetime.toLocaleTimeString();
+
+                                    myLineChart.data.labels.push(timeLabel);
+                                    myLineChart.data.datasets[0].data.push(sensor[type]);
+
+                                    if (myLineChart.data.labels.length > 80) {
+                                        myLineChart.data.labels.shift();
+                                        myLineChart.data.datasets[0].data.shift();
+                                    }
+                                });
+                            } else {
+                                var ctx = document.getElementById("myAreaChart");
+                                myLineChart = new Chart(ctx, {
+                                    type: 'line',
+                                    data: {
+                                        labels: [],
+                                        datasets: [{
+                                            label: type,
+                                            data: [],
+                                            lineTension: 0.1,
+                                            backgroundColor: "rgba(2,117,216,0.2)",
+                                            borderColor: "rgba(2,117,216,1)",
+                                            pointRadius: 0,
+                                            pointBackgroundColor: "rgba(2,117,216,1)",
+                                            pointBorderColor: "rgba(255,255,255,0.8)",
+                                            pointHoverRadius: 5,
+                                            pointHoverBackgroundColor: "rgba(2,117,216,1)",
+                                            pointHitRadius: 50,
+                                            pointBorderWidth: 2
+                                        }]
+                                    },
+                                    options: {
+                                        tooltips: { mode: 'nearest', intersect: true },
+                                        animation: { duration: 0 },
+                                        scales: {
+                                            xAxes: [{
+                                                type: 'category',
+                                                gridLines: { display: false },
+                                                ticks: { minRotation: 0, maxRotation: 0, maxTicksLimit: 7 }
+                                            }],
+                                            yAxes: [{
+                                                ticks: { min: 0, max: 6000, maxTicksLimit: 5 },
+                                                gridLines: { color: "rgba(0, 0, 0, .125)" }
+                                            }],
+                                        },
+                                        legend: { display: true }
+                                        }
+                                    });
+                                }
+                                myLineChart.data.datasets[0].label = type;
+                                myLineChart.update();
+                            }
+                        },
+                        error: function () {
+                            console.log("차트 데이터 전송 실패");
+                        }
+                    });
+                }
+
+
+                function getChart(){
+                    let begin = $('#df_start-date').val();
+                    let end = $('#df_end-date').val();
+
+                    if(!begin || !end)
+                        chartToggle = true;
+                    else{
+                         $.ajax({
+                            url: "/admin/getChartByDateRange",
+                            type: "post",
+                            data: {
+                                begin : begin,
+                                end : end
+                            },
+                            beforeSend: function (xhr) { xhr.setRequestHeader(header, token); },
+                            success: function (sensors) {
+                                chartToggle = false;
+                                if (myLineChart) {
+                                    myLineChart.destroy();  // 기존 차트 완전 삭제
+                                    myLineChart = null;
+                                }
+
+                                let dates = [];
+                                let values = [];
+                                let type = $('.card-select').val();
+
+                                //데이터 300개 제한
+                                const sMax = 300;
+                                if (sensors.length > sMax) {
+                                    for (let i = 0; i < sensors.length; i += Math.floor(sensors.length / sMax)) {
+                                        const dt = new Date(sensors[i].measureDatetime).toLocaleString();
+                                        dates.push(dt);
+                                        values.push(sensors[i][type]);
+                                    }
+                                } else {
+                                    sensors.forEach(sensor, index => {
+                                        const dt = new Date(sensor.measureDatetime).toLocaleString();
+                                        dates.push(dt);
+                                        values.push(sensor[type]);
+                                    });
+                                }
+
+
+                                 $('#myAreaChart').html('');
+                                 var ctx = $('#myAreaChart');
+                                 myLineChart = new Chart(ctx, {
+                                    type: 'line',
+                                    data: {
+                                        labels: dates,
+                                        datasets: [{
+                                            label: type,
+                                            data: values,
+                                            lineTension: 0.1,
+                                            backgroundColor: "rgba(2,117,216,0.2)",
+                                            borderColor: "rgba(2,117,216,1)",
+                                            pointRadius: 0,
+                                            pointBackgroundColor: "rgba(2,117,216,1)",
+                                            pointBorderColor: "rgba(255,255,255,0.8)",
+                                            pointHoverRadius: 5,
+                                            pointHoverBackgroundColor: "rgba(2,117,216,1)",
+                                            pointHitRadius: 50,
+                                            pointBorderWidth: 2
+                                        }]
+                                    },
+                                    options: {
+                                        tooltips: {
+                                            mode: 'nearest',
+                                            intersect: true
+                                        },
+                                        animation: {
+                                            duration: 0,     // 0이면 애니메이션 없음
+                                        },
+                                        scales: {
+                                            xAxes: [{
+                                                type: 'category',
+                                                gridLines: { display: false },
+                                                ticks: {
+                                                    maxTicksLimit: 7,
+                                                    minRotation: 0,
+                                                    maxRotation: 0
+
+                                                }
+                                            }],
+                                            yAxes: [{
+                                                ticks: {
+                                                    min: 0,
+                                                    max: 6000,
+                                                    maxTicksLimit: 5
+                                                },
+                                                gridLines: {
+                                                    color: "rgba(0, 0, 0, .125)",
+                                                }
+                                            }],
+                                        },
+                                        legend: {
+                                            display: true
+                                        }
+                                    }
+                                });
+                            },
+                            error: function(){
+
+                            }
+                        });
+                    }
+                }
 
                 $(document).ready(function () {
                     token = document.getElementById('csrfToken').value;
                     header = document.getElementById('csrfHeader').value;
 
-<!--                    $('.card-select').on('change', function() {-->
-<!--                        updateChart();  // 타입 바뀌면 기존 데이터로 다시 그리기-->
-<!--                    });-->
+                    let begin = Date.now();  // 시작 시간
 
-                    const begin = Date.now();  // 시작 시간
+                     // 1. 최초 실행
+                    updateSensorData(begin);
 
-                    setInterval(function () {
-                        const end = Date.now();
-                        const time = Math.floor((end - begin) / 1000);
-
-                        $.ajax({
-                            url: "/admin/updateSensorData",
-                            type: "post",
-                            data: { time: time },
-                            beforeSend: function (xhr) { xhr.setRequestHeader(header, token); },
-                            success: function (sensors) {
-                                if(!sensors){
-                                    $(".chart-failed").text("센서를 등록해주세요.").show();
-                                }
-                                else{
-                                    <!--  Table  -->
-
-
-
-                                    <!--  Chart  -->
-                                    let type = $('.card-select').val();
-
-                                    allSensorData.push(...sensors);
-
-                                    // 데이터 준비
-                                    let dates = [];
-                                    let values = [];
-
-                                    // 차트가 이미 있다면 데이터만 업데이트
-                                    if (myLineChart) {
-                                        allSensorData.forEach(function (sensor) {
-                                            let datetime = new Date(sensor.measureDatetime);
-                                            let timeLabel = datetime.toLocaleTimeString();
-
-                                            myLineChart.data.labels.push(timeLabel);
-                                            myLineChart.data.datasets[0].data.push(sensor[type]);
-
-                                            // 100개 넘으면 앞에서 제거
-                                            if (myLineChart.data.labels.length > 80) {
-                                                myLineChart.data.labels.shift();
-                                                myLineChart.data.datasets[0].data.shift();
-                                            }
-                                        });
-
-                                    } else {
-                                        var ctx = document.getElementById("myAreaChart");
-                                        myLineChart = new Chart(ctx, {
-                                            type: 'line',
-                                            data: {
-                                                labels: dates,
-                                                datasets: [{
-                                                    label: type,
-                                                    data: values,
-                                                    lineTension: 1,
-                                                    backgroundColor: "rgba(2,117,216,0.2)",
-                                                    borderColor: "rgba(2,117,216,1)",
-                                                    pointRadius: 0,
-                                                    pointBackgroundColor: "rgba(2,117,216,1)",
-                                                    pointBorderColor: "rgba(255,255,255,0.8)",
-                                                    pointHoverRadius: 5,
-                                                    pointHoverBackgroundColor: "rgba(2,117,216,1)",
-                                                    pointHitRadius: 50,
-                                                    pointBorderWidth: 2
-                                                }]
-                                            },
-                                            options: {
-                                                tooltips: {
-                                                    mode: 'nearest',
-                                                    intersect: true
-                                                },
-                                                animation: {
-                                                    duration: 0,     // 0이면 애니메이션 없음
-                                                },
-                                                scales: {
-                                                    xAxes: [{
-                                                        type: 'category',
-                                                        gridLines: { display: false },
-                                                        ticks: {
-                                                            minRotation: 0,
-                                                            maxRotation: 0,
-                                                            maxTicksLimit: 7
-                                                        }
-                                                    }],
-                                                    yAxes: [{
-                                                        ticks: {
-                                                            min: 0,
-                                                            max: 6000,
-                                                            maxTicksLimit: 5
-                                                        },
-                                                        gridLines: {
-                                                            color: "rgba(0, 0, 0, .125)",
-                                                        }
-                                                    }],
-                                                },
-                                                legend: {
-                                                    display: true
-                                                }
-                                            }
-                                        });
-                                    }
-
-                                    myLineChart.data.datasets[0].label = type;
-                                    myLineChart.update();
-                                }
-                            },
-                            error: function () {
-                                console.log("차트 데이터 전송 실패");
-                            }
-                        });
+                    // 2. 이후 3초마다 실행
+                    setInterval(function() {
+                      updateSensorData(begin);
                     }, 3000);
+
                 });
+
             </script>
         </th:block>
     </body>

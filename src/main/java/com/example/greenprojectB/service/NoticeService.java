@@ -4,6 +4,7 @@ import com.example.greenprojectB.dto.NoticeDto;
 import com.example.greenprojectB.entity.Notice;
 import com.example.greenprojectB.repository.NoticeRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +20,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,14 +44,21 @@ public class NoticeService {
         // 제목 or 내용 포함 검색
         return noticeRepository.findByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(keyword, keyword, pageRequest);
     }
+
     public void saveNotice(NoticeDto dto) {
-         Notice notice = Notice.createNotice(dto);
+        Notice notice = Notice.createNotice(dto);
         noticeRepository.save(notice);
     }
 
+    @Transactional
     public Notice getNoticeByIdx(Long idx) {
-        return noticeRepository.findById(idx).orElse(null);
+        Notice notice = noticeRepository.findById(idx).orElse(null);
+        if (notice != null) {
+            notice.increaseViewCount();
+        }
+        return notice;
     }
+
 
     public void updateNotice(Long idx, NoticeDto noticeDto) {
         Notice notice = noticeRepository.findById(idx).orElseThrow(() -> new RuntimeException("공지 없음"));
@@ -66,44 +75,64 @@ public class NoticeService {
 
     private void writeFile(MultipartFile file, String sFileName, String urlPath) throws IOException {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String realPath = request.getSession().getServletContext().getRealPath("/"+urlPath+"/");
+        String realPath = request.getSession().getServletContext().getRealPath("/" + urlPath + "/");
 
         FileOutputStream fos = new FileOutputStream(realPath + sFileName);
 
-        if(file.getBytes().length != -1) {
+        if (file.getBytes().length != -1) {
             fos.write(file.getBytes());
         }
         fos.flush();
         fos.close();
     }
 
-    public int setMultiFileUpload(MultipartHttpServletRequest workFile) {
+    public int setMultiFileUpload(MultipartHttpServletRequest workFile, NoticeDto noticeDto) {
         int res = 0;
 
         try {
             List<MultipartFile> fileList = workFile.getFiles("mFile");
+
             String oFileNames = "";
             String sFileNames = "";
             int fileSizes = 0;
 
-            for(MultipartFile file : fileList) {
-                String oFileName = file.getOriginalFilename();
-                String sFileName = oFileName.substring(0,oFileName.lastIndexOf(".")) + "_" + UUID.randomUUID().toString().substring(0,4) + oFileName.substring(oFileName.lastIndexOf("."));
+            // 업로드된 실제 파일 수 체크
+            int uploadCount = 0;
 
-                writeFile(file, sFileName, "upload");
+            for (MultipartFile file : fileList) {
+                if (!file.isEmpty()) {
+                    String oFileName = file.getOriginalFilename();
+                    String sFileName = oFileName.substring(0, oFileName.lastIndexOf(".")) +
+                            "_" + UUID.randomUUID().toString().substring(0, 4) +
+                            oFileName.substring(oFileName.lastIndexOf("."));
 
-                oFileNames += oFileName + "/";
-                sFileNames += sFileName + "/";
-                fileSizes += file.getSize();
+                    writeFile(file, sFileName, "upload");
+
+                    oFileNames += oFileName + "/";
+                    sFileNames += sFileName + "/";
+                    fileSizes += file.getSize();
+                    uploadCount++;
+                }
             }
-            oFileNames = oFileNames.substring(0,oFileNames.length()-1);
-            sFileNames = sFileNames.substring(0,sFileNames.length()-1);
 
-            System.out.println("================>> 원본파일 : " + oFileNames);
-            System.out.println("================>> 저장파일 : " + sFileNames);
+            if (uploadCount > 0) {
+                oFileNames = oFileNames.substring(0, oFileNames.length() - 1);
+                sFileNames = sFileNames.substring(0, sFileNames.length() - 1);
 
-            res = 1;
-        } catch (Exception e) { e.printStackTrace(); }
+
+                // DTO에 저장
+                noticeDto.setOFileNames(oFileNames);
+                noticeDto.setSFileNames(sFileNames);
+
+                System.out.println("================>> 원본파일 : " + oFileNames);
+                System.out.println("================>> 저장파일 : " + sFileNames);
+
+                res = 1;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return res;
     }

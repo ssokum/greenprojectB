@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +43,12 @@ public class AdminController {
         System.out.println("sensors: " + sensors);
 
         return sensors;
+    }
+
+    @ResponseBody
+    @PostMapping("/getChartByDateRange")
+    public ArrayList<Sensor> getChartByDateRangePost(LocalDateTime begin, LocalDateTime end) {
+        return adminService.getChartSensors(begin, end);
     }
 
     @GetMapping("/register-device")

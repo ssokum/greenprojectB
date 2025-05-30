@@ -41,6 +41,12 @@ public class Notice {
 
     private LocalDateTime updateDate; // 수정일
 
+    @Column(name = "notice_oFileNames")
+    private String oFileNames; // 사용자가 올린 실제 파일명
+
+    @Column(name = "notice_sFileNames")
+    private String sFileNames; // 서버에 저장된 파일명
+
     // 자동 생성 시간 처리 , 작성/수정 시점 자동 처리
     @PrePersist
     public void onCreate() {
@@ -69,6 +75,8 @@ public class Notice {
                 .createDate(dto.getCreateDate())
                 .updateDate(dto.getUpdateDate())
                 .writer(dto.getWriter())
+                .oFileNames(dto.getOFileNames())
+                .sFileNames(dto.getSFileNames())
                 .build();
     }
 }

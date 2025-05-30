@@ -96,9 +96,6 @@ public class MessageCommunityController {
 		else if(msgFlag.equals("recruitDeleteOk")) {
 			model.addAttribute("message", "인재채용 게시글이 삭제되었습니다.");
 			model.addAttribute("url", "/recruit/recruitList");
-		} else if(msgFlag.equals("fileUploadNo")) {
-			model.addAttribute("message", "파일 업로드 실패~~ 다시 시도해주세요");
-			model.addAttribute("url", "/notice/noticeWrite");
 		}
 
 		return "include/message";

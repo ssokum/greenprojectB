@@ -24,6 +24,8 @@ public class NoticeDto {
     private LocalDateTime updateDate;   // 수정일
     private int viewCount;              // 조회수
     private String writer;              // 작성자
+    private String oFileNames;           // 사용자가 올린 실제 파일명
+    private String sFileNames;           // 서버에 저장된 파일명
 
     //entity to dto / entity를 dto로 변환
     public static NoticeDto createNoticeDto(Optional<Notice> opNotice) {
@@ -36,6 +38,8 @@ public class NoticeDto {
                 .createDate(opNotice.get().getCreateDate())
                 .updateDate(opNotice.get().getUpdateDate())
                 .writer(opNotice.get().getWriter())
+                .oFileNames(opNotice.get().getOFileNames())
+                .sFileNames(opNotice.get().getSFileNames())
                 .build();
     }
 }
