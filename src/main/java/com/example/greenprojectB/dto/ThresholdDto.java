@@ -22,7 +22,6 @@ public class ThresholdDto {
     private double high;        // 최댓값
     private LocalDateTime updatedAt;        // 수정날짜
     private String updatedBy;        // 임계값을 변경한 대상
-    private SummarySensorDto summarySensor;
 
     // Entity to DTO
     public ThresholdDto createThresholdDto(Threshold threshold) {
@@ -35,7 +34,6 @@ public class ThresholdDto {
                 .low(threshold.getLow())
                 .updatedAt(threshold.getUpdatedAt())
                 .updatedBy(threshold.getUpdatedBy())
-                .summarySensor(threshold.getSummarySensor())
                 .build();
     }
 }

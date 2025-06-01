@@ -1,10 +1,13 @@
 package com.example.greenprojectB.controller;
 
+import com.example.greenprojectB.Handler.TimeHandler;
 import com.example.greenprojectB.dto.SummarySensorDto;
 import com.example.greenprojectB.entity.Company;
 import com.example.greenprojectB.entity.Sensor;
 import com.example.greenprojectB.entity.Threshold;
 import com.example.greenprojectB.service.AdminService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,33 +26,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 public class AdminController {
+
     private final AdminService adminService;
 
     @GetMapping("/index")
-    public String adminIndexGet(Model model) {
-        ArrayList<SummarySensorDto> summarySensors = adminService.getSummarySensors();
-
-        model.addAttribute("summarySensors", summarySensors);
-
-        System.out.println(summarySensors);
-
+    public String adminIndexGet(Model model, HttpServletRequest request) {
         return "admin/index";
-    }
-
-    @ResponseBody
-    @PostMapping("/updateSensorData")
-    public ArrayList<Sensor> updateSensorDataPost(int time) {
-        ArrayList<Sensor> sensors = adminService.getChartSensors(time);
-
-        System.out.println("sensors: " + sensors);
-
-        return sensors;
-    }
-
-    @ResponseBody
-    @PostMapping("/getChartByDateRange")
-    public ArrayList<Sensor> getChartByDateRangePost(LocalDateTime begin, LocalDateTime end) {
-        return adminService.getChartSensors(begin, end);
     }
 
     @GetMapping("/register-device")
@@ -76,18 +59,19 @@ public class AdminController {
     @ResponseBody
     @PostMapping("/getThreshold")
     public ArrayList<Threshold> getThresholdPost(String companyId, String deviceCode) {
-        ArrayList<Threshold> thresholds = adminService.getThreshold(companyId, deviceCode);
-        ArrayList<SummarySensorDto> summarySensors = adminService.getSummarySensors();
-        for (Threshold threshold : thresholds) {
-            for (SummarySensorDto summarySensor : summarySensors) {
-                if (threshold.getSensorName().equals(summarySensor.getSensorName())) {
-                    threshold.setSummarySensor(summarySensor);
-                    break;
-                }
-            }
-        }
-
         return adminService.getThreshold(companyId, deviceCode);
     }
+
+    @ResponseBody
+    @PostMapping("/updateSensorByExcel")
+    public String updateSensorByExcelPost(MultipartFile fName) {
+        String oFileName = fName.getOriginalFilename();
+        //System.out.println("==============>> oFileName : " + oFileName);
+        adminService.fileCsvToMysql(fName);
+
+        return "1";
+    }
+
+
 
 }

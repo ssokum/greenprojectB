@@ -1,7 +1,10 @@
 package com.example.greenprojectB.controller;
 
+import com.example.greenprojectB.service.AdminService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,8 +17,10 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@RequiredArgsConstructor
 @Controller
 public class HomeController {
+  private final AdminService adminService;
 
   // ckeditor에서의 파일 업로드 처리
   @PostMapping("/ckeditor/imageUpload")
@@ -113,7 +118,5 @@ public class HomeController {
     out.println("</script>");
     out.flush();
   }
-
-
 
 }

@@ -1,0 +1,532 @@
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/exampleLayout}">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Dashboard - SB Admin</title>
+
+    <th:block th:insert="~{/include/bs5.html}"></th:block>
+    <link th:href="@{https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <script th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}" crossorigin="anonymous"></script>
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js}"></script>
+    <script th:src="@{/js/scripts.js}"></script>
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js}"
+            crossorigin="anonymous"></script>
+    <script th:src="@{https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js}"></script>
+    <script th:src="@{https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@0.5.7/chartjs-plugin-annotation.min.js}"></script>
+            crossorigin="anonymous"></script>
+    <script th:src="@{/js/datatables-simple-demo.js}"></script>
+</head>
+
+<th:block layout:fragment="css">
+    <style th:inline="css">
+        .bodyCenter {
+            width: 80%;
+            margin: 0px auto;
+        }
+
+        .card-header{
+          display: flex;
+          justify-content: space-between;
+        }
+    </style>
+</th:block>
+
+<div class="bodyCenter" layout:fragment="content">
+    <!-- tokens -->
+    <div>
+        <input type="hidden" th:value="${_csrf.token}" name="csrfToken" id="csrfToken"/>
+        <input type="hidden" th:value="${_csrf.headerName}" name="csrfHeader" id="csrfHeader"/>
+        <input type="hidden" th:value="${sName}" name="sName" id="sName"/>
+    </div>
+
+    <div class="cp_pf-nav">
+        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling"
+                aria-controls="offcanvasScrolling">Enable body scrolling
+        </button>
+
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
+             id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Offcanvas with body scrolling</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div class="nav-item">
+                    <a th:href="@{/professional/dashBoard}" class="dropdown-item">Dash Board</a>
+                    <a th:href="@{/professional/register-device}" class="dropdown-item">Register Device</a>
+                    <a th:href="@{/professional/setup-device}" class="dropdown-item">Setup Device</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- nav -->
+    <input type="hidden" th:value="${deviceCode[0]}" id="deviceCode"/>
+    <ul class="nav nav-tabs" id="device-nav" th:each="dc: ${deviceCode}">
+        <li class="nav-item">
+            <a class="nav-link" href="#" onclick="getDeviceCode(this)" th:text="${dc}"></a>
+        </li>
+    </ul>
+
+    <!-- Chart -->
+    <div class="row">
+        <div id="date-filter">
+            <label for="df_start-date">시작일:</label>
+            <input type="datetime-local" id="df_start-date" name="startDate">
+
+            <label for="df_end-date">종료일:</label>
+            <input type="datetime-local" id="df_end-date" name="lastDate">
+
+            <button type="button" onclick="getChart()" class="btn btn-outline-success">조회</button>
+        </div>
+        <div class="col-xl-6" style="width: 100%;">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <div class="left">
+                        <i class="fas fa-chart-area me-1"></i>
+                        <span class="card-title" th:text="${sensorValue[0]}"></span>
+                    </div>
+                    <div class="right">
+                        <select class="card-select">
+                            <option th:each="sv : ${sensorValue}" th:value="${sv}" th:text="${sv}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="chart-failed" style="display: none;"></div>
+                <div class="card-body">
+                    <canvas id="myAreaChart" width="100%" height="40px"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            DataTable Example
+        </div>
+        <div class="card-body">
+            <table id="datatablesSimple">
+                <thead>
+                <tr>
+                    <th>번호</th>
+                    <th>센서</th>
+                    <th>최솟값</th>
+                    <th>평균값</th>
+                    <th>최댓값</th>
+                    <th>이벤트</th>
+                </tr>
+                </thead>
+                <tfoot>
+                <tr>
+                    <th>번호</th>
+                    <th>센서</th>
+                    <th>최솟값</th>
+                    <th>평균값</th>
+                    <th>최댓값</th>
+                    <th>이벤트</th>
+                </tr>
+                </tfoot>
+                <tbody class="sensor-table">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">센서 등록(excel)</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group">
+                        <input type="file" name="fName" id="fName" class="form-control" accept=".csv"/>
+                        <input type="button" value="변환후DB저장" onclick="fCheck()" class="btn btn-success"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- script  -->
+    <th:block layout:fragment="script">
+        <script>
+            var token;
+            var header;
+            let intervalId;
+            let sName = '';
+
+            var myLineChart = null; // 전역 Chart 인스턴스
+            let chartToggle = true;
+            let deviceCode = '';
+
+            let lowThreshold = 0;
+            let highThreshold = 0;
+
+            const customTextPlugin = null;
+
+            $(document).ready(function () {
+                token = document.getElementById('csrfToken').value;
+                header = document.getElementById('csrfHeader').value;
+
+                sName = $('#sName').val();
+                deviceCode = $('#deviceCode').val();
+
+                 // 1. 최초 실행
+                updateSensorData();
+
+                // 2. 이후 3초마다 실행
+                setInterval(updateSensorData, 3000);
+
+                $(".card-select").on("change", function() {
+                  let selectedValue = $('.card-select').val();
+                  $('.card-title').text(selectedValue);
+
+                  getThreshold();
+
+                });
+
+                $(".card-select").on("change", function(){
+                    updateSensorData();
+                });
+
+            });
+
+
+            function getThreshold(){
+                $.ajax({
+                    url  : "/professional/getThreshold",
+                    type : "post",
+                    data : {
+                        deviceCode: deviceCode,
+                        sName: sName
+                    },
+                    beforeSend : function(xhr) { xhr.setRequestHeader(header, token); },
+                    success:function(threshold) {
+                        if(!threshold){
+                            console.log("threshold 전달 실패");
+                        }
+                        else{
+                            lowThreshold = threshold.low;
+                            highThreshold = threshold.high;
+
+                            console.log(lowThreshold);
+                            console.log(highThreshold);
+                        }
+                    },
+                    error : function() { alert("전송오류!"); }
+                });
+
+            }
+
+             function fCheck() {
+                  let fileInput = $("#fName")[0];
+                  if (fileInput.files.length > 0) {
+                    let formData = new FormData();
+                    formData.append("fName", fileInput.files[0]);
+
+                    $.ajax({
+                        url  : "/professional/updateSensorByExcel",
+                        type : "post",
+                        data : formData,
+                        processData: false,
+                        contentType: false,
+                        beforeSend : function(xhr) { xhr.setRequestHeader(header, token); },
+                        success:function(res) {
+                          if(res != "0") {
+                            alert("처리완료");
+                          }
+                          else alert("처리 실패~~");
+                        },
+                        error : function() { alert("전송오류!"); }
+                    });
+                  } else {
+                    alert("파일을 선택해 주세요.");
+                  }
+                }
+
+            function updateSensorData() {
+                if (!chartToggle) {
+                    clearInterval(intervalId);
+                    return;
+                }
+
+
+            $.ajax({
+                url: "/professional/updateSensorData",
+                type: "post",
+                data: {
+                  deviceCode : deviceCode
+                },
+                beforeSend: function (xhr) { xhr.setRequestHeader(header, token); },
+                success: function (sensors) {
+                    if (!sensors) {
+                        $(".chart-failed").html(`
+                              <button data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                센서 등록(excel)
+                              </button>
+                            `).show();
+                    } else {
+                        let type = $('.card-select').val();
+
+                        if (myLineChart) {
+                            sensors.forEach(function (sensor) {
+                                let datetime = new Date(sensor.measureDatetime);
+                                let timeLabel = datetime.toLocaleTimeString();
+
+                                myLineChart.data.labels.push(timeLabel);
+                                myLineChart.data.datasets[0].data.push(sensor[type]);
+
+                                if (myLineChart.data.labels.length > 80) {
+                                    myLineChart.data.labels.shift();
+                                    myLineChart.data.datasets[0].data.shift();
+                                }
+                            });
+                        } else {
+                            var ctx = document.getElementById("myAreaChart");
+                            myLineChart = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: [],
+                                    datasets: [{
+                                        label: type,
+                                        data: [],
+                                        lineTension: 0.1,
+                                        backgroundColor: "rgba(2,117,216,0.2)",
+                                        borderColor: "rgba(2,117,216,1)",
+                                        pointRadius: 0,
+                                        pointBackgroundColor: "rgba(2,117,216,1)",
+                                        pointBorderColor: "rgba(255,255,255,0.8)",
+                                        pointHoverRadius: 5,
+                                        pointHoverBackgroundColor: "rgba(2,117,216,1)",
+                                        pointHitRadius: 50,
+                                        pointBorderWidth: 2
+                                    }]
+                                },
+                                options: {
+                                    plugins: {
+                                      annotation: {
+                                        annotations: {
+                                          thresholdLine: {
+                                            type: 'line',
+                                            yMin: 30,
+                                            yMax: 30,
+                                            borderColor: 'red',
+                                            borderWidth: 2,
+                                            label: {
+                                              content: '임계값 30',
+                                              enabled: true,
+                                              position: 'end'
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    tooltips: { mode: 'nearest', intersect: true },
+                                    animation: { duration: 0 },
+                                    scales: {
+                                        xAxes: [{
+                                            type: 'category',
+                                            gridLines: { display: false },
+                                            ticks: { minRotation: 0, maxRotation: 0, maxTicksLimit: 7 }
+                                        }],
+                                        yAxes: [{
+                                            ticks: { min: 0, max: 6000, maxTicksLimit: 5 },
+                                            gridLines: { color: "rgba(0, 0, 0, .125)" }
+                                        }],
+                                    },
+                                    legend: { display: true }
+
+                                    }
+                                });
+                            }
+                            myLineChart.data.datasets[0].label = type;
+                            myLineChart.update();
+                        }
+                    },
+                    error: function () {
+                        console.log("차트 데이터 전송 실패");
+                    }
+                });
+
+                getSummarySensor(deviceCode);
+            }
+
+
+            function getChart(){
+                let begin = $('#df_start-date').val();
+                let end = $('#df_end-date').val();
+
+                if(!begin || !end)
+                    chartToggle = true;
+                else{
+                     $.ajax({
+                        url: "/professional/getChartByDateRange",
+                        type: "post",
+                        data: {
+                            deviceCode : deviceCode,
+                            begin : begin,
+                            end : end
+                        },
+                        beforeSend: function (xhr) { xhr.setRequestHeader(header, token); },
+                        success: function (sensors) {
+                            console.log(sensors);
+
+                            chartToggle = false;
+                            if (myLineChart) {
+                                myLineChart.destroy();  // 기존 차트 완전 삭제
+                                myLineChart = null;
+                            }
+
+                            let dates = [];
+                            let values = [];
+                            let type = $('.card-select').val();
+
+                            //데이터 300개 제한
+                            const sMax = 300;
+                            if (sensors.length > sMax) {
+                                for (let i = 0; i < sensors.length; i += Math.floor(sensors.length / sMax)) {
+                                    const dt = new Date(sensors[i].measureDatetime).toLocaleString();
+                                    dates.push(dt);
+                                    values.push(sensors[i][type]);
+                                }
+                            } else {
+                                sensors.forEach((sensor, index) => {
+                                    const dt = new Date(sensor.measureDatetime).toLocaleString();
+                                    dates.push(dt);
+                                    values.push(sensor[type]);
+                                });
+                            }
+
+
+                             $('#myAreaChart').html('');
+                             var ctx = $('#myAreaChart');
+                             myLineChart = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: dates,
+                                    datasets: [{
+                                        label: type,
+                                        data: values,
+                                        lineTension: 0.1,
+                                        backgroundColor: "rgba(2,117,216,0.2)",
+                                        borderColor: "rgba(2,117,216,1)",
+                                        pointRadius: 0,
+                                        pointBackgroundColor: "rgba(2,117,216,1)",
+                                        pointBorderColor: "rgba(255,255,255,0.8)",
+                                        pointHoverRadius: 5,
+                                        pointHoverBackgroundColor: "rgba(2,117,216,1)",
+                                        pointHitRadius: 50,
+                                        pointBorderWidth: 2
+                                    }]
+                                },
+                                options: {
+                                    tooltips: {
+                                        mode: 'nearest',
+                                        intersect: true
+                                    },
+                                    animation: {
+                                        duration: 0,     // 0이면 애니메이션 없음
+                                    },
+                                    scales: {
+                                        xAxes: [{
+                                            type: 'category',
+                                            gridLines: { display: false },
+                                            ticks: {
+                                                maxTicksLimit: 7,
+                                                minRotation: 0,
+                                                maxRotation: 0
+
+                                            }
+                                        }],
+                                        yAxes: [{
+                                            ticks: {
+                                                min: 0,
+                                                max: 6000,
+                                                maxTicksLimit: 5
+                                            },
+                                            gridLines: {
+                                                color: "rgba(0, 0, 0, .125)",
+                                            }
+                                        }],
+                                    },
+                                    legend: {
+                                        display: true
+                                    }
+                                }
+                            });
+                        },
+                        error: function(){
+
+                        }
+                    });
+                }
+            }
+
+            function getSummarySensor(deviceCode){
+              $.ajax({
+                url: "/professional/getSummarySensors",
+                type: "POST",
+                data: {
+                  deviceCode: deviceCode
+                },
+                beforeSend: function(xhr) {
+                  xhr.setRequestHeader(header, token);
+                },
+                success: function(summarySensors) {
+
+                  console.log("summarySensors: " + summarySensors);
+                  let html = '';
+
+                  summarySensors.forEach(function(summarySensor, index) {
+                        html += `
+                            <tr>
+                                <td>${index}</td>
+                                <td>${summarySensor.sensorName}</td>
+                                <td>${summarySensor.stats.min}</td>
+                                <td>${summarySensor.stats.mean}</td>
+                                <td>${summarySensor.stats.max}</td>
+                                <td>${summarySensor.eventCnt}</td>
+                            </tr>
+                        `;
+                    });
+
+                  $(".sensor_table").html(html);
+                },
+                error: function(err) {
+                  console.error("에러 발생", err);
+                }
+              });
+            }
+
+          function getDeviceCode(element){
+            deviceCode = $(element).text();
+
+            if (myLineChart) {
+              myLineChart.destroy();
+              myLineChart = null;
+            }
+
+            updateSensorData();
+          }
+        </script>
+    </th:block>
+</div>
+
+</html>

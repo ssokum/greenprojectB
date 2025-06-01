@@ -2,10 +2,12 @@ package com.example.greenprojectB.controller;
 
 import com.example.greenprojectB.dto.CompanyDto;
 import com.example.greenprojectB.dto.HistoryDto;
+import com.example.greenprojectB.dto.SummarySensorDto;
 import com.example.greenprojectB.entity.Company;
 import com.example.greenprojectB.entity.History;
 import com.example.greenprojectB.entity.Member;
 import com.example.greenprojectB.repository.HistoryRepository;
+import com.example.greenprojectB.service.AdminService;
 import com.example.greenprojectB.service.CompanyService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -16,6 +16,9 @@ public interface SensorRepository extends JpaRepository<Sensor,Long> {
     @Query("SELECT DISTINCT s.deviceCode FROM Sensor s WHERE s.companyId = :companyId")
     List<String> findDistinctDevicesByCompanyId(@Param("companyId") String companyId);
 
+
     ArrayList<Sensor> findByMeasureDatetimeBetween(LocalDateTime start, LocalDateTime end);
+    ArrayList<Sensor> findByDeviceCodeAndMeasureDatetimeBetween(String deviceCode, LocalDateTime start, LocalDateTime end);
+
 
 }

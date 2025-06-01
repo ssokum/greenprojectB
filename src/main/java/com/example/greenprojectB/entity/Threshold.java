@@ -46,11 +46,9 @@ public class Threshold {
     @CreatedDate
     private LocalDateTime updatedAt;
 
-    @Column(name = "updated_by", length = 50,nullable = false)
+    @Column(name = "updated_by", length = 50, nullable = false)
     private String updatedBy;
 
-    @Transient
-    private SummarySensorDto summarySensor;
 
 
 
@@ -65,7 +63,6 @@ public class Threshold {
                 .high(0)
                 .updatedAt(dto.getUpdatedAt())
                 .updatedBy(dto.getUpdatedBy())
-                .summarySensor(null)
                 .build();
     }
 

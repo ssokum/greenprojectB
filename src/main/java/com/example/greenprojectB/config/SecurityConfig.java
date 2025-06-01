@@ -31,6 +31,7 @@ public class SecurityConfig {
                     .ignoringRequestMatchers("/register")
                     .ignoringRequestMatchers("/company/**")
                     .ignoringRequestMatchers("/admin/**")
+                    .ignoringRequestMatchers("/professional/**")
                     .ignoringRequestMatchers("/faq/**")
                     .ignoringRequestMatchers("/recruit/**")
                     .ignoringRequestMatchers("/ckeditor/**") // CKEditor 업로드 경로 제외
@@ -63,6 +64,7 @@ public class SecurityConfig {
             .requestMatchers("/company/**").permitAll()
             .requestMatchers("/company/companyLogin").permitAll()
             .requestMatchers("/notice/**").permitAll()
+            .requestMatchers("/professional/**").hasRole("ADMIN") //나중에 바꾸기
             .requestMatchers("/recruit/recruitInput").hasRole("ENTERPRISE")
             .requestMatchers("/notice/noticeWrite", "/notice/noticeUpdate","/faq/**").hasRole("ADMIN")
             .requestMatchers("/admin/**").hasRole("ADMIN")

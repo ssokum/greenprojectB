@@ -1,6 +1,5 @@
 package com.example.greenprojectB.dto;
 
-import jakarta.persistence.Entity;
 import lombok.*;
 
 @Getter
@@ -12,9 +11,8 @@ import lombok.*;
 public class SummarySensorDto {
 
     private String sensorName;
-    private double min;
-    private double mean;
-    private double max;
+    private String deviceCode;
+    private Stats stats;
     private long eventCnt;
 
 }

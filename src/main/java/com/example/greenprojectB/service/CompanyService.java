@@ -25,6 +25,7 @@ public class CompanyService {
 
   private final CompanyRepository companyRepository;
   private final HistoryRepository historyRepository;
+  private final AdminService adminService;
 
   public List<History> getHistoryList() {
     return historyRepository.findAll();
@@ -66,10 +67,9 @@ public class CompanyService {
 
   public Optional<Company> findByCompanyId(Long company_idx) {
     return Optional.of(companyRepository.findById(company_idx).orElse(new Company()));
-
   }
 
   public Company getCompanyDto(String id) {
-    return companyRepository.findByCompanyId(id).orElseThrow(() -> new RuntimeException("해당 사용자를 찾을 수 없습니다."));
+    return companyRepository.findByCompanyId(id).orElseThrow(() ->  new RuntimeException("해당 사용자를 찾을 수 없습니다."));
   }
 }
