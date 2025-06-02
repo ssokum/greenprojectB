@@ -97,6 +97,42 @@ public class MessageCommunityController {
 			model.addAttribute("message", "인재채용 게시글이 삭제되었습니다.");
 			model.addAttribute("url", "/recruit/recruitList");
 		}
+		else if(msgFlag.equals("equipmentInputOk")) {
+			model.addAttribute("message", "장비소개 게시글이 등록되었습니다.");
+			model.addAttribute("url", "/equipment/equipmentList");
+		}
+		else if(msgFlag.equals("equipmentInputNo")) {
+			model.addAttribute("message", "장비소개 게시글 등록을 실패했습니다.");
+			model.addAttribute("url", "/equipment/equipmentInput");
+		}
+		else if(msgFlag.equals("equipmentUpdateOk")) {
+			model.addAttribute("message", "장비소개 게시글이 수정되었습니다.");
+			model.addAttribute("url", "/equipment/equipmentList");
+		}
+		else if(msgFlag.equals("equipmentDeleteOk")) {
+			model.addAttribute("message", "장비소개 게시글이 삭제되었습니다.");
+			model.addAttribute("url", "/equipment/equipmentList");
+		}
+		else if(msgFlag.equals("equipmentNotFound")) {
+			model.addAttribute("message", "장비소개 게시글을 찾을수없습니다.");
+			model.addAttribute("url", "/equipment/equipmentList");
+		}
+		else if(msgFlag.equals("accessDenied")) {
+			model.addAttribute("message", "접근 권한이 없습니다.");
+			model.addAttribute("url", "/");
+		}else if(msgFlag.equals("noticeWriteOk")) {
+			model.addAttribute("message", "공지사항이 등록되었습니다.");
+			model.addAttribute("url", "/notice/noticeMain");
+		}
+		else if(msgFlag.equals("noticeUpdateOk")) {
+			model.addAttribute("message", "공지가 수정되었습니다.");
+			model.addAttribute("url", "/notice/detail/" + idx);
+		}
+		else if(msgFlag.equals("noticeUpdateNo")) {
+			model.addAttribute("message", "수정에 실패하였습니다. 다시 시도해 주세요!");
+			model.addAttribute("url", "/notice/noticeUpdate?idx=" + idx);
+		}
+
 
 		return "include/message";
 	}

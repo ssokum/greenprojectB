@@ -17,26 +17,100 @@
 </th:block>
 <th:block layout:fragment="css">
   <style>
-  .table {
-    margin-top:20px;
-    padding:20px;
-  }
+    body {
+      font-family: 'Arial', sans-serif;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
 
-  .general tr th {
-    background-color:#4E71FF;
-    font-weight: bold;
-    color: white;
-  }
+    .companyHistory {
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
 
+    .companyHistory h2, .companyHistory h5 {
+      margin-bottom: 20px;
+      color: #4E71FF;
+    }
+
+    .companyHistory .table {
+      margin-top: 20px;
+      padding: 20px;
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .companyHistory .general tr th {
+      background-color: #4E71FF;
+      font-weight: bold;
+      color: white;
+      padding: 10px;
+    }
+
+    .companyHistory .general tr td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+
+    .companyHistory .btn {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .companyHistory .btn-success {
+      background-color: #4E71FF;
+      color: white;
+    }
+
+    .companyHistory .btn-success:hover {
+      background-color: #3a5bbf;
+    }
+
+    .companyHistory .btn-warning {
+      background-color: #ffc107;
+      color: black;
+    }
+
+    .companyHistory .btn-warning:hover {
+      background-color: #e0a800;
+    }
+
+    .companyHistory hr {
+      border: 1px solid #4E71FF;
+      margin: 20px 0;
+    }
+
+    .companyHistory .row {
+      margin-bottom: 30px;
+    }
+
+    .companyHistory textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      resize: vertical;
+    }
+    .toHome {
+      text-align: center;  /* 버튼 중앙 정렬 */
+      margin-top: 20px;  /* 버튼과 위의 요소 간격 */
+    }
   </style>
 </th:block>
 
-<div layout:fragment="content" class="container">
-  <h2 class="mb-5 text-center"><b>일반현황 및 연혁</b></h2>
+<div layout:fragment="content" class="container companyHistory">
+  <h2 class="text-center"><b>일반현황 및 연혁</b></h2>
   <form class="form text-center">
     <h5 class="text-start"><b>일반현황</b></h5>
-    <p></p>
-    <table class="table table-bordered general shadow-lg p-3 mb-5 bg-body-tertiary">
+    <table class="table table-bordered general shadow-lg">
       <tr>
         <th scope="row">회사명</th>
         <td>주식회사 그린컴퍼니</td>
@@ -59,27 +133,25 @@
         <th scope="row">회사 설립년도</th>
         <td>2020년 5월</td>
       </tr>
-    <p></p>
     </table>
   </form>
 
   <h5 class="text-start"><b>연혁</b></h5>
-  <p></p>
-
-  <div class="row mb-5">
+  <div class="row">
     <th:block th:each="dto : ${historyByYear}">
       <hr/>
-      <div class="col"><h3><b th:text="${dto.key} + '년'"></b></h3></div> <!--연도는 한번만 출력-->
-        <ul>
-          <li th:each="h : ${dto.value}">
-            <span th:text="${#temporals.format(h.historyDate, 'MM월')}"></span>
-            <span th:text="${h.content}"></span>
-          </li>
-        </ul>
+      <div class="col"><h3><b th:text="${dto.key} + '년'"></b></h3></div>
+      <ul>
+        <li style="margin-left:20px" th:each="h : ${dto.value}">
+          <span th:text="${#temporals.format(h.historyDate, 'MM월')}"></span>
+          <span th:text="${h.content}"></span>
+        </li>
+      </ul>
     </th:block>
   </div>
 
-  <p></p>
+
+  <hr/>
   <form role="form" method="post">
     <div>
       <div>연도/월</div>
@@ -98,7 +170,6 @@
           </th:block>
         </select>
       </label>
-      <p></p>
       <div>내용</div>
       <label>
         <textarea name="content" id="content" cols="70" rows="7"></textarea>
@@ -109,9 +180,8 @@
     </div>
     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf?.token}" />
   </form>
-  <p></p>
-  <a th:href="@{/}" class="btn btn-success">홈으로</a>
 
+  <div class="toHome"><a th:href="@{/}" class="btn btn-success" >홈으로</a></div>
 </div>
 
 </html>

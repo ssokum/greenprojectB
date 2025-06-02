@@ -4,63 +4,79 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/exampleLayout}">
 
+<div layout:fragment="css">
+  <style>
+    .companyDirections {
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+    }
+    .companyDirections #map {
+        width: 100%; /* 가로 폭을 100%로 설정 */
+        height: 500px; /* 높이는 고정 */
+        max-width: 1296px; /* 최대 폭 설정 */
+        margin: 0 auto; /* 중앙 정렬 */
+    }
+  </style>
+</div>
 
-
-<div layout:fragment="content" class="container text-center">
+<div layout:fragment="content" class="container text-center companyDirections">
   <h2><b>찾아오시는 길</b></h2>
   <hr class="mb-6"/>
-  <p><br/ ></p>
-  <div>
-    <div id="map" style="width:1296px;height:500px;margin:0 auto"></div>
+  <p><br/></p>
 
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2d68bba3ec86dbbe53f4203b51b023cf&libraries=services,cluster,drawing"></script>
+  <div id="map"></div>
 
-    <script>
-      $(function() {
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2d68bba3ec86dbbe53f4203b51b023cf&libraries=services,cluster,drawing"></script>
 
-        var xx = "";
-        var yy = "";
+  <script>
+    $(function() {
 
-        // 주소-좌표 변환 객체 생성
-        var geocoder = new kakao.maps.services.Geocoder();
-        // 주소로 좌표 검색
-        geocoder.addressSearch('충북 청주시 서원구 사직대로 109 4층', function(result, status) {
+      var xx = "";
+      var yy = "";
 
-          if(status === kakao.maps.services.Status.OK) {
-            xx = result[0].x;
-            yy = result[0].y;
+      // 주소-좌표 변환 객체 생성
+      var geocoder = new kakao.maps.services.Geocoder();
+      // 주소로 좌표 검색
+      geocoder.addressSearch('충북 청주시 서원구 사직대로 109 4층', function(result, status) {
 
-            console.log("yyyyy : " + yy);
-            console.log("xxxxx : " + xx);
+        if(status === kakao.maps.services.Status.OK) {
+          xx = result[0].x;
+          yy = result[0].y;
 
-            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+          console.log("yyyyy : " + yy);
+          console.log("xxxxx : " + xx);
 
-            //결과값으로 받은 위치를 마커로 표시
-            var marker = new kakao.maps.Marker({
-              map: map,
-              position: coords
-            });
+          var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-            //인포윈도우로 장소에 대한 설명을 표시
-            var infowindow = new kakao.maps.InfoWindow({
-              content: '<div style="width:150px;text-align:center;padding:6px 0;">그린컴퍼니</div>'
-            });
-            infowindow.open(map, marker);
-            // 지도의 중심을 결과값으로 받은 위치로 이동
-            map.setCenter(coords);
-          };
-        });
-        // 지도를 담을 영역의 DOM 레퍼런스
-        var container = document.getElementById('map');
-        var options = {
-          center: new kakao.maps.LatLng(yy, xx),
-          level: 3
+          //결과값으로 받은 위치를 마커로 표시
+          var marker = new kakao.maps.Marker({
+            map: map,
+            position: coords
+          });
+
+          //인포윈도우로 장소에 대한 설명을 표시
+          var infowindow = new kakao.maps.InfoWindow({
+            content: '<div style="width:150px;text-align:center;padding:6px 0;">그린컴퍼니</div>'
+          });
+          infowindow.open(map, marker);
+          // 지도의 중심을 결과값으로 받은 위치로 이동
+          map.setCenter(coords);
         };
-        var map = new kakao.maps.Map(container, options);    //지도 생성 및 객체 리턴
-
       });
-    </script>
-  </div>
+      // 지도를 담을 영역의 DOM 레퍼런스
+      var container = document.getElementById('map');
+      var options = {
+        center: new kakao.maps.LatLng(yy, xx),
+        level: 3
+      };
+      var map = new kakao.maps.Map(container, options);    //지도 생성 및 객체 리턴
+
+    });
+  </script>
+
+
   <hr/>
   <p><br></p>
   <div class="row">

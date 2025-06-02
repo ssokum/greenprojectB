@@ -3,6 +3,24 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/exampleLayout}">
 
+<th:block layout:fragment="script">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+  <script>
+    function companyCheck() {
+      let companyId = document.getElementById("companyId").value;
+      let password = document.getElementById("password").value;
+
+      if(companyId == "" || password == "") {
+        alert("아이디와 비밀번호를 입력하세요");
+        return false;
+      }
+      else {
+        companyForm.submit();
+      }
+    }
+  </script>
+</th:block>
 
 <!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -67,7 +85,7 @@
 
 <div layout:fragment="content">
 
-  <form method="post" id="login-form">
+  <form name="companyForm" method="post" id="login-form">
     <div id="login-title">
       <img src="/images/violet-moon_1.png" />
       <h2>로그인하고 나만의 브랜드를<br/>
@@ -75,7 +93,7 @@
     </div>
     <div class="form-group mb-3">
       <label th:for="companyId">아이디</label>
-      <input type="text" name="companyId" value="1000005" class="form-control" placeholder="아이디를 입력해주세요">
+      <input type="text" name="companyId" id="companyId" value="1000004" class="form-control" placeholder="아이디를 입력해주세요">
     </div>
     <div class="form-group mb-3">
       <label th:for="password">비밀번호</label>
@@ -83,13 +101,12 @@
     </div>
     <div class="mb-3" id="login-button">
       <p th:if="${cLoginErrorMsg}" class="error" th:text="${cLoginErrorMsg}"></p>
-      <button type="submit" class="btn btn-info">기업회원 로그인</button>
+      <button type="button" onclick="companyCheck()" class="btn btn-info">기업회원 로그인</button>
     </div>
     <div class="line">또는</div>
     <p>아직 회원이 아니신가요? <a href="/member/memberJoin">회원가입</a> / <a href="/company/companyJoin">기업으로 가입</a></p>
 
-
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf?.token}" />
+    <input type="hidden" th:name="${_csrf}" th:value="${_csrf?.token}" />
   </form>
 
 </div>

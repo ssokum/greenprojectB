@@ -18,7 +18,8 @@ public interface SensorRepository extends JpaRepository<Sensor,Long> {
 
 
     ArrayList<Sensor> findByMeasureDatetimeBetween(LocalDateTime start, LocalDateTime end);
+    ArrayList<Sensor> findByCompanyIdAndMeasureDatetimeBetween(String companyId, LocalDateTime start, LocalDateTime end);
     ArrayList<Sensor> findByDeviceCodeAndMeasureDatetimeBetween(String deviceCode, LocalDateTime start, LocalDateTime end);
-
+    ArrayList<Sensor> findByCompanyIdAndDeviceCodeAndMeasureDatetimeBetween(String companyId, String deviceCode, LocalDateTime start, LocalDateTime end);
 
 }

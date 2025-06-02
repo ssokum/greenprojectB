@@ -2,158 +2,222 @@
 <html lang="ko"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{/layouts/exampleLayout}">
+      layout:decorate="~{layouts/exampleLayout}">
 
-<head>
-    <title>공지사항 수정</title>
-    <th:block layout:fragment="script">
-        <meta name="_csrf" th:content="${_csrf?.token}"/>
-        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<th:block layout:fragment="script">
 
-        <script th:inline="javascript">
-            $(document).ready(function() {
-                // 전체선택
-                $("#checkAll").click(function() {
-                    $(".chk").prop("checked", $(this).prop("checked"));
-                });
+    <meta name="_csrf" th:content="${_csrf?.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
-                // 개별 파일 삭제 처리
-                window.fileDeleteCheck = function(file) {
-                    const token = $("meta[name='_csrf']").attr("content");
-                    const header = $("meta[name='_csrf_header']").attr("content");
+    <script th:inline="javascript">
+        // 전체선택
+        $(function(){
+          $("#checkAll").click(function(){
+            if($("#checkAll").prop("checked")) $(".chk").prop("checked", true);
+            else $(".chk").prop("checked", false);
+          });
+        });
 
-                    if (!confirm("현재 파일을 삭제하시겠습니까?")) return false;
+        // 개별파일 삭제처리
+        function fileDeleteCheck(file) {
+          const token = $("meta[name='_csrf']").attr("content");
+          const header = $("meta[name='_csrf_header']").attr("content");
+          const idx = document.getElementById("idx").value;
 
-                    $.ajax({
-                        type: "POST",
-                        url: "/notice/fileDeleteCheck",  // 서버에서 처리하는 URL
-                        data: { file: file },
-                        beforeSend: function(xhr) {
-                            xhr.setRequestHeader(header, token);
-                        },
-                        success: function(res) {
-                            if (res !== "0") {
-                                alert("파일이 삭제되었습니다.");
-                                location.reload();
-                            } else {
-                                alert("삭제에 실패했습니다.");
-                            }
-                        },
-                        error: function() {
-                            alert("전송 오류가 발생했습니다.");
-                        }
-                    });
-                };
+          let ans = confirm("현재 파일을 삭제하시겠습니까?");
+          console.log("삭제할 파일명:", file);
 
-                // 선택된 파일들 모두 삭제처리
-                window.selectDelCheck = function() {
-                    const token = $("meta[name='_csrf']").attr("content");
-                    const header = $("meta[name='_csrf_header']").attr("content");
+          if(!ans) return false;
 
-                    if (!confirm("선택된 파일을 삭제하시겠습니까?")) return false;
+          $.ajax({
+            type : "post",
+            url  : "/notice/fileDeleteCheck",
+            data : {
+            file : file,
+            idx: idx
+            },
+            beforeSend : function(xhr) { xhr.setRequestHeader(header, token); },
+            success:function(res) {
+              if(res != "0") {
+                alert("파일이 삭제되었습니다.");
+                location.reload();
+              }
+            },
+            error : function() { alert("전송오류!"); }
+          });
+        }
 
-                    let delItems = "";
-                    $("input[name='chk']:checked").each(function() {
-                        delItems += $(this).val() + "/";
-                    });
+        // 선택된 파일들 모두 삭제처리
+        function selectDelCheck() {
+          const token = $("meta[name='_csrf']").attr("content");
+          const header = $("meta[name='_csrf_header']").attr("content");
+          const idx = document.getElementById("idx").value;
 
-                    if (delItems === "") {
-                        alert('한 개 이상의 파일을 선택 후 처리하세요.');
-                        return false;
+          let ans = confirm("선택된 파일을 삭제하시겠습니까?");
+          if(!ans) return false;
+
+          let delItems = "";
+          let checkboxes = myform.chk;
+            if (!checkboxes) {
+              alert('선택된 파일이 없습니다.');
+              return false;
+            }
+
+            if (!checkboxes.length) { // 단일 checkbox인 경우
+              if (checkboxes.checked) delItems = checkboxes.value + "/";
+            } else {
+              for(let i=0; i<checkboxes.length; i++) {
+                if(checkboxes[i].checked) delItems += checkboxes[i].value + "/";
+              }
+            }
+
+          $.ajax({
+            type : "post",
+            url  : "/notice/fileSelectDelete",
+            data : {
+            delItems : delItems,
+            idx : idx
+            },
+            beforeSend : function(xhr) { xhr.setRequestHeader(header, token); },
+            success:function(res) {
+              if(res != "0") {
+                alert("파일이 삭제되었습니다.");
+                location.reload();
+              }
+            },
+            error : function() { alert("전송오류!"); }
+          });
+        }
+
+        function mfCheck() {
+            const titleInput = document.getElementById("title");
+            const pwInput = document.getElementById("noticePassword");
+            const titleError = document.getElementById("titleError");
+            const pwError = document.getElementById("pwError");
+
+            let ufName = document.getElementById("newFile");
+            let maxSize = 1024 * 1024 * 30; // 30MB
+            let fileSize = 0;
+            let valid = true;
+
+            // 에러 초기화
+            if (titleError) titleError.textContent = "";
+            if (pwError) pwError.textContent = "";
+
+            // 제목 필수 체크
+            if (titleInput.value.trim() === "") {
+                if (titleError) titleError.textContent = "제목은 필수 입력입니다.";
+                valid = false;
+            }
+
+            // 비밀번호 필수 체크
+            if (pwInput && pwInput.value.trim() === "") {
+                if (pwError) pwError.textContent = "비밀번호는 필수 입력입니다.";
+                valid = false;
+            }
+
+            if (ufName && ufName.files.length > 0) {
+                for (let i = 0; i < ufName.files.length; i++) {
+                    const file = ufName.files[i];
+                    const ext = file.name.substring(file.name.lastIndexOf(".") + 1).toLowerCase();
+                    fileSize += file.size;
+
+                    if (!['jpg', 'gif', 'png', 'hwp', 'zip', 'ppt', 'pptx', 'pdf'].includes(ext)) {
+                        alert("업로드 가능한 파일은 'jpg/gif/png/hwp/zip/ppt/pptx/pdf'만 가능합니다.");
+                        valid = false;
+                        break;
                     }
+                }
 
-                    $.ajax({
-                        type: "post",
-                        url: "/notice/fileSelectDelete",
-                        data: { delItems: delItems },
-                        beforeSend: function(xhr) { xhr.setRequestHeader(header, token); },
-                        success: function(res) {
-                            if (res !== "0") {
-                                alert("파일이 삭제되었습니다.");
-                                location.reload();
-                            }
-                        },
-                        error: function() { alert("전송오류!"); }
-                    });
-                };
+                if (fileSize > maxSize) {
+                    alert("업로드할 전체 파일의 최대용량은 30MByte 입니다.");
+                    valid = false;
+                }
+            }
 
-                // 스크롤 시 상단으로 부드럽게 이동 버튼 토글
-                $(window).scroll(function() {
-                    if ($(this).scrollTop() > 100) {
-                        $("#topBtn").addClass("on");
-                    } else {
-                        $("#topBtn").removeClass("on");
-                    }
-                });
 
-                $("#topBtn").click(function() {
-                    window.scrollTo({ top: 0, behavior: "smooth" });
-                });
-            });
-        </script>
-    </th:block>
-</head>
+            return valid;
+        }
+    </script>
+</th:block>
 
 <body>
-<div layout:fragment="content">
-    <div class="form-container">
-        <h3 class="text-center mb-4">공지사항 수정</h3>
-        <form name="myform" method="post" enctype="multipart/form-data">
-            <table class="table table-bordered align-middle">
-                <tbody>
-                    <tr>
-                        <th class="required">제목</th>
-                        <td>
-                            <input type="text" name="title" id="title" class="form-control" required autofocus
-                                   th:value="${notice.title}" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="required">작성자</th>
-                        <td>
-                            <input type="text" name="writer" id="writer" class="form-control" required
-                                   th:value="${notice.writer}" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>내용</th>
-                        <td>
-                            <textarea rows="8" name="content" id="content" class="form-control"
-                                      th:text="${notice.content}"></textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="bg-light text-center">첨부 파일</th>
-                        <td colspan="3">
-                            <th:block th:if="${fileList != null and !#lists.isEmpty(fileList)}">
-                                <th:block th:each="file : ${fileList}">
-                                    <div class="d-inline-block me-3 mb-2">
-                                        <a th:href="@{/upload/{file}(file=${file})}"
-                                           th:text="${file}"
-                                           th:download="${file}"
-                                           th:title="'파일 다운로드: ' + ${file}"
-                                           class="text-decoration-none text-primary me-2">
-                                        </a>
-                                    </div>
-                                </th:block>
-                            </th:block>
-                            <th:block th:if="${fileList == null or #lists.isEmpty(fileList)}">
-                                <span class="text-muted">첨부 파일 없음</span>
-                            </th:block>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+<div layout:fragment="content" class="container mt-5">
+    <h4 class="mb-4 border-bottom pb-2 fw-bold">공지사항 수정</h4>
 
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <form name="myform" method="post" enctype="multipart/form-data" th:action="@{/notice/noticeUpdate}" onsubmit="return mfCheck();">
+        <table class="table table-bordered align-middle">
+            <tbody>
+            <tr>
+                <th class="bg-light text-center" style="width: 150px;">제목</th>
+                <td colspan="3">
+                    <input type="text" name="title" id="title" class="form-control" th:value="${notice.title}" />
+                    <div class="error-text" id="titleError"></div>
+                </td>
+            </tr>
+            <tr>
+                <th class="bg-light text-center" style="width: 150px;">작성자</th>
+                <td colspan="3"><input type="text" name="writer" class="form-control" th:value="${notice.writer}" readonly/></td>
+            </tr>
+            <tr>
+                <th class="bg-light text-center">내용</th>
+                <td colspan="3">
+                    <textarea name="content" rows="8" class="form-control" th:text="${notice.content}"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <th class="bg-light text-center">첨부 파일</th>
+                <td colspan="3">
+                    <div class="mb-2">
+                        <input type="checkbox" id="checkAll"/> 전체선택
+                        <input type="button" value="선택항목삭제" onclick="selectDelCheck()" class="btn btn-danger btn-sm mb-2"/>
+                    </div>
+                    <th:block th:if="${sFileList != null and !#lists.isEmpty(sFileList)}">
+                        <th:block th:each="i : ${#numbers.sequence(0, sFileList.size() - 1)}">
+                            <div class="d-flex align-items-center mb-2">
+                                <input type="checkbox" class="chk me-2" name="chk" th:value="${sFileList[i]}"/>
+                                <a th:href="@{/upload/{file}(file=${sFileList[i]})}"
+                                   th:text="${oFileList[i]}"
+                                   th:download="${oFileList[i]}"
+                                   class="text-decoration-none text-primary me-2">
+                                </a>
+                                <button type="button" class="badge bg-danger" style="border:0px"
+                                        th:data-file="${sFileList[i]}"
+                                        onclick="fileDeleteCheck(this.getAttribute('data-file'))">삭제</button>
+                            </div>
+                        </th:block>
+                    </th:block>
+                    <th:block th:if="${fileList == null or #lists.isEmpty(fileList)}">
+                        <span class="text-muted">첨부 파일 없음</span>
+                    </th:block>
+                </td>
+            </tr>
+            <tr>
+                <th class="bg-light text-center">새 파일 첨부</th>
+                <td colspan="3">
+                    <input type="file" name="newFile" id="newFile" multiple class="form-control" accept=".jpg,.gif,.png,.zip,.hwp,.ppt,.pptx,.pdf"/>
+                    <small class="text-muted">기존 첨부파일은 삭제 후 새로 첨부하세요.</small>
+                </td>
+            </tr>
+            <tr>
+                <th class="bg-light text-center write_required">비밀번호</th>
+                <td colspan="3">
+                    <input type="password" name="noticePassword" id="noticePassword" class="form-control" />
+                    <div class="error-text" id="pwError"></div>
+                    <small class="text-muted">※ 글 수정, 삭제 시 필요합니다.</small>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
-            <div class="text-center">
-                <button type="submit" class="btn btn-save me-2">저장</button>
-                <button type="button" class="btn btn-cancel"
-                        th:onclick="|location.href='@{/notice/noticeMain}'|">취소</button>
-            </div>
-        </form>
-    </div>
+        <input type="hidden" id="idx" name="idx" th:value="${notice.idx}"/>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary me-2">저장</button>
+            <a th:href="@{/notice/noticeMain}" class="btn btn-secondary">취소</a>
+        </div>
+    </form>
 </div>
 </body>
 </html>

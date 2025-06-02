@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/exampleLayout}">
+
+<div layout:fragment="content" class="container mt-4">
+  <h2 class="mb-4" th:text="${equipment.title}">장비 제목</h2>
+  <div class="mb-3 text-muted" th:text="${#temporals.format(equipment.createdAt, 'yyyy-MM-dd HH:mm')}">작성일</div>
+  <div class="mb-5" th:utext="${equipment.content}">장비 내용</div>
+
+  <a th:href="@{/equipment/equipmentList}" class="btn btn-secondary">목록으로</a>
+  <th:block>
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/equipment/equipmentUpdate/{id}(id=${equipment.equipmentId})}" class="btn btn-outline-warning" onclick="return confirm('수정하시겠습니까?');">수정</a>
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/equipment/equipmentDelete/{id}(id=${equipment.equipmentId})}" class="btn btn-outline-danger" onclick="return confirm('삭제하시겠습니까?');">삭제</a>
+  </th:block>
+</div>
+
+</html>

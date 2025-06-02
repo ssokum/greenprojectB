@@ -63,7 +63,32 @@ public class ProfessionalService {
         if (sensor != null) {
             LocalDateTime baseTime = sensor.getMeasureDatetime().plusMinutes(curTime);
             LocalDateTime targetTime = baseTime.plusMinutes(1);
+
             return sensorRepository.findByMeasureDatetimeBetween(baseTime, targetTime);
+        }
+
+        return null;
+    }
+
+    public ArrayList<Sensor> getChartSensors(String companyId, String deviceCode, int curTime) {
+        Sensor sensor = sensorRepository.findBySensorId(3935953);
+        if (sensor != null) {
+            LocalDateTime baseTime = sensor.getMeasureDatetime().plusMinutes(curTime);
+            LocalDateTime targetTime = baseTime.plusMinutes(2);
+
+            return sensorRepository.findByCompanyIdAndDeviceCodeAndMeasureDatetimeBetween(companyId, deviceCode, baseTime, targetTime);
+        }
+
+        return null;
+    }
+
+    public ArrayList<Sensor> getChartSensors(String companyId, String deviceCode, int base, int curTime) {
+        Sensor sensor = sensorRepository.findBySensorId(3935953);
+        if (sensor != null) {
+            LocalDateTime baseTime = sensor.getMeasureDatetime().plusMinutes(base);
+            LocalDateTime targetTime = baseTime.plusMinutes(curTime);
+
+            return sensorRepository.findByCompanyIdAndDeviceCodeAndMeasureDatetimeBetween(companyId, deviceCode, baseTime, targetTime);
         }
 
         return null;
@@ -72,6 +97,7 @@ public class ProfessionalService {
     public ArrayList<Sensor> getChartSensors(String deviceCode, LocalDateTime begin, LocalDateTime end) {
         return sensorRepository.findByDeviceCodeAndMeasureDatetimeBetween(deviceCode, begin, end);
     }
+
 
     public Company getCompany(String companyId) {
         return companyRepository.findByCompanyId(companyId)
@@ -90,6 +116,10 @@ public class ProfessionalService {
         return thresholdRepository.findByCompany_CompanyIdAndDeviceCode(companyId, deviceCode);
     }
 
+    public Threshold getThreshold(String companyId, String deviceCode, String type) {
+        return thresholdRepository.findByCompany_CompanyIdAndDeviceCodeAndSensorName(companyId, deviceCode, type);
+    }
+
     public void createThreshold(List<String> deviceCode, Company company, String sName) {
         for (String string : deviceCode) {
             for (String s : sensorValue) {
@@ -105,6 +135,10 @@ public class ProfessionalService {
                 thresholdRepository.save(threshold);
             }
         }
+    }
+
+    public void inputThreshold(Threshold threshold){
+        thresholdRepository.save(threshold);
     }
 
     private void writeFile(MultipartFile file, String sFileName, String urlPath) throws IOException {

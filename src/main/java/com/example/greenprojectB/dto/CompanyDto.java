@@ -2,6 +2,7 @@ package com.example.greenprojectB.dto;
 
 import com.example.greenprojectB.constant.Role;
 import com.example.greenprojectB.entity.Company;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
@@ -55,7 +56,6 @@ public class CompanyDto {
   private LocalDateTime createdAt;
   private LocalDateTime updateAt;
   private Role role;
-
 
   // Entity to DTO
   public static CompanyDto createMemberDto(Optional<Company> opCompany ) {

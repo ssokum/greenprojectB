@@ -101,7 +101,7 @@ public class Company {
             .isDeleted(0)
             .createdAt(null)
             .updateAt(null)
-            .role(Role.ENTERPRISE)
+            .role(Role.COMPANY)
             .build();
   }
 }

@@ -4,56 +4,125 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/exampleLayout}">
 
-    <div layout:fragment="content" class="container mt-5">
-        <h4 class="mb-4 border-bottom pb-2 fw-bold">공지사항 </h4>
+<th:block layout:fragment="css">
+    <style>
+        .notice-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #87CEEB; /* 하늘색 밑줄 */
+            margin-bottom: 2rem;
+        }
 
-        <table class="table table-bordered align-middle">
-            <tbody>
-                <tr>
-                    <th class="bg-light text-center" style="width: 150px;">제목</th>
-                    <td colspan="3" th:text="${notice.title}"></td>
-                </tr>
-                <tr>
-                    <th class="bg-light text-center">작성일자</th>
-                    <td th:text="${#temporals.format(notice.createDate, 'yyyy.MM.dd HH:mm')}"></td>
-                    <th class="bg-light text-center">작성자</th>
-                    <td th:text="${notice.writer}"></td>
-                </tr>
-                <tr>
-                    <th class="bg-light text-center">조회수</th>
-                    <td th:text="${notice.viewCount}"></td>
-                </tr>
-                <tr>
-                    <th class="bg-light text-center">첨부 파일</th>
-                    <td colspan="3">
-                        <th:block th:if="${fileList != null and !#lists.isEmpty(fileList)}">
-                            <th:block th:each="file : ${fileList}">
-                                <div class="d-inline-block me-3 mb-2">
-                                    <a th:href="@{/upload/{file}(file=${file})}"
-                                       th:text="${file}"
-                                       th:download="${file}"
-                                       th:title="'파일 다운로드: ' + ${file}"
-                                       class="text-decoration-none text-primary me-2">
-                                    </a>
-                                </div>
-                            </th:block>
+        .custom-hr {
+            border: none;
+            height: 2px;
+            background-color: #87CEEB;
+            margin: 3rem 0;
+        }
+
+        .notice-content {
+            font-size: 1rem;
+            line-height: 1.8;
+            padding: 1rem 0;
+            white-space: pre-wrap;
+            background: none;
+            border: none;
+        }
+
+        .nav-article-link a:hover {
+            color: #0bb3f0;
+        }
+
+        /* 첨부파일 배지 간격 개선 */
+        .file-badge {
+            max-width: 200px;
+            font-size: 0.9rem;
+        }
+
+        /* 버튼 스타일은 그대로 유지 */
+    </style>
+</th:block>
+
+    <div layout:fragment="content" class="container py-5">
+        <div class="px-2 px-md-4">
+
+            <h2 class="notice-title">공지사항</h2>
+
+            <!-- 공지사항 제목 -->
+            <h3 class="fw-bold mb-4 border-bottom pb-2 text-truncate"
+                th:text="${notice.title}"
+                th:title="${notice.title}"></h3>
+
+            <!-- 작성 정보 -->
+            <div class="row text-muted small mb-4">
+                <div class="col-12 col-md-4 mb-2 mb-md-0">
+                    <strong>작성자:</strong> <span th:text="${notice.writer}"></span>
+                </div>
+
+                <div class="col-12 col-md-8 text-md-end d-flex flex-column align-items-md-end">
+                    <div>
+                        <strong>작성일:</strong> <span th:text="${notice.updateDate != null} ?
+                                                    ${#temporals.format(notice.updateDate, 'yyyy.MM.dd HH:mm')} :
+                                                    ${#temporals.format(notice.createDate, 'yyyy.MM.dd HH:mm')}">
+                                                </span>
+                    </div>
+                    <div class="mt-1">
+                        <strong>조회수:</strong> <span th:text="${notice.viewCount}"></span>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="custom-hr"/>
+            <!-- 본문 내용 -->
+            <div class="notice-content"
+                 th:utext="${#strings.replace(notice.content, newLine, '<br/>')}"></div>
+
+            <!-- 첨부파일 -->
+            <div class="mt-4">
+                <h6 class="fw-semibold mb-2">📎 첨부 파일</h6>
+                <div class="d-flex flex-wrap">
+                    <th:block th:if="${fileList != null and !#lists.isEmpty(fileList)}">
+                        <th:block th:each="file : ${fileList}">
+                            <a th:href="@{/upload/{file}(file=${file})}"
+                               th:text="${file}"
+                               th:download="${file}"
+                               th:title="'파일 다운로드: ' + ${file}"
+                               class="badge bg-primary text-white me-2 mb-2 p-2 text-decoration-none text-truncate file-badge"></a>
                         </th:block>
-                        <th:block th:if="${fileList == null or #lists.isEmpty(fileList)}">
-                            <span class="text-muted">첨부 파일 없음</span>
-                        </th:block>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                    </th:block>
+                    <th:block th:if="${fileList == null or #lists.isEmpty(fileList)}">
+                        <span class="text-muted">첨부 파일 없음</span>
+                    </th:block>
+                </div>
+            </div>
 
-        <div class="p-4 bg-white" th:utext="${#strings.replace(notice.content, newLine, '<br/>')}"></div>
+            <!-- 이전글 / 다음글 -->
+            <hr class="custom-hr"/>
+            <div class="d-flex justify-content-between align-items-center nav-article-container flex-wrap gap-2">
+                <div th:if="${prevNotice != null}" class="nav-article-link">
+                    ← <a th:href="@{'/notice/detail/' + ${prevNotice.idx}}"
+                         th:text="${prevNotice.title}"
+                         th:title="${prevNotice.title}"></a>
+                </div>
+                <div th:if="${nextNotice != null}" class="nav-article-link text-end">
+                    <a th:href="@{'/notice/detail/' + ${nextNotice.idx}}"
+                       th:text="${nextNotice.title}"
+                       th:title="${nextNotice.title}"></a> →
+                </div>
+            </div>
 
-        <div class="mt-4 text-end">
-            <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
-               th:href="@{/notice/noticeCheck(idx=${notice.idx}, action='update')}" class="btn btn-outline-primary me-2">수정</a>
-            <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
-               th:href="@{/notice/noticeCheck(idx=${notice.idx}, action='delete')}" class="btn btn-outline-danger me-2">삭제</a>
-            <a th:href="@{/notice/noticeMain}" class="btn btn-secondary">목록</a>
+            <!-- 버튼 -->
+            <div class="mt-5 text-end">
+                <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+                   th:href="@{/notice/noticeCheck(idx=${notice.idx}, action='update')}"
+                   class="btn btn-outline-primary me-2">수정</a>
+                <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
+                   th:href="@{/notice/noticeCheck(idx=${notice.idx}, action='delete')}"
+                   class="btn btn-outline-danger me-2">삭제</a>
+                <a th:href="@{/notice/noticeMain}" class="btn btn-secondary">목록</a>
+            </div>
         </div>
     </div>
 </html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/exampleLayout}">
+
+<div layout:fragment="content" class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">장비 소개</h2>
+
+    <!-- 관리자만 글쓰기 가능 -->
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/equipment/equipmentInput}" class="btn btn-outline-success">작성하기</a>
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="col" th:each="item, stat : ${equipmentList}">
+      <div class="card h-100 shadow-sm" style="cursor:pointer"
+           th:onclick="|location.href='@{/equipment/equipmentDetail/{id}(id=${item.equipmentId})}'|">
+
+        <img th:src="@{'/equipmentImage/' + ${img1[stat.index]}}" class="card-img-top" alt="장비 이미지"
+             style="height: 220px; object-fit: cover;">
+
+        <div class="card-body">
+          <h5 class="card-title" th:text="${item.title}">장비 이름</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</html>

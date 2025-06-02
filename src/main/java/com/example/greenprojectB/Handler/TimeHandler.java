@@ -16,14 +16,9 @@ import java.util.ArrayList;
 public class TimeHandler {
     private int curTime = 0;
 
-    @Autowired
-    private ProfessionalController professionalController;
-
     @Scheduled(fixedDelay = 1000)
     public void run() {
         curTime += 1;
-
-        professionalController.updateAllSensorData(curTime);
     }
 
     public int curTimeGet(){

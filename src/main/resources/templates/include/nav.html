@@ -112,6 +112,7 @@
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">회사소개</a>
               <div class="dropdown-menu m-0 bg-secondary rounded-0">
                 <a th:href="@{/company/companyGreeting}" class="dropdown-item">인사말</a>
+                <a th:href="@{/equipment/equipmentList}" class="dropdown-item">장비소개</a>
                 <a th:href="@{/company/companyHistory}" class="dropdown-item">일반현황 및 연혁</a>
                 <a th:href="@{/notice/noticeMain}" class="dropdown-item">공지사항</a>
                 <a th:href="@{/company/companyOrganizationChart}" class="dropdown-item">조직도</a>
@@ -119,14 +120,32 @@
                    class="dropdown-item">찾아오시는 길</a>
               </div>
             </div>
+
+            <!--  <div class="nav-item dropdown">
+               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">참여기업</a>
+               <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                 <a th:href="@{/company/enterprise/enterprise1(company_idx=2)}" class="dropdown-item">레드라이즈</a>
+                 <a th:href="@{/company/enterprise/enterprise2(company_idx=3)}" class="dropdown-item">화이트서버</a>
+                 <a th:href="@{/company/enterprise/enterprise3(company_idx=4)}" class="dropdown-item">블루와이즈</a>
+                 <a th:href="@{/company/enterprise/enterprise4(company_idx=5)}" class="dropdown-item">EDB청주</a>
+                 <a th:href="@{/company/enterprise/enterprise5(company_idx=6)}" class="dropdown-item">하이브리드</a>
+                 <a th:href="@{/company/enterprise/enterprise6(company_idx=7)}" class="dropdown-item">에코팜</a>
+                 <a th:href="@{/company/enterprise/enterprise7(company_idx=8)}" class="dropdown-item">스타일리시</a>
+                 <a th:href="@{/company/enterprise/enterprise8(company_idx=9)}" class="dropdown-item">HeavenBank</a>
+               </div>
+             </div>-->
             <div class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">참여기업</a>
               <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                <a th:href="@{/company/enterprise/enterprise1(company_idx=8)}" class="dropdown-item">레드라이즈</a>
-                <a th:href="@{/company/enterprise/enterprise2(company_idx=9)}" class="dropdown-item">화이트서버</a>
-                <a th:href="@{/company/enterprise/enterprise3(company_idx=10)}" class="dropdown-item">블루와이즈</a>
+                <th:block th:if="${companies != null}">
+                  <th:block th:each="company : ${companies}">
+                    <a th:href="@{/company/company/companyDetail(company_idx=${company.companyIdx})}" th:text="${company.companyName}" class="dropdown-item"></a>
+                  </th:block>
+                </th:block>
               </div>
             </div>
+
+
             <div class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Membership<i
                       class="fa-solid fa-store text-success" aria-hidden="true"></i></a>

@@ -116,45 +116,38 @@ public class CompanyController {
   }
 
   // 기업 회원가입 처리
-  @PostMapping("/companyJoin")
+  /*@PostMapping("/companyJoin")
   public String companyJoinPost(CompanyDto dto) {
-    System.out.println("com : " + dto);
-    Company company = Company.createCompany(dto, passwordEncoder);
+    // 주소 조합
+    String address = dto.getPostCode() + "/" +
+            dto.getAddress() + " "
+            + (dto.getAddress２() != null ? dto.getAddress２() : "")
+            + (dto.getAddress１() != null ? dto.getAddress１() : "");
+
+    log.info("=============> dto처음 : " + dto);
+
+    // 일반회원으로 먼저 가입 처리한다.
+    MemberDto memberDto = new MemberDto();
+    memberDto.setMemberId(dto.getCompanyId());
+    memberDto.setMemberName(dto.getCompanyName());
+    memberDto.setMemberEmail(dto.getCompanyEmail());
+    memberDto.setPhoneNumber(dto.getPhoneNumber());
+    memberDto.setRole(Role.COMPANY);
+    memberDto.setPassword(dto.getPassword());
+
+    log.info("=============> memberDto : " + memberDto);
+    Member member = Member.createMember(memberDto, passwordEncoder);  // DTO객체를 Entity객체로 변화
+    Member memberRes = memberService.saveMember(member);              // 회원 가입 처리
+    log.info("=============> entity : " + memberRes);
+
+    // 일반회원 가입완료후 다시 기업회원으로 가입처리한다.
+    dto.setAddress(address);
+    Company company = Company.createCompany(dto);
     companyService.setCompanyInput(company);
-    return "member/memberLogin";
-  }
-
-  // 기업 소개 -
-  // 레드라이즈(기업1) 상세보기
-    @GetMapping("/enterprise/enterprise1")
-  public String enterprise1Get(@RequestParam("company_idx") Long company_idx, Model model ) {
-    Optional<Company> company = companyService.findByCompanyId(company_idx);
-    CompanyDto dto = CompanyDto.createMemberDto(company);
-
-    model.addAttribute("dto", dto);
-    return "enterprise/enterprise1";
-  }
-
-  // 화이트서버(기업2) 상세보기
-  @GetMapping("/enterprise/enterprise2")
-  public String enterprise2Get(@RequestParam("company_idx") Long company_idx, Model model ) {
-    Optional<Company> company = companyService.findByCompanyId(company_idx);
-    CompanyDto dto = CompanyDto.createMemberDto(company);
-
-    model.addAttribute("dto", dto);
-    return "enterprise/enterprise2";
+    return "company/companyLogin";
   }
 
 
-  // 블루와이즈(기업3) 상세보기
-  @GetMapping("/enterprise/enterprise3")
-  public String enterprise3Get(@RequestParam("company_idx") Long company_idx, Model model ) {
-    Optional<Company> company = companyService.findByCompanyId(company_idx);
-    CompanyDto dto = CompanyDto.createMemberDto(company);
-
-    model.addAttribute("dto", dto);
-    return "enterprise/enterprise3";
-  }
 
   // 기업회원 로그인 폼 불러오기
   @GetMapping("/companyLogin")
@@ -196,4 +189,113 @@ public class CompanyController {
 
     return "redirect:/";
   }
+
+
+  // 기업 소개 -
+  // 기업 상세보기
+  @GetMapping("/company/companyDetail")
+  public String companyDetailGet(@RequestParam("company_idx") Long company_idx, Model model ) {
+    Optional<Company> company = companyService.findByCompanyId(company_idx);
+    CompanyDto dto = CompanyDto.createCompanyDto(company);
+
+    model.addAttribute("dto", dto);
+    System.out.println("dto : " + dto);
+    return "company/companyDetail";
+  }*/
+
+
+
+
+
+
+
+/*
+
+  // 기업 소개 -
+  // 레드라이즈(기업1) 상세보기
+  @GetMapping("/enterprise/enterprise1")
+  public String enterprise1Get(@RequestParam("company_idx") Long company_idx, Model model ) {
+    Optional<Company> company = companyService.findByCompanyId(company_idx);
+    CompanyDto dto = CompanyDto.createCompanyDto(company);
+
+    model.addAttribute("dto", dto);
+    return "enterprise/enterprise1";
+  }
+
+  // 화이트서버(기업2) 상세보기
+  @GetMapping("/enterprise/enterprise2")
+  public String enterprise2Get(@RequestParam("company_idx") Long company_idx, Model model ) {
+    Optional<Company> company = companyService.findByCompanyId(company_idx);
+    CompanyDto dto = CompanyDto.createCompanyDto(company);
+
+    model.addAttribute("dto", dto);
+    return "enterprise/enterprise2";
+  }
+
+
+  // 블루와이즈(기업3) 상세보기
+  @GetMapping("/enterprise/enterprise3")
+  public String enterprise3Get(@RequestParam("company_idx") Long company_idx, Model model ) {
+    Optional<Company> company = companyService.findByCompanyId(company_idx);
+    CompanyDto dto = CompanyDto.createCompanyDto(company);
+
+    model.addAttribute("dto", dto);
+    return "enterprise/enterprise3";
+  }
+
+
+  // (기업4) 상세보기
+  @GetMapping("/enterprise/enterprise4")
+  public String enterprise4Get(@RequestParam("company_idx") Long company_idx, Model model ) {
+    Optional<Company> company = companyService.findByCompanyId(company_idx);
+    CompanyDto dto = CompanyDto.createCompanyDto(company);
+
+    model.addAttribute("dto", dto);
+    return "enterprise/enterprise4";
+  }
+
+
+  // (기업5) 상세보기
+  @GetMapping("/enterprise/enterprise5")
+  public String enterprise5Get(@RequestParam("company_idx") Long company_idx, Model model ) {
+    Optional<Company> company = companyService.findByCompanyId(company_idx);
+    CompanyDto dto = CompanyDto.createCompanyDto(company);
+
+    model.addAttribute("dto", dto);
+    return "enterprise/enterprise5";
+  }
+
+  // (기업6) 상세보기
+  @GetMapping("/enterprise/enterprise6")
+  public String enterprise6Get(@RequestParam("company_idx") Long company_idx, Model model ) {
+    Optional<Company> company = companyService.findByCompanyId(company_idx);
+    CompanyDto dto = CompanyDto.createCompanyDto(company);
+
+    model.addAttribute("dto", dto);
+    return "enterprise/enterprise6";
+  }
+
+
+  // (기업7) 상세보기
+  @GetMapping("/enterprise/enterprise7")
+  public String enterprise7Get(@RequestParam("company_idx") Long company_idx, Model model ) {
+    Optional<Company> company = companyService.findByCompanyId(company_idx);
+    CompanyDto dto = CompanyDto.createCompanyDto(company);
+
+    model.addAttribute("dto", dto);
+    return "enterprise/enterprise7";
+  }
+
+
+  // (기업8) 상세보기
+  @GetMapping("/enterprise/enterprise8")
+  public String enterprise8Get(@RequestParam("company_idx") Long company_idx, Model model ) {
+    Optional<Company> company = companyService.findByCompanyId(company_idx);
+    CompanyDto dto = CompanyDto.createCompanyDto(company);
+
+    model.addAttribute("dto", dto);
+    return "enterprise/enterprise8";
+  }
+*/
+
 }

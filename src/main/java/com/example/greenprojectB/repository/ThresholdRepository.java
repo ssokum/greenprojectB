@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public interface ThresholdRepository extends JpaRepository<Threshold, Long> {
+    Threshold findByCompany_CompanyIdAndDeviceCodeAndSensorName(String companyId, String deviceCode, String SensorName);
     ArrayList<Threshold> findByCompany_CompanyIdAndDeviceCode(String companyId, String deviceCode);
     ArrayList<Threshold> findByCompany_CompanyId(String companyId);
 }

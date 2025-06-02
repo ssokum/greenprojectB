@@ -3,100 +3,433 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/exampleLayout}">
 
-    <th:block layout:fragment="css">
-        <style th:inline="css">
-            .img-lineTalk {
-                aspect-ratio: 1;
-                object-fit: cover;
-            }
+<th:block layout:fragment="css">
+    <style th:inline="css">
+        .img-lineTalk {
+            aspect-ratio: 1;
+            object-fit: cover;
+        }
 
-            .knowhowMainImg img {
-                aspect-ratio: 1;
-                object-fit: cover;
-                height: 250px;
-            }
+        .knowhowMainImg img {
+            aspect-ratio: 1;
+            object-fit: cover;
+            height: 250px;
+        }
 
-            .h-80 {
-                height: 90px !important;
-                object-fit: cover;
-            }
+        .h-80 {
+            height: 90px !important;
+            object-fit: cover;
+        }
 
-            .h-300 {
-                height: 400px !important;
-                object-fit: cover;
-            }
+        .h-300 {
+            height: 400px !important;
+            object-fit: cover;
+        }
 
-            .trandingTags {
-                margin: 0;
-                padding: 0;
-            }
+        .trandingTags {
+            margin: 0;
+            padding: 0;
+        }
 
-            .trandingTags li {
-                list-style: none;
-                text-align: center;
-                display: inline-block;
-                word-break: keep-all;
-                margin: 12px 5px;
-            }
+        .trandingTags li {
+            list-style: none;
+            text-align: center;
+            display: inline-block;
+            word-break: keep-all;
+            margin: 12px 5px;
+        }
 
-            .trandingTags li a {
-                color: #333;
-                padding: 10px 15px;
-            }
-        </style>
-    </th:block>
-    <!--<script th:src="@{/js/main.js}"></script>-->
+        .trandingTags li a {
+            color: #333;
+            padding: 10px 15px;
+        }
 
-<div class="bodyCenter" layout:fragment="content" >
-<!--<script th:inline="javascript">-->
+        /**/
 
 
-    <!--<script>
-        $(() => {
-            wordCheck();
+    </style>
+</th:block>
+<th:block layout:fragment="script">
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+        const video = document.querySelector('.main_video');
+        const playButton = document.querySelector('.video_control .play');
+        const pauseButton = document.querySelector('.video_control .pause');
+
+        // 재생 버튼 클릭
+        playButton.addEventListener('click', function () {
+            video.play();
+            playButton.style.display = 'none';
+            pauseButton.style.display = 'inline-block';
         });
 
-        function wordCheck() {
-            let url = "http://localhost:9090/";
-            let selector = "a.h4";
-            // let url = "https://news.naver.com";
-            // let selector = "div.cjs_t";
-            let excludeWord = " ../test"; // 제외할문자열('/'로 구분해서 입력)
+        // 일시정지 버튼 클릭
+        pauseButton.addEventListener('click', function () {
+            video.pause();
+            pauseButton.style.display = 'none';
+            playButton.style.display = 'inline-block';
+        });
+    });
+</script>
+</th:block>
+<div class="bodyCenter" layout:fragment="content">
+    <div>
+        <div id="content" class="main type_a">
+            <div class="video_wrap">
+                <video src="https://mis-prod-koce-skhynixhomepage-cdn-01-ep.azureedge.net/img/main/main_video.mp4"
+                       type="video/mp4" playsinline="" autoplay="autoplay" loop="loop" muted="muted"
+                       poster="https://mis-prod-koce-skhynixhomepage-cdn-01-ep.azureedge.net/img/content/poster.jpg"
+                       class="main_video"></video>
+                <!--src : 재생할 비디오 파일 경로입니다. 이 URL에 있는 mp4 파일이 브라우저에 로드되어 재생됩니다.
+                    type : 비디오의 MIME 타입으로 video/mp4는 mp4 형식을 의미합니다. <source> 태그 안에서 주로 쓰이며 이곳에서는 없어도 무방합니다.
+                    playsinline : iOS 같은 모바일 브라우저에서 전체 화면으로 넘어가지 않고, 페이지 안에서 바로 재생되도록 합니다.
+                    autoplay : 페이지가 로드되면 비디오를 자동으로 재생시킵니다. 다만 muted가 설정되지 않으면 대부분의 브라우저에서 자동재생을 차단합니다.
+                    loop : 비디오 재생이 끝나면 자동으로 처음부터 반복 재생됩니다.
+                    muted : 비디오가 무음 상태로 재생됩니다. autoplay가 동작하기 위한 필수 조건입니다.
+                    poster : 비디오 로딩 전 표시될 미리보기 이미지(썸네일)입니다. 사용자에게 보여질 첫 화면입니다.-->
+                <div class="video_control control_area">
+                    <button type="button" class="play" style="display:none"><span class="hidden">Play</span>
+                    </button>
+                    <button type="button" class="pause"><span class="hidden">Pause</span></button>
+                </div>
+                <div class="scroll_hint"><span class="mouse_icon"></span> <span class="arrow"></span></div>
+            </div>
 
-            $.ajax({
-                url: "/board/wordcloud/analyzer3",
-                type: "post",
-                data: {
-                    url: url,
-                    selector: selector,
-                    excludeWord: excludeWord
-                },
-                success: function (data) {
-                    let no = 0;
-                    let res = '';
-                    Object.entries(data).forEach(([key, value]) => {
-                        // console.log(key, value);
-                        no++;
-                        res += '<li>';
-                        res += '<a class="bg-light rounded-pill" href="#">';
-                        res += key;
-                        res += '</a>';
-                        res += '</li>';
-                    });
-                    $("#demo").html(res);
-                },
-                error: function () {
-                    alert("전송오류~");
-                }
-            });
-        }
-    </script>-->
 
-    <div style="text-align: center;
-    height: 400px;
-    padding-top: 100px;">
-        <h2>컨텐트 부분</h2>
+            <div class="sa_wrap frame_wrap">
+                <div class="dbl_con"><span id="frame" class="frame"
+                                           style="border:64px solid #fff;opacity:1;transition:.8s ease"></span>
+                    <div class="dbl_con_wrap fadeUp_wrap fadeUpSmall">
+                        <h2 class="tit">
+                            <a href="https://sustainability.skhynix.com" style="color: white" target="_blank"
+                               rel="noopener noreferrer" role="button"
+                               class="link_more blank"><span role="button" class="hidden">DBL</span></a>
+                        </h2>
+                        <p class="con" role="text"><span>DBL은 GNA컴퍼니가 생각하고 실천하는 </span> <span>지속가능경영에 대한 이야기입니다.</span></p>
+                        <ul class="list_btn">
+                            <li><a href="/sustainability/UI-FR-SA02" role="button" class="link_more">SK DBL</a></li>
+                            <li><a href="/sustainability/UI-FR-SA0301" class="link_more" role="button">DBL 추구</a></li>
+                            <li><a href="/sustainability/UI-FR-SA04" class="link_more" role="button">DBL 성과측정</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="esg_con"><span id="frame02" class="frame"
+                                           style="border:64px solid #fff;opacity:1;transition:.8s ease"></span>
+                    <div class="esg_con_wrap fadeUp_wrap fadeUpSmall"><h2 class="tit"><a
+                            href="https://sustainability.skhynix.com" target="_blank" rel="noopener noreferrer" role="button"
+                            class="link_more blank"><span role="button" class="hidden">ESG</span></a>
+                    </h2>
+                        <p class="con" role="text">
+                            <span>환경과 사회적 책임 경영,</span><span> 투명한 지배구조 확산을 통해 </span><span>새로운 가치를 창출합니다.</span></p>
+                        <ul class="list_btn">
+                            <li><a href="/sustainability/UI-FR-SA06" class="link_more" role="button">PRISM</a></li>
+                            <li><a href="/sustainability/UI-FR-SA12" class="link_more" role="button">경영원칙</a></li>
+                            <li><a href="/sustainability/UI-FR-SA1501" class="link_more" role="button">지배구조</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 자유게시판글 최근 4개 Start -->
+            <div class="container-fluid features mb-5">
+                <div class="container py-5">
+                    <div class="row g-4">
+                        <!-- 반복문 S -->
+
+                        <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="row g-4 align-items-center features-item">
+                                <div class="col-4">
+                                    <div class="rounded-circle position-relative">
+                                        <div class="overflow-hidden rounded-circle">
+                                            <img src="/images/profile_imsi.png" alt="회원이미지 임시"
+                                                 class="img-lineTalk img-zoomin img-fluid rounded-circle w-100">
+                                        </div>
+                                        <span class="rounded-circle border border-2 border-white bg-primary btn-sm-square text-white position-absolute"
+                                              style="top: 10%; right: -10px;">1</span>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="features-content d-flex flex-column">
+                                        <p class="text-uppercase mb-2 text-warning">응가</p>
+                                        <a href="/lineTalk/lineTalk" class="h6">
+                                            나도 똥쌀래요
+
+                                        </a>
+                                        <small class="text-body d-block"><i class="fas fa-calendar-alt me-1"
+                                                                            aria-hidden="true"></i> 2024-08-02 11:16</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="row g-4 align-items-center features-item">
+                                <div class="col-4">
+                                    <div class="rounded-circle position-relative">
+                                        <div class="overflow-hidden rounded-circle">
+                                            <img src="/images/profile_imsi.png" alt="회원이미지 임시"
+                                                 class="img-lineTalk img-zoomin img-fluid rounded-circle w-100">
+                                        </div>
+                                        <span class="rounded-circle border border-2 border-white bg-primary btn-sm-square text-white position-absolute"
+                                              style="top: 10%; right: -10px;">1</span>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="features-content d-flex flex-column">
+                                        <p class="text-uppercase mb-2 text-warning">테스터</p>
+                                        <a href="/lineTalk/lineTalk" class="h6">
+                                            올여름은 바다를 못
+                                            ..
+                                        </a>
+                                        <small class="text-body d-block"><i class="fas fa-calendar-alt me-1"
+                                                                            aria-hidden="true"></i> 2024-08-02 11:18</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="row g-4 align-items-center features-item">
+                                <div class="col-4">
+                                    <div class="rounded-circle position-relative">
+                                        <div class="overflow-hidden rounded-circle">
+                                            <img src="/images/profile_imsi.png" alt="회원이미지 임시"
+                                                 class="img-lineTalk img-zoomin img-fluid rounded-circle w-100">
+                                        </div>
+                                        <span class="rounded-circle border border-2 border-white bg-primary btn-sm-square text-white position-absolute"
+                                              style="top: 10%; right: -10px;">1</span>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="features-content d-flex flex-column">
+                                        <p class="text-uppercase mb-2 text-warning">테스터</p>
+                                        <a href="/lineTalk/lineTalk" class="h6">
+                                            오늘은 더덕 득템~
+                                            ..
+                                        </a>
+                                        <small class="text-body d-block"><i class="fas fa-calendar-alt me-1"
+                                                                            aria-hidden="true"></i> 2024-08-05 00:38</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 col-lg-6 col-xl-3">
+                            <div class="row g-4 align-items-center features-item">
+                                <div class="col-4">
+                                    <div class="rounded-circle position-relative">
+                                        <div class="overflow-hidden rounded-circle">
+                                            <img src="/images/profile_imsi.png"
+                                                 alt="아톰맨 회원이미지" class="img-lineTalk img-zoomin img-fluid rounded-circle w-100">
+                                        </div>
+                                        <span class="rounded-circle border border-2 border-white bg-primary btn-sm-square text-white position-absolute"
+                                              style="top: 10%; right: -10px;">1</span>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="features-content d-flex flex-column">
+                                        <p class="text-uppercase mb-2 text-warning">아톰맨</p>
+                                        <a href="/lineTalk/lineTalk" class="h6">
+                                            오랜만에 왔어요 ~
+                                            ..
+                                        </a>
+                                        <small class="text-body d-block"><i class="fas fa-calendar-alt me-1"
+                                                                            aria-hidden="true"></i> 2024-08-05 00:42</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 반복문 E -->
+                    </div>
+                </div>
+            </div>
+            <!-- 자유게시판글 최근 4개 End -->
+
+
+            <!-- Latest News Start -->
+            <div class="container-fluid latest-news mb-5">
+                <div class="container py-5">
+                    <h2 class="mb-4">자유게시판</h2>
+                    <div class="latest-news-carousel owl-carousel owl-loaded owl-drag">
+                        <!-- 반복 -->
+                        <div class="latest-news-item">
+                            <div class="bg-light rounded">
+                                <div class="rounded-top overflow-hidden">
+                                    <!-- 리스트이미지 START -->
+                                    <a href="/javaclassS3/board/boardContent?boardName=realty&amp;idx=4">
+                                        <div class="rounded-top overflow-hidden knowhowMainImg">
+
+
+                                            <img src="/images/임시사진.jpg"
+                                                 class="img-zoomin img-fluid w-100" alt="리스트이미지">
+
+                                        </div>
+                                    </a>
+                                    <!-- 리스트이미지 END -->
+                                </div>
+                                <div class="d-flex flex-column p-4">
+                                    <a href="/javaclassS3/board/boardContent?boardName=realty&amp;idx=4" class="h4">
+                                        금싸라기 토지매매 선착순1
+                                    </a>
+                                    <div class="d-flex justify-content-between">
+                                        <a href="#" class="small text-body link-hover">관리맨</a>
+                                        <small class="text-body d-block"><i class="fas fa-calendar-alt me-1"
+                                                                            aria-hidden="true"></i> 2024-07-27
+                                            18:37</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="latest-news-item">
+                            <div class="bg-light rounded">
+                                <div class="rounded-top overflow-hidden">
+                                    <!-- 리스트이미지 START -->
+                                    <a href="/javaclassS3/board/boardContent?boardName=realty&amp;idx=4">
+                                        <div class="rounded-top overflow-hidden knowhowMainImg">
+
+
+                                            <img src="/images/임시사진.jpg"
+                                                 class="img-zoomin img-fluid w-100" alt="리스트이미지">
+
+                                        </div>
+                                    </a>
+                                    <!-- 리스트이미지 END -->
+                                </div>
+                                <div class="d-flex flex-column p-4">
+                                    <a href="/javaclassS3/board/boardContent?boardName=realty&amp;idx=4" class="h4">
+                                        금싸라기 토지매매 선착순2
+                                    </a>
+                                    <div class="d-flex justify-content-between">
+                                        <a href="#" class="small text-body link-hover">관리맨</a>
+                                        <small class="text-body d-block"><i class="fas fa-calendar-alt me-1"
+                                                                            aria-hidden="true"></i> 2024-07-27
+                                            18:37</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="latest-news-item">
+                            <div class="bg-light rounded">
+                                <div class="rounded-top overflow-hidden">
+                                    <!-- 리스트이미지 START -->
+                                    <a href="/javaclassS3/board/boardContent?boardName=realty&amp;idx=4">
+                                        <div class="rounded-top overflow-hidden knowhowMainImg">
+
+
+                                            <img src="/images/임시사진.jpg"
+                                                 class="img-zoomin img-fluid w-100" alt="리스트이미지">
+
+                                        </div>
+                                    </a>
+                                    <!-- 리스트이미지 END -->
+                                </div>
+                                <div class="d-flex flex-column p-4">
+                                    <a href="/javaclassS3/board/boardContent?boardName=realty&amp;idx=4" class="h4">
+                                        금싸라기 토지매매 선착순3
+                                    </a>
+                                    <div class="d-flex justify-content-between">
+                                        <a href="#" class="small text-body link-hover">관리맨</a>
+                                        <small class="text-body d-block"><i class="fas fa-calendar-alt me-1"
+                                                                            aria-hidden="true"></i> 2024-07-27
+                                            18:37</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="latest-news-item">
+                            <div class="bg-light rounded">
+                                <div class="rounded-top overflow-hidden">
+                                    <!-- 리스트이미지 START -->
+                                    <a href="/javaclassS3/board/boardContent?boardName=realty&amp;idx=4">
+                                        <div class="rounded-top overflow-hidden knowhowMainImg">
+
+
+                                            <img src="/images/임시사진.jpg"
+                                                 class="img-zoomin img-fluid w-100" alt="리스트이미지">
+
+                                        </div>
+                                    </a>
+                                    <!-- 리스트이미지 END -->
+                                </div>
+                                <div class="d-flex flex-column p-4">
+                                    <a href="/javaclassS3/board/boardContent?boardName=realty&amp;idx=4" class="h4">
+                                        금싸라기 토지매매 선착순4
+                                    </a>
+                                    <div class="d-flex justify-content-between">
+                                        <a href="#" class="small text-body link-hover">관리맨</a>
+                                        <small class="text-body d-block"><i class="fas fa-calendar-alt me-1"
+                                                                            aria-hidden="true"></i> 2024-07-27
+                                            18:37</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="latest-news-item">
+                            <div class="bg-light rounded">
+                                <div class="rounded-top overflow-hidden">
+                                    <!-- 리스트이미지 START -->
+                                    <a href="/javaclassS3/board/boardContent?boardName=realty&amp;idx=4">
+                                        <div class="rounded-top overflow-hidden knowhowMainImg">
+
+
+                                            <img src="/images/임시사진.jpg"
+                                                 class="img-zoomin img-fluid w-100" alt="리스트이미지">
+
+                                        </div>
+                                    </a>
+                                    <!-- 리스트이미지 END -->
+                                </div>
+                                <div class="d-flex flex-column p-4">
+                                    <a href="/javaclassS3/board/boardContent?boardName=realty&amp;idx=4" class="h4">
+                                        금싸라기 토지매매 선착순5
+                                    </a>
+                                    <div class="d-flex justify-content-between">
+                                        <a href="#" class="small text-body link-hover">관리맨</a>
+                                        <small class="text-body d-block"><i class="fas fa-calendar-alt me-1"
+                                                                            aria-hidden="true"></i> 2024-07-27
+                                            18:37</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 반복 -->
+                    </div>
+                </div>
+            </div>
+            <!-- Latest News End -->
+
+
+
+            <div class="product_wrap"><span class="bg"></span> <a href="https://product.skhynix.com"
+                                                                  target="_blank" rel="noopener noreferrer"
+                                                                  class="menu"><h2 role="text"
+                                                                                   class="tit_type">Products
+                &amp; Solutions</h2></a>
+                <p role="text" class="con"><span class="pc">DRAM · CMM · SSD · NAND Storage · MCP</span>
+                    <span class="pc">AI · Server · Networking · Mobile · PC · Consumer · Automotive</span>
+                </p></div>
+            <div class="ir_wrap">
+                <div class="inner"><h2 class="tit_type">Investor Relations</h2>
+                    <div class="box_wrap">
+                       <div class="graph_con">
+                            <iframe height="460"
+                                    src="https://asia.tools.euroland.com/tools/ticker/html/?companycode=kr-000660&amp;v=redesign&amp;lang=ko-kr"
+                                    scrolling="no" allowfullscreen="" class="euroland_tool"
+                                    title="SK하이닉스 주식의 현재가, 주가 등락폭, 등락비율, 월별 주가 변동 그래프 등 실시간 주가 정보를 나타냄"></iframe>
+                        </div>
+                        <div class="menu_area"><a href="/ir/UI-FR-IR07" role="button" class="menu ic"><span
+                                class="txt">재무제표</span></a> <a href="/ir/UI-FR-IR12_T3" role="button"
+                                                               class="menu ic02"><span
+                                class="txt">정기보고서</span></a> <a href="/ir/UI-FR-IR06" role="button"
+                                                                class="menu ic03"><span
+                                class="txt">실적발표</span></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
 </div>
 
 </html>

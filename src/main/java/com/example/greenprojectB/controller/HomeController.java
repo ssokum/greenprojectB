@@ -23,7 +23,7 @@ public class HomeController {
   private final AdminService adminService;
 
   // ckeditor에서의 파일 업로드 처리
-  @PostMapping("/ckeditor/imageUpload")
+  @PostMapping("/ckeditor/imageUploadCompany")
   @ResponseBody
   public void imageUploadPost(@RequestParam("upload") MultipartFile upload,
                               @RequestParam("CKEditorFuncNum") String callback,
@@ -110,6 +110,38 @@ public class HomeController {
     upload.transferTo(file);
 
     String fileUrl = request.getContextPath() + "/faqImage/" + newName;
+
+    // 콜백 응답
+    PrintWriter out = response.getWriter();
+    out.println("<script type='text/javascript'>");
+    out.println("window.parent.CKEDITOR.tools.callFunction(" + callback + ", '" + fileUrl + "', '이미지 업로드 완료');");
+    out.println("</script>");
+    out.flush();
+  }
+
+  // ckeditor에서의 파일 업로드 처리
+  @PostMapping("/ckeditor/imageUploadEquipment")
+  @ResponseBody
+  public void imageUploadEquipmentPost(@RequestParam("upload") MultipartFile upload,
+                                       @RequestParam("CKEditorFuncNum") String callback,
+                                       HttpServletRequest request,
+                                       HttpServletResponse response) throws IOException {
+
+    response.setCharacterEncoding("utf-8");
+    response.setContentType("text/html;charset=utf-8");
+
+    // 저장 경로 (실제 경로에 맞게 조정)
+    String realPathPath = request.getServletContext().getRealPath("/equipmentImage/");
+    File folder = new File(realPathPath);
+    if (!folder.exists()) folder.mkdirs();
+
+    // 파일 저장
+    String originalName = upload.getOriginalFilename();
+    String newName = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + "_" + originalName;
+    File file = new File(realPathPath, newName);
+    upload.transferTo(file);
+
+    String fileUrl = request.getContextPath() + "/equipmentImage/" + newName;
 
     // 콜백 응답
     PrintWriter out = response.getWriter();

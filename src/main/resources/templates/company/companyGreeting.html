@@ -4,33 +4,76 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/exampleLayout}">
 
-<div layout:fragment="content" class="container text-center">
+<div layout:fragment="css">
+  <style>
+    .companyGreeting {
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .companyGreeting h1, .companyGreeting h2, .companyGreeting h3, .companyGreeting h5 {
+        margin: 20px 0;
+    }
+    .companyGreeting h1 {
+        color: #4E71FF;
+        font-size: 2.5em;
+    }
+    .companyGreeting h2 {
+        font-size: 2em;
+        border-bottom: 2px solid #4E71FF;
+        padding-bottom: 10px;
+    }
+    .companyGreeting h3 {
+        font-size: 1.5em;
+        color: #555;
+    }
+    .companyGreeting h5 {
+        font-size: 1.2em;
+        line-height: 1.6;
+    }
+    .companyGreeting a.btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #4E71FF;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+    .companyGreeting a.btn:hover {
+        background-color: #3a5bbf;
+    }
+    .companyGreeting hr {
+        border: 1px solid #4E71FF;
+        margin: 30px 0;
+    }
+  </style>
+</div>
+
+
+<div layout:fragment="content" class="container text-center companyGreeting">
   <h2><b>인사말</b></h2>
-  <p><br/></p>
   <hr/>
-  <p><br/></p>
-  <h3>계속 갈망하고, 겸손 한 마음으로 도전에 임하는 전문 데이터베이스관리 기업</h3><br>
-  <h1><b style="font-weight:bold; color:#4E71FF">주식회사 그린컴퍼니</b></h1>
-  <p><br/></p>
-  <p><br/></p>
+  <h3>계속 갈망하고, 겸손 한 마음으로 도전에 임하는 전문 데이터베이스관리 기업</h3>
+  <p><br></p>
+  <h1><b>주식회사 G&A 컴퍼니</b></h1>
+  <p><br></p>
   <div>
-    <h5>2020년 02월에 설립하여 공공기관 및 국내 주요기업을 대상으로</h5><br>
-    <h5><span style="font-weight:bold; color:#4E71FF">시스템통합(SI), 시스템관리(SM), 업무프로그램 개발 사업을 수행</span>하며</h5><br>
-    <h5>축적된 기술력으로 최고수준의 IT TOTAL SERVICE를 제공하는</h5><br>
-    <h5><span style="font-weight:bold; color:#4E71FF">소프트웨어 개발 전문 회사</span> 입니다.</h5>
+    <h5>2020년 02월에 설립하여 공공기관 및 국내 주요기업을 대상으로</h5>
+    <h5><span style="font-weight:bold; color:#4E71FF">시스템통합(SI), 시스템관리(SM), 업무프로그램 개발 사업을 수행</span>하며</h5>
+    <h5>축적된 기술력으로 최고수준의 IT TOTAL SERVICE를 제공하는</h5>
+    <h5><span style="font-weight:bold; color:#4E71FF">데이터베이스관리 기업</span> 입니다.</h5>
   </div>
-  <p><br/></p>
-  <p><br/></p>
   <div>
-    <h5>창조적인 사고와 혁신적인 가치창출을 통하여 고객의 성공을 보장하고,</h5><br>
-    <h5>정보통신 기술의 발전과 미래를 주도하는 선도적인 기업을 목표로</h5><br>
+    <h5>창조적인 사고와 혁신적인 가치창출을 통하여 고객의 성공을 보장하고,</h5>
+    <h5>정보통신 기술의 발전과 미래를 주도하는 선도적인 기업을 목표로</h5>
     <h5>국내를 넘어서 세계를 향해 나아가는 기업이 되겠습니다.</h5>
   </div>
-  <p><br/></p>
-  <p><br/></p>
-  <p><br/></p>
+  <p><br></p>
   <div>
-    <a th:href="@{/}" class="btn btn-success">홈으로</a>
+    <a th:href="@{/}" class="btn">홈으로</a>
   </div>
 
 </div>

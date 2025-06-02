@@ -13,11 +13,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class ThresholdDto {
-    
+
     private int idx;    // 번호
-    private Company company;       // 회사ID
+    private Company company;       // 회사
+    private String companyId;
     private String sensorName;      // 센서 이름
     private String deviceCode;        // 위치
+    private double mean;
     private double low;        // 최솟값
     private double high;        // 최댓값
     private LocalDateTime updatedAt;        // 수정날짜
@@ -30,6 +32,7 @@ public class ThresholdDto {
                 .company(threshold.getCompany())
                 .sensorName(threshold.getSensorName())
                 .deviceCode(threshold.getDeviceCode())
+                .mean(threshold.getMean())
                 .high(threshold.getHigh())
                 .low(threshold.getLow())
                 .updatedAt(threshold.getUpdatedAt())

@@ -31,7 +31,9 @@
         }
     });
     $('.back-to-top').click(function () {
-        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+       /* $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');*/
+       /* $("html, body").animate({ scrollTop: 0 }, "slow");*/ // 0.5초로 부드럽게
+        $('html').stop().animate({ scrollTop: 0 }, 0, "slow"); //텀없이 부드럽게
         return false;
     });
 

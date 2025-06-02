@@ -4,15 +4,212 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/exampleLayout}">
 
+<th:block layout:fragment="css">
+    <style>
+        /* 기본 컨테이너 */
+        .container.mt-5 {
+            max-width: 900px;
+            margin: 40px auto;
+            font-family: 'Noto Sans KR', sans-serif;
+            color: #222; /* 진한 검정색 느낌 */
+            background-color: #fff; /* 배경은 흰색 */
+        }
+
+        /* 제목 영역 */
+        .notice_MainTitle {
+            margin-bottom: 20px;
+            border-left: 5px solid #4dabf7; /* 하늘색 포인트 */
+            padding-left: 12px;
+        }
+        .notice_MainTitle h2.notice_MainT {
+            color: #222; /* 검정에 가깝게 */
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .notice_MainTitle small {
+            color: #555; /* 중간 그레이 */
+            font-weight: 400;
+        }
+
+        /* 공지사항 테이블 */
+        .notice_MainTable {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* 가벼운 그림자 */
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            background: #fff; /* 배경은 하얀색 */
+            border: 1px solid #ddd; /* 연한 회색 테두리 */
+        }
+        .notice_MainTable th, .notice_MainTable td {
+            padding: 14px 18px;
+            text-align: center;
+            border-bottom: 1px solid #eee; /* 연한 구분선 */
+            font-size: 14px;
+            color: #222;
+        }
+        .notice_MainTable th {
+            background-color: #f9f9f9; /* 거의 흰색, 약간의 회색 느낌 */
+            color: black;
+            font-weight: 600;
+            user-select: none;
+        }
+        .notice_MainTable tbody tr:hover {
+            background-color: #e6f0fb; /* 연한 하늘색 배경 hover */
+        }
+        .notice_MainTable td.text-start {
+            text-align: left;
+        }
+        .notice_MainTable a {
+            color: black;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .notice_MainTable a:hover {
+            text-decoration: underline;
+            color: #4dabf7;
+        }
+
+        /* 검색 영역 */
+        .notice_swContainer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .notice_SearchForm {
+            flex-grow: 1;
+            max-width: 500px;
+        }
+        .notice_searchGroup {
+            display: flex;
+            gap: 4px;
+            width: 200px;
+        }
+        .notice_searchGroup input.form-control {
+            flex-grow: 1;
+            border: 1.5px solid #aaa; /* 연한 회색 테두리 */
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 14px;
+            color: #222;
+            transition: border-color 0.3s ease;
+            background-color: #fff;
+        }
+        .notice_searchGroup input.form-control::placeholder {
+            color: #999; /* 연한 회색 placeholder */
+        }
+        .notice_searchGroup input.form-control:focus {
+            outline: none;
+            border-color: #4dabf7; /* 하늘색 */
+            box-shadow: 0 0 8px #4dabf7aa;
+        }
+
+        /* 검색 버튼 */
+        .notice_SearchBtn {
+            background-color: black;
+            border: none;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .notice_SearchBtn:hover {
+            background-color: #4dabf7; /* 진한 하늘색 */
+        }
+        .notice_SearchBtn i.fas.fa-search {
+            pointer-events: none;
+        }
+
+        /* 공지 작성 버튼 (관리자) */
+        .notice_WriteBtn {
+            background-color: black;
+            color: #fff;
+            padding: 9px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            white-space: nowrap;
+            user-select: none;
+        }
+        .notice_WriteBtn:hover {
+            background-color: #4dabf7;
+        }
+
+        /* 페이지네이션 */
+        .pagination {
+            --bs-pagination-color: #4dabf7;
+            --bs-pagination-hover-color: #1a73e8;
+        }
+
+        .pagination .page-link {
+            color: #4dabf7;
+            border-radius: 6px;
+            border: 1px solid #d1d1d1;
+            margin: 0 4px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            background-color: #fff;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .pagination .page-link:hover {
+            background-color: #4dabf7;
+            color: white;
+            border-color: #4dabf7;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #e3f2fd;
+            border: 1px solid #4dabf7;
+            color: #1a73e8;
+            font-weight: bold;
+        }
+
+        /* 모바일 대응 */
+        @media (max-width: 576px) {
+            .notice_swContainer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .notice_WriteBtn {
+                width: 100%;
+                text-align: center;
+                margin-top: 10px;
+            }
+            .notice_searchGroup {
+                width: 100%;
+            }
+        }
+
+    </style>
+</th:block>
 
 <div layout:fragment="content" class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="text-start">공지사항<small>새로운 소들과 유용한 정보들을 한곳에서 확인하세요.</small></h2>
+    <div class="notice_MainTitle">
+        <h2 class="notice_MainT">공지사항</h2><small>새로운 소들과 유용한 정보들을 한곳에서 확인하세요.</small>
     </div>
 
     <!-- 📑 공지사항 테이블 -->
-    <table class="table table-hover text-center align-middle">
-        <thead class="table-dark">
+    <table class="notice_MainTable">
+        <thead class="notice_MainTableH">
         <tr>
             <th>No.</th>
             <th>제목</th>
@@ -23,7 +220,7 @@
         <tbody>
         <tr th:each="notice : ${noticeList}">
             <td th:text="${notice.idx}">1</td>
-            <td class="text-start">
+            <td>
                 <a th:href="@{'/notice/detail/' + ${notice.idx}}" th:text="${notice.title}"></a>
             </td>
             <td th:text="${notice.writer}"></td>
@@ -35,14 +232,14 @@
         </tbody>
     </table>
     <!-- 검색바 + 공지 작성-->
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="notice_swContainer">
         <!-- 검색바 -->
-        <form id="searchForm" class="d-flex align-items-center" method="get" th:action="@{/notice/noticeMain}">
-            <div class="input-group" style="min-width: 300px; max-width: 500px;">
+        <form id="searchForm" class="notice_SearchForm" method="get" th:action="@{/notice/noticeMain}">
+            <div class="notice_searchGroup" style="min-width: 300px; max-width: 500px;">
                 <input id="keywordInput" type="text" class="form-control" name="keyword"
                        placeholder="제목 또는 내용을 입력하세요"
                        th:value="${keyword}">
-                <button type="submit" class="btn btn-outline-primary">
+                <button type="submit" class="notice_SearchBtn">
                     <i class="fas fa-search"></i>
                 </button>
             </div>
@@ -68,6 +265,9 @@
                         showCloseButton: true,
                         backdrop: true,
                         allowOutsideClick: true
+                    }).then(() => {
+                        // 확인 버튼 클릭 시 noticeMain으로 이동
+                        window.location.href = '/notice/noticeMain';
                     });
                 }
             });
@@ -75,22 +275,50 @@
 
         <!-- 공지 작성 버튼 (관리자만 표시) -->
         <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
-           th:href="@{/notice/noticeWrite}" class="btn btn-primary ms-3">
+           th:href="@{/notice/noticeWrite}" class="notice_WriteBtn">
             공지 작성
         </a>
     </div>
 
-    <!-- 페이지 네이션 -->
-    <div class="text-center">
+    <!-- 페이지네이션 -->
+    <div class="text-center mt-4">
         <ul class="pagination justify-content-center">
-            <th:block th:if="${pag > 1}"><li class="page-item"><a class="page-link text-secondary" th:href="@{noticeMain(pageSize=${pageSize},pag=0)}">첫페이지</a></li></th:block>
-            <th:block th:if="${curBlock > 0}"><li class="page-item"><a class="page-link text-secondary" th:href="@{noticeMain(pageSize=${pageSize},pag=${(curBlock-1)*blockSize+1-1})}">이전블록</a></li></th:block>
-            <th:block th:each="i: ${#numbers.sequence((curBlock*blockSize)+1,(curBlock*blockSize)+blockSize)}">
-                <th:block th:if="${i <= totPage && i == pag}"><li class="page-item active"><a class="page-link bg-secondary border-secondary" th:href="@{noticeMain(pageSize=${pageSize},pag=${i-1})}" th:text="${i}"></a></li></th:block>
-                <th:block th:if="${i <= totPage && i != pag}"><li class="page-item"><a class="page-link text-secondary" th:href="@{noticeMain(pageSize=${pageSize},pag=${i-1})}" th:text="${i}"></a></li></th:block>
+            <!-- 첫 페이지 이동 -->
+            <th:block th:if="${pag > 0}">
+                <li class="page-item">
+                    <a class="page-link" th:href="@{noticeMain(pageSize=${pageSize}, pag=0)}">&laquo;</a>
+                </li>
             </th:block>
-            <th:block th:if="${curBlock < lastBlock}"><li class="page-item"><a class="page-link text-secondary" th:href="@{noticeMain(pageSize=${pageSize},pag=${(curBlock+1)*blockSize+1-1})}">다음블록</a></li></th:block>
-            <th:block th:if="${pag < totPage}"><li class="page-item"><a class="page-link text-secondary" th:href="@{noticeMain(pageSize=${pageSize},pag=${totPage-1})}">마지막페이지</a></li></th:block>
+
+            <!-- 이전 블록 -->
+            <th:block th:if="${curBlock > 0}">
+                <li class="page-item">
+                    <a class="page-link" th:href="@{noticeMain(pageSize=${pageSize}, pag=${(curBlock-1)*blockSize})}">&lsaquo;</a>
+                </li>
+            </th:block>
+
+            <!-- 페이지 번호들 -->
+            <th:block th:each="i : ${#numbers.sequence((curBlock*blockSize)+1, (curBlock+1)*blockSize)}">
+                <th:block th:if="${i <= totPage}">
+                    <li th:classappend="${i == pag+1} ? 'active'" class="page-item">
+                        <a class="page-link" th:href="@{noticeMain(pageSize=${pageSize}, pag=${i-1})}" th:text="${i}"></a>
+                    </li>
+                </th:block>
+            </th:block>
+
+            <!-- 다음 블록 -->
+            <th:block th:if="${curBlock < lastBlock}">
+                <li class="page-item">
+                    <a class="page-link" th:href="@{noticeMain(pageSize=${pageSize}, pag=${(curBlock+1)*blockSize})}">&rsaquo;</a>
+                </li>
+            </th:block>
+
+            <!-- 마지막 페이지 이동 -->
+            <th:block th:if="${pag < totPage-1}">
+                <li class="page-item">
+                    <a class="page-link" th:href="@{noticeMain(pageSize=${pageSize}, pag=${totPage-1})}">&raquo;</a>
+                </li>
+            </th:block>
         </ul>
     </div>
 </div>

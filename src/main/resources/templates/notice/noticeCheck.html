@@ -113,7 +113,6 @@
     </div>
 
     <script>
-        // 에러 메시지 처리 (기존 코드 유지)
         const params = new URLSearchParams(window.location.search);
         const error = params.get('error');
 
@@ -124,18 +123,20 @@
         }
 
         // 삭제일 때만 confirm 띄우고 제출 컨트롤
-        document.getElementById('passwordCheckForm').addEventListener('submit', function(event) {
-            const action = document.querySelector('input[name="action"]').value;
+           document.getElementById('passwordCheckForm').addEventListener('submit', function(event) {
+            // 폼 안에서만 action input 찾기
+            const actionInput = event.target.querySelector('input[name="action"]');
+            const action = actionInput ? actionInput.value : null;
+
             if (action === 'delete') {
-                event.preventDefault();  // 일단 제출 막기
+                event.preventDefault();
                 const confirmed = confirm("정말 삭제하시겠습니까?");
                 if (confirmed) {
-                    // 확인 시 다시 제출
+                    alert("공지가 삭제되었습니다!");
                     event.target.submit();
                 }
-                // 취소 시 아무 동작 없음(제출 안됨)
             }
-        });
+           });
     </script>
 
     <a class="cancel-btn" th:href="@{/notice/detail/{idx}(idx=${param.idx})}">취소</a>

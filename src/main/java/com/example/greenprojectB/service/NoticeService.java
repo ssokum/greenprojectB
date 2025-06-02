@@ -19,10 +19,10 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +32,7 @@ public class NoticeService {
 
     // 검색 포함 공지 리스트 조회 (pag, pageSize, keyword, searchType)
     public Page<Notice> getNoticeMain(int pag, int pageSize, String keyword, String searchType) {
-        PageRequest pageRequest = PageRequest.of(pag, pageSize, Sort.by("createDate").descending());
+        PageRequest pageRequest = PageRequest.of(pag, pageSize, Sort.by(Sort.Order.desc("updateDate"), Sort.Order.desc("createDate")));
 
 
         if (!StringUtils.hasText(keyword)) {
@@ -45,9 +45,15 @@ public class NoticeService {
         return noticeRepository.findByTitleContainingIgnoreCaseOrContentContainingIgnoreCase(keyword, keyword, pageRequest);
     }
 
-    public void saveNotice(NoticeDto dto) {
-        Notice notice = Notice.createNotice(dto);
-        noticeRepository.save(notice);
+    public int saveNotice(NoticeDto dto) {
+        try {
+            Notice notice = Notice.createNotice(dto);
+            noticeRepository.save(notice);
+            return 1; // 저장 성공
+        } catch (Exception e) {
+            e.printStackTrace(); // 로그 확인용
+            return 0; // 저장 실패
+        }
     }
 
     @Transactional
@@ -60,14 +66,31 @@ public class NoticeService {
     }
 
 
-    public void updateNotice(Long idx, NoticeDto noticeDto) {
-        Notice notice = noticeRepository.findById(idx).orElseThrow(() -> new RuntimeException("공지 없음"));
-        notice.setTitle(noticeDto.getTitle());
-        notice.setContent(noticeDto.getContent());
-        // 파일 처리 및 기타 필요한 필드 수정
+    @Transactional
+    public int updateNotice(Long idx, NoticeDto noticeDto) {
+        try {
+            Notice notice = noticeRepository.findById(idx)
+                    .orElseThrow(() -> new RuntimeException("공지 없음"));
 
-        noticeRepository.save(notice);
+            notice.setTitle(noticeDto.getTitle());
+            notice.setContent(noticeDto.getContent());
+            notice.setNoticePassword(noticeDto.getNoticePassword());
+
+            // 새 첨부파일 처리
+            if (noticeDto.getOFileNames() != null && !noticeDto.getOFileNames().isEmpty()) {
+                notice.setOFileNames(noticeDto.getOFileNames());
+                notice.setSFileNames(noticeDto.getSFileNames());
+            }
+
+            noticeRepository.save(notice);
+
+            return 1; // 성공
+        } catch (Exception e) {
+            e.printStackTrace(); // 로그 남기기 (실무에서는 로깅 권장)
+            return 0; // 실패
+        }
     }
+
 
     public void deleteNotice(Long idx) {
         noticeRepository.deleteById(idx);
@@ -94,9 +117,7 @@ public class NoticeService {
 
             String oFileNames = "";
             String sFileNames = "";
-            int fileSizes = 0;
 
-            // 업로드된 실제 파일 수 체크
             int uploadCount = 0;
 
             for (MultipartFile file : fileList) {
@@ -108,25 +129,16 @@ public class NoticeService {
 
                     writeFile(file, sFileName, "upload");
 
-                    oFileNames += oFileName + "/";
-                    sFileNames += sFileName + "/";
-                    fileSizes += file.getSize();
+                    oFileNames += (oFileNames.isEmpty() ? "" : "/") + oFileName;
+                    sFileNames += (sFileNames.isEmpty() ? "" : "/") + sFileName;
+
                     uploadCount++;
                 }
             }
 
             if (uploadCount > 0) {
-                oFileNames = oFileNames.substring(0, oFileNames.length() - 1);
-                sFileNames = sFileNames.substring(0, sFileNames.length() - 1);
-
-
-                // DTO에 저장
                 noticeDto.setOFileNames(oFileNames);
                 noticeDto.setSFileNames(sFileNames);
-
-                System.out.println("================>> 원본파일 : " + oFileNames);
-                System.out.println("================>> 저장파일 : " + sFileNames);
-
                 res = 1;
             }
 
@@ -136,5 +148,74 @@ public class NoticeService {
 
         return res;
     }
+
+    public int addMultiFileUpload(MultipartHttpServletRequest workFile, NoticeDto noticeDto) {
+        int res = 0;
+
+        try {
+            List<MultipartFile> fileList = workFile.getFiles("newFile");
+
+            // 🔸 기존 공지사항 가져오기 (DB에서)
+            Optional<Notice> optional = noticeRepository.findById(noticeDto.getIdx());
+            String oFileNames = "";
+            String sFileNames = "";
+
+            if (optional.isPresent()) {
+                Notice original = optional.get();
+                oFileNames = original.getOFileNames() != null ? original.getOFileNames() : "";
+                sFileNames = original.getSFileNames() != null ? original.getSFileNames() : "";
+            }
+
+            int uploadCount = 0;
+
+            for (MultipartFile file : fileList) {
+                if (!file.isEmpty()) {
+                    String oFileName = file.getOriginalFilename();
+                    String sFileName = oFileName.substring(0, oFileName.lastIndexOf(".")) +
+                            "_" + UUID.randomUUID().toString().substring(0, 4) +
+                            oFileName.substring(oFileName.lastIndexOf("."));
+
+                    writeFile(file, sFileName, "upload");
+
+                    oFileNames += (oFileNames.isEmpty() ? "" : "/") + oFileName;
+                    sFileNames += (sFileNames.isEmpty() ? "" : "/") + sFileName;
+
+                    uploadCount++;
+                }
+            }
+
+            if (uploadCount > 0) {
+                noticeDto.setOFileNames(oFileNames);
+                noticeDto.setSFileNames(sFileNames);
+                res = 1;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
+
+
+    @Transactional
+    public void updateFiles(Long idx, String updatedSFileNames, String updatedOFileNames) {
+        Notice notice = noticeRepository.findById(idx)
+                .orElseThrow(() -> new RuntimeException("공지사항을 찾을 수 없습니다."));
+        notice.setSFileNames(updatedSFileNames);
+        notice.setOFileNames(updatedOFileNames);
+        noticeRepository.save(notice);
+    }
+
+    @Transactional
+    public Notice getPrevNotice(Long idx) {
+        return noticeRepository.findTopByIdxLessThanOrderByIdxDesc(idx).orElse(null);
+    }
+
+    @Transactional
+    public Notice getNextNotice(Long idx) {
+        return noticeRepository.findTopByIdxGreaterThanOrderByIdxAsc(idx).orElse(null);
+    }
+
 }
 

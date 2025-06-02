@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/exampleLayout}">
+
+<th:block layout:fragment="script">
+
+  <script>
+
+  </script>
+</th:block>>
+<th:block layout:fragment="css">
+  <style>
+    .container {
+      text-align: center;
+      max-width: 1300px;
+    }
+    hr{
+      text-align: center;
+      margin: 0px auto;
+    }
+    .bodyText {
+      text-align: center;
+      margin: 0px auto;
+    }
+  </style>
+</th:block>>
+
+
+<div layout:fragment="content" class="container">
+
+
+  <div class="container mb-3">
+    <!-- 헤더 섹션 -->
+    <div class="company-header p-4 mb-4">
+      <div class="col-md-3 text-center">
+        <img src="/images/enterprise/logo4.jpg" class="company-logo" style="width:1200px" alt="기업 로고">
+      </div>
+    </div>
+    <p></p>
+    <!-- 본문 섹션 -->
+    <div class="text-center p-4">
+      <h3 style="color:"><b>Enterprise Grade Database</b></h3>
+      <h5><span style="color:grey">Acebase는 가장 많은 고객과 구축사례를 보유한 국산 RDBMS입니다.</span></h5>
+      <hr style="width:100px">
+      <p><br></p>
+    </div>
+    <p><br></p>
+    <div class="" style="min-width:1100px">
+      <div class="form-control" style="margin-bottom:20px">
+        <h5><span>Acebase는 가장 많은 고객과 구축사례를 보유한 국산 RDBMS입니다.</span></h5>
+      </div>
+      <div class="form-control" style="margin-bottom:20px">
+        <h5><span>제품의 안정성과 품질을 최우선의 가치로 두고 있습니다. 가장 안전하고 빠르게 데이터를 처리할 수 있는 DBMS를 제공하고 있습니다.</span></h5>
+      </div>
+      <div class="form-control" style="margin-bottom:20px">
+        <h5><span>Acebase는 표준 SQL을 준수하며 오라클과의 호환성을 추구하여 개발자들이 편리하게 사용할 수 있도록 노력하고 있습니다.</span></h5>
+      </div>
+      <div class="form-control" style="margin-bottom:20px">
+        <h5><span>Acebase 고객의 재구매율은 90%를 넘어섭니다. Altibase를 사용한 고객의 만족도가 높기 때문에 가능하다고 할 수 있습니다.</span></h5>
+      </div>
+      <div class="form-control" style="margin-bottom:20px">
+        <h5><span>Acebase는 AT&T, China Mobile, 캐논메디칼, 노무라증권 등에 공급되어 국내 DBMS로서는 유일하게 유의미한 해외 고객을 다수 확보하였습니다.</span></h5>
+      </div>
+    </div>
+    <p><br></p>
+    <div class="text-center p-4">
+      <h3 style="color:"><b>High Performance Database</b></h3>
+      <p><br></p>
+      <div style="font-size:17px;color:#333" class="bodyText">Acebase는 클라우드 환경에 최적화된 고성능 대용량 데이터 관리 솔루션 입니다.</div>
+    </div>
+    <p><br></p>
+    <div class="col-md-3 text-center">
+      <img src="/images/enterprise/4-1.png" style="width:1200px" alt="기업 로고">
+    </div>
+
+    <!-- 푸터 섹션 -->
+    <div class="company-footer text-center" style="background-color:#5459AC;color:white;margin-top:200px;padding:150px">
+      <div class="">
+        <h1>Mission –Critical Succeed</h1>
+        <button type="button" class="btn btn-outline-warning">AceBase</button>
+        <p>contact_at_<a href="https://altibase.com/kr/" target="_blank">altibase.com(이미지/텍스트 출처)</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+</html>

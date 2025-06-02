@@ -36,6 +36,8 @@ public class Threshold {
     @Column(name = "device_code", length = 20)// 기기 번호
     private String deviceCode;
 
+    @Transient
+    private double mean;
 
     @Column(name = "low")
     private double low;
@@ -59,6 +61,7 @@ public class Threshold {
                 .company(dto.getCompany())
                 .sensorName(dto.getSensorName())
                 .deviceCode(dto.getDeviceCode())
+                .mean(0)
                 .low(0)
                 .high(0)
                 .updatedAt(dto.getUpdatedAt())

@@ -184,7 +184,7 @@
 /*** Topbar End ***/
 
 /*** Navbar Start ***/
-.navbar-brand img{width:160px; margin-left:12px; margin-bottom:5px;}
+.navbar-brand img{width:135px; margin-left:12px; margin-bottom:0px;}
 
 .navbar .navbar-nav .nav-link {
     padding: 10px 15px;

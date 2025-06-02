@@ -17,11 +17,9 @@
     <script th:src="@{https://use.fontawesome.com/releases/v6.3.0/js/all.js}" crossorigin="anonymous"></script>
     <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js}"></script>
     <script th:src="@{/js/scripts.js}"></script>
-    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js}"
-            crossorigin="anonymous"></script>
+    <script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js}" crossorigin="anonymous"></script>
     <script th:src="@{https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js}"></script>
     <script th:src="@{https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@0.5.7/chartjs-plugin-annotation.min.js}"></script>
-            crossorigin="anonymous"></script>
     <script th:src="@{/js/datatables-simple-demo.js}"></script>
 </head>
 
@@ -115,7 +113,7 @@
             DataTable Example
         </div>
         <div class="card-body">
-            <table id="datatablesSimple">
+            <table id="datatablesSimple"  class="table table-bordered">
                 <thead>
                 <tr>
                     <th>번호</th>
@@ -136,7 +134,10 @@
                     <th>이벤트</th>
                 </tr>
                 </tfoot>
-                <tbody class="sensor-table">
+                <tbody class="sensor_table">
+                    <tr>
+                        <td>.</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -172,12 +173,18 @@
             let intervalId;
             let sName = '';
 
-            var myLineChart = null; // 전역 Chart 인스턴스
+            var myLineChart = null;
             let chartToggle = true;
             let deviceCode = '';
 
-            let lowThreshold = 0;
-            let highThreshold = 0;
+            let selectedValue = '';
+
+            let lowThreshold = 0.0;
+            let highThreshold = 0.0;
+
+            let minChartValue = 0.0;
+            let maxChartValue = 0.0;
+            let realChartValue = 0;
 
             const customTextPlugin = null;
 
@@ -187,53 +194,30 @@
 
                 sName = $('#sName').val();
                 deviceCode = $('#deviceCode').val();
+                selectedValue = $('.card-select').val();
 
-                 // 1. 최초 실행
-                updateSensorData();
+                //최초 실행
+                getThreshold();       //임계값 받기
+                updateSensorData("create");   //실시간 센서 데이터
 
                 // 2. 이후 3초마다 실행
-                setInterval(updateSensorData, 3000);
+                setInterval(() => updateSensorData("update"), 1000);
 
+                //Sensor type이 바뀌면
                 $(".card-select").on("change", function() {
-                  let selectedValue = $('.card-select').val();
-                  $('.card-title').text(selectedValue);
+                  selectedValue = $('.card-select').val();
 
-                  getThreshold();
+                  getThreshold();       //임계값 받기
+                  if(myLineChart){
+                    myLineChart.destroy();
+                    myLineChart = null;
+                   }
 
+                  updateSensorData("create");
                 });
 
-                $(".card-select").on("change", function(){
-                    updateSensorData();
-                });
 
             });
-
-
-            function getThreshold(){
-                $.ajax({
-                    url  : "/professional/getThreshold",
-                    type : "post",
-                    data : {
-                        deviceCode: deviceCode,
-                        sName: sName
-                    },
-                    beforeSend : function(xhr) { xhr.setRequestHeader(header, token); },
-                    success:function(threshold) {
-                        if(!threshold){
-                            console.log("threshold 전달 실패");
-                        }
-                        else{
-                            lowThreshold = threshold.low;
-                            highThreshold = threshold.high;
-
-                            console.log(lowThreshold);
-                            console.log(highThreshold);
-                        }
-                    },
-                    error : function() { alert("전송오류!"); }
-                });
-
-            }
 
              function fCheck() {
                   let fileInput = $("#fName")[0];
@@ -261,121 +245,164 @@
                   }
                 }
 
-            function updateSensorData() {
+            function updateSensorData(drawType) {
                 if (!chartToggle) {
                     clearInterval(intervalId);
                     return;
                 }
 
+                getSummarySensor(deviceCode);
 
-            $.ajax({
-                url: "/professional/updateSensorData",
-                type: "post",
-                data: {
-                  deviceCode : deviceCode
-                },
-                beforeSend: function (xhr) { xhr.setRequestHeader(header, token); },
-                success: function (sensors) {
-                    if (!sensors) {
-                        $(".chart-failed").html(`
-                              <button data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                센서 등록(excel)
-                              </button>
-                            `).show();
-                    } else {
-                        let type = $('.card-select').val();
-
-                        if (myLineChart) {
-                            sensors.forEach(function (sensor) {
-                                let datetime = new Date(sensor.measureDatetime);
-                                let timeLabel = datetime.toLocaleTimeString();
-
-                                myLineChart.data.labels.push(timeLabel);
-                                myLineChart.data.datasets[0].data.push(sensor[type]);
-
-                                if (myLineChart.data.labels.length > 80) {
-                                    myLineChart.data.labels.shift();
-                                    myLineChart.data.datasets[0].data.shift();
-                                }
-                            });
+                $.ajax({
+                    url: "/professional/updateSensorData",
+                    type: "post",
+                    data: {
+                      deviceCode : deviceCode,
+                      type : drawType
+                    },
+                    beforeSend: function (xhr) { xhr.setRequestHeader(header, token); },
+                    success: function (sensors) {
+                        if (!sensors) {
+                            $(".chart-failed").html(`
+                                  <button data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    센서 등록(excel)
+                                  </button>
+                                `).show();
                         } else {
-                            var ctx = document.getElementById("myAreaChart");
-                            myLineChart = new Chart(ctx, {
-                                type: 'line',
-                                data: {
-                                    labels: [],
-                                    datasets: [{
-                                        label: type,
-                                        data: [],
-                                        lineTension: 0.1,
-                                        backgroundColor: "rgba(2,117,216,0.2)",
-                                        borderColor: "rgba(2,117,216,1)",
-                                        pointRadius: 0,
-                                        pointBackgroundColor: "rgba(2,117,216,1)",
-                                        pointBorderColor: "rgba(255,255,255,0.8)",
-                                        pointHoverRadius: 5,
-                                        pointHoverBackgroundColor: "rgba(2,117,216,1)",
-                                        pointHitRadius: 50,
-                                        pointBorderWidth: 2
-                                    }]
-                                },
-                                options: {
-                                    plugins: {
-                                      annotation: {
-                                        annotations: {
-                                          thresholdLine: {
-                                            type: 'line',
-                                            yMin: 30,
-                                            yMax: 30,
-                                            borderColor: 'red',
-                                            borderWidth: 2,
-                                            label: {
-                                              content: '임계값 30',
-                                              enabled: true,
-                                              position: 'end'
-                                            }
-                                          }
-                                        }
-                                      }
-                                    },
-                                    tooltips: { mode: 'nearest', intersect: true },
-                                    animation: { duration: 0 },
-                                    scales: {
-                                        xAxes: [{
-                                            type: 'category',
-                                            gridLines: { display: false },
-                                            ticks: { minRotation: 0, maxRotation: 0, maxTicksLimit: 7 }
-                                        }],
-                                        yAxes: [{
-                                            ticks: { min: 0, max: 6000, maxTicksLimit: 5 },
-                                            gridLines: { color: "rgba(0, 0, 0, .125)" }
-                                        }],
-                                    },
-                                    legend: { display: true }
+                            let type = $('.card-select').val();
 
+                            if (myLineChart) {
+                                sensors.forEach(function (sensor) {
+                                    let datetime = new Date(sensor.measureDatetime);
+                                    let timeLabel = datetime.toLocaleTimeString();
+
+                                    myLineChart.data.labels.push(timeLabel);
+                                    myLineChart.data.datasets[0].data.push(sensor[type]);
+
+                                    if (myLineChart.data.labels.length > 3000) {
+                                        myLineChart.data.labels.shift();
+                                        myLineChart.data.datasets[0].data.shift();
                                     }
                                 });
-                            }
-                            myLineChart.data.datasets[0].label = type;
-                            myLineChart.update();
-                        }
-                    },
-                    error: function () {
-                        console.log("차트 데이터 전송 실패");
-                    }
-                });
+                            } else {
+                                var ctx = document.getElementById("myAreaChart");
+                                myLineChart = new Chart(ctx, {
+                                    type: 'line',
+                                    data: {
+                                        labels: [],
+                                        datasets: [{
+                                            label: type,
+                                            data: sensors[type],
+                                            lineTension: 0.1,
+                                            backgroundColor: "rgba(0,0,0,0)",
+                                            borderColor: "rgba(2,117,216,1)",
+                                            pointRadius: 0,
+                                            pointBackgroundColor: "rgba(2,117,216,1)",
+                                            pointBorderColor: "rgba(255,255,255,0.8)",
+                                            pointHoverRadius: 5,
+                                            pointHoverBackgroundColor: "rgba(2,117,216,1)",
+                                            pointHitRadius: 10,
+                                            pointBorderWidth: 1
+                                        }]
+                                    },
+                                    options: {
+                                       annotation: {
+                                            annotations: [{
+                                              type: 'line',
+                                              mode: 'horizontal',
+                                              scaleID: 'y-axis-0',
+                                              value: lowThreshold, // 중앙값 (예: 기준선)
+                                              borderColor: 'red',
+                                              borderWidth: 1,
+                                              label: {
+                                                enabled: true,
+                                                content: 'low('+lowThreshold+')',
+                                                position: 'right',
+                                                  // ✅ 깔끔한 스타일을 위한 설정
+                                                  backgroundColor: 'transparent', // 배경 없애기
+                                                  fontColor: 'red',               // 글자색
+                                                  fontStyle: 'normal',
+                                                  fontSize: 15,
+                                                  xAdjust: -3,                    // 약간 왼쪽으로 이동
+                                                  yAdjust: -10,
+                                                  cornerRadius: 0,                // 박스 모서리 둥글기 제거
+                                                  borderWidth: 0                  // 테두리 제거
+                                              }
+                                            },
+                                            {
+                                              type: 'line',
+                                              mode: 'horizontal',
+                                              scaleID: 'y-axis-0',
+                                              value: highThreshold, // 중앙값 (예: 기준선)
+                                              borderColor: 'red',
+                                              borderWidth: 1,
+                                              label: {
+                                                enabled: true,
+                                                content: 'high('+highThreshold+')',
+                                                position: 'right',
 
-                getSummarySensor(deviceCode);
-            }
+                                                // ✅ 깔끔한 스타일을 위한 설정
+                                                  backgroundColor: 'transparent', // 배경 없애기
+                                                  fontColor: 'red',               // 글자색
+                                                  fontStyle: 'normal',
+                                                  fontSize: 15,
+                                                  xAdjust: -3,                    // 약간 왼쪽으로 이동
+                                                  yAdjust: -10,
+                                                  cornerRadius: 0,                // 박스 모서리 둥글기 제거
+                                                  borderWidth: 0                  // 테두리 제거
+                                              }
+                                            }]
+                                          },
+                                        tooltips: { mode: 'nearest', intersect: true },
+                                        animation: { duration: 0 },
+                                        scales: {
+                                            xAxes: [{
+                                                type: 'category',
+                                                gridLines: { display: false },
+                                                ticks: { minRotation: 0, maxRotation: 0, maxTicksLimit: 7 }
+                                            }],
+                                            yAxes: [{
+                                                ticks: { min: minChartValue, max: maxChartValue, maxTicksLimit: 5 },
+                                                gridLines: { color: "rgba(0, 0, 0, .125)" }
+                                            }],
+                                        },
+                                        legend: { display: true }
+
+                                        }
+                                    });
+                                }
+                                myLineChart.data.datasets[0].label = type;
+
+                                myLineChart.options.scales.yAxes[0].ticks.min = minChartValue;
+                                myLineChart.options.scales.yAxes[0].ticks.max = maxChartValue;
+                                myLineChart.options.scales.yAxes[0].ticks.maxTicksLimit = 5;
+
+                                myLineChart.options.annotation.annotations[0].value = lowThreshold;
+                                myLineChart.options.annotation.annotations[0].label.content = 'low(' + lowThreshold + ')';
+                                myLineChart.options.annotation.annotations[1].value = highThreshold;
+                                myLineChart.options.annotation.annotations[1].label.content = 'high(' + highThreshold + ')';
+
+                                myLineChart.update();
+                            }
+                        },
+                        error: function () {
+                            console.log("차트 데이터 전송 실패");
+                        }
+                    });
+                }
 
 
             function getChart(){
                 let begin = $('#df_start-date').val();
                 let end = $('#df_end-date').val();
 
+                getSummarySensor(deviceCode);
+                getThreshold();
+
                 if(!begin || !end)
                     chartToggle = true;
                 else{
+
                      $.ajax({
                         url: "/professional/getChartByDateRange",
                         type: "post",
@@ -397,6 +424,9 @@
                             let dates = [];
                             let values = [];
                             let type = $('.card-select').val();
+
+                            getThreshold();
+                            getSummarySensor(deviceCode);
 
                             //데이터 300개 제한
                             const sMax = 300;
@@ -425,24 +455,70 @@
                                         label: type,
                                         data: values,
                                         lineTension: 0.1,
-                                        backgroundColor: "rgba(2,117,216,0.2)",
                                         borderColor: "rgba(2,117,216,1)",
                                         pointRadius: 0,
                                         pointBackgroundColor: "rgba(2,117,216,1)",
                                         pointBorderColor: "rgba(255,255,255,0.8)",
                                         pointHoverRadius: 5,
                                         pointHoverBackgroundColor: "rgba(2,117,216,1)",
-                                        pointHitRadius: 50,
-                                        pointBorderWidth: 2
+                                        pointHitRadius: 20,
+                                        pointBorderWidth: 1
                                     }]
                                 },
                                 options: {
+                                     annotation: {
+                                            annotations: [{
+                                              type: 'line',
+                                              mode: 'horizontal',
+                                              scaleID: 'y-axis-0',
+                                              value: lowThreshold, // 중앙값 (예: 기준선)
+                                              borderColor: 'red',
+                                              borderWidth: 1,
+                                              label: {
+                                                enabled: true,
+                                                content: 'low('+lowThreshold+')',
+                                                position: 'right',
+                                                  // ✅ 깔끔한 스타일을 위한 설정
+                                                  backgroundColor: 'transparent', // 배경 없애기
+                                                  fontColor: 'red',               // 글자색
+                                                  fontStyle: 'normal',
+                                                  fontSize: 15,
+                                                  xAdjust: -3,                    // 약간 왼쪽으로 이동
+                                                  yAdjust: -10,
+                                                  cornerRadius: 0,                // 박스 모서리 둥글기 제거
+                                                  borderWidth: 0                  // 테두리 제거
+                                              }
+                                            },
+                                            {
+                                              type: 'line',
+                                              mode: 'horizontal',
+                                              scaleID: 'y-axis-0',
+                                              value: highThreshold, // 중앙값 (예: 기준선)
+                                              borderColor: 'red',
+                                              borderWidth: 1,
+                                              label: {
+                                                enabled: true,
+                                                content: 'high('+highThreshold+')',
+                                                position: 'right',
+
+                                                // ✅ 깔끔한 스타일을 위한 설정
+                                                  backgroundColor: 'transparent', // 배경 없애기
+                                                  fontColor: 'red',               // 글자색
+                                                  fontStyle: 'normal',
+                                                  fontSize: 15,
+                                                  xAdjust: -3,                    // 약간 왼쪽으로 이동
+                                                  yAdjust: -10,
+                                                  cornerRadius: 0,                // 박스 모서리 둥글기 제거
+                                                  borderWidth: 0                  // 테두리 제거
+                                              }
+                                            }]
+                                          },
                                     tooltips: {
                                         mode: 'nearest',
                                         intersect: true
                                     },
                                     animation: {
-                                        duration: 0,     // 0이면 애니메이션 없음
+                                        duration: 200,     // 0이면 애니메이션 없음
                                     },
                                     scales: {
                                         xAxes: [{
@@ -457,8 +533,8 @@
                                         }],
                                         yAxes: [{
                                             ticks: {
-                                                min: 0,
-                                                max: 6000,
+                                                min: minChartValue,
+                                                max: maxChartValue,
                                                 maxTicksLimit: 5
                                             },
                                             gridLines: {
@@ -479,40 +555,82 @@
                 }
             }
 
-            function getSummarySensor(deviceCode){
-              $.ajax({
-                url: "/professional/getSummarySensors",
-                type: "POST",
-                data: {
-                  deviceCode: deviceCode
-                },
-                beforeSend: function(xhr) {
-                  xhr.setRequestHeader(header, token);
-                },
-                success: function(summarySensors) {
+            function getThreshold(){
+                $.ajax({
+                  url: "/professional/getThreshold",
+                  type: "POST",
+                  data: {
+                    deviceCode: deviceCode,
+                    companyId: sName,
+                    type: selectedValue
+                  },
+                  beforeSend: function(xhr) {
+                    xhr.setRequestHeader(header, token);
+                  },
+                  success: function(threshold) {
+                    if (threshold) {
+                         lowThreshold = threshold.low;
+                         highThreshold = threshold.high;
+                    }
+                  },
+                  error: function(err) {
+                    console.error("에러 발생", err);
+                  }
+                });
+              }
 
-                  console.log("summarySensors: " + summarySensors);
-                  let html = '';
+            function getSummarySensor(deviceCode) {
+                $.ajax({
+                    url: "/professional/getSummarySensors",
+                    type: "POST",
+                    data: {
+                        deviceCode: deviceCode
+                    },
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    success: function(summarySensors) {
+                        let html = '';
 
-                  summarySensors.forEach(function(summarySensor, index) {
-                        html += `
-                            <tr>
-                                <td>${index}</td>
-                                <td>${summarySensor.sensorName}</td>
-                                <td>${summarySensor.stats.min}</td>
-                                <td>${summarySensor.stats.mean}</td>
-                                <td>${summarySensor.stats.max}</td>
-                                <td>${summarySensor.eventCnt}</td>
-                            </tr>
-                        `;
-                    });
+                        if(!summarySensors){
+                            html += `<tr><td>서비스에 가입해주세요.</td></tr>`;
+                        }
+                        else{
+                            summarySensors.forEach(function(summarySensor, index) {
+                                // 차트 Y값 설정
+                                if(summarySensor.sensorName == selectedValue){
+                                    let lineLength = summarySensor.stats.max - summarySensor.stats.min;
 
-                  $(".sensor_table").html(html);
-                },
-                error: function(err) {
-                  console.error("에러 발생", err);
-                }
-              });
+<!--                                    minChartValue = Math.min(lowThreshold, summarySensor.stats.min);-->
+<!--                                    maxChartValue = Math.max(highThreshold, summarySensor.stats.max);-->
+<!--                                    realChartValue = Math.abs(maxChartValue) + Math.abs(minChartValue);-->
+
+<!--                                    maxChartValue = realChartValue + Math.abs(realChartValue/2);-->
+<!--                                    minChartValue = maxChartValue - Math.abs(maxChartValue * 2);-->
+                                    let center = summarySensor.stats.max - Math.abs(lineLength/2);
+                                    maxChartValue = center + summarySensor.stats.max;
+                                    minChartValue = center - Math.abs(summarySensor.stats.max);
+                                   }
+
+                                html += `
+                                    <tr>
+                                        <td>${index + 1}</td>
+                                        <td>${summarySensor.sensorName}</td>
+                                        <td>${(summarySensor.stats.min).toFixed(2)}</td>
+                                        <td>${(summarySensor.stats.count === 0 ? 0 : summarySensor.stats.sum / summarySensor.stats.count).toFixed(2)}</td>
+                                        <td>${(summarySensor.stats.max).toFixed(2)}</td>
+                                        <td>${summarySensor.eventCnt}</td>
+                                    </tr>
+                                `;
+                            });
+                        }
+
+                       $("#datatablesSimple tbody").html(html);
+                    },
+                    error: function(err) {
+                        console.error("에러 발생", err);
+                    }
+                });
             }
 
           function getDeviceCode(element){
@@ -523,8 +641,10 @@
               myLineChart = null;
             }
 
-            updateSensorData();
+            getThreshold();
+            updateSensorData("create");
           }
+
         </script>
     </th:block>
 </div>

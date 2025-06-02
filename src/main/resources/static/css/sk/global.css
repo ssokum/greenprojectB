@@ -1,0 +1,2134 @@
+@charset "utf-8";
+/******************** Commmon ********************/
+#wrap:not(.kor) .footer_menu > li {
+    width: 25%;
+}
+/* 다국어 SK윤리경영 상담/제보 페이지 연결로 주석처리 */
+/* #wrap:not(.kor) .footer_link {
+	position: static;
+} */
+#wrap:not(.kor) .mark-accessibility {
+    display: none;
+}
+#wrap:not(.kor) .align_vertical .vertical_con.product {
+    height: 80px;
+    border-bottom: 0;
+}
+#wrap:not(.kor) .list_top .search_area .btn {
+    width: 88px;
+}
+#wrap:not(.kor) .list_top .search_area .delete_search {
+    right: 112px;
+}
+/* #wrap:not(.kor) .list_file.download {
+	padding-bottom: 192px;
+} */
+#wrap:not(.kor) .content_type .content_detail .list_file.download {
+    padding-bottom: 0;
+}
+
+/* 지속가능경영 - 최근자료 다운로드 */
+#wrap:not(.kor) .main_sustainability .list_file.download .list_type .tit_wrap {
+    width: calc(100% - 384px);
+}
+#wrap:not(.kor) .main_sustainability .list_file.download .list_type .btn_area {
+    width: 384px;
+}
+
+/* Reports & Policies - 정책 및 가이드라인, 인증서 */
+#wrap:not(.kor) .list_file.download .list_type .tit_wrap {
+    width: calc(100% - 384px);
+}
+#wrap:not(.kor) .list_file.download .list_type .btn_area {
+    width: 384px;
+}
+
+/* IR메뉴(gnb) max-width수정 */
+#wrap:not(.kor) .gnb_menu > li:nth-child(3) .gnb_depth1 {
+    max-width: 970px;
+}
+
+/******************** ENG ********************/
+/* Common */
+.eng .gnb_depth1 .depth1,
+.eng .gnb_depth2 .depth2,
+.eng .gnb_depth3 .depth3 {
+    font-family: "NotoSanskr";
+}
+.eng .gnb_depth1.sus .gnb_depth2.inline > li {
+    padding-right: 2%;
+}
+.eng .gnb_depth3 > li {
+    padding-right: 2%;
+}
+
+.eng #footer .gnb_area {
+    width: calc(100% - 384px);
+}
+.eng .footer_menu > li {
+    width: 25%;
+}
+.eng .allmenu_area .stit {
+    width: 90px;
+    margin-bottom: 20px;
+}
+.eng .list_top .check_area .btn_check,
+.eng .content_tit .check_area .btn_check {
+    width: 88px;
+}
+.eng .content_tit .check_area .select {
+    width: calc(100% - 92px);
+}
+.eng .list_top .check_area.video .btn_base.link {
+    right: 300px;
+}
+.eng .list_box.icon.percent .txt dt {
+    width: 136px;
+}
+.eng .list_step .con {
+    display: block;
+}
+.eng .list_step > li:last-child {
+    margin-bottom: 0;
+}
+.eng .list_step > li:before {
+    display: none;
+}
+.eng .list_step > li:last-child::after {
+    display: none;
+}
+
+/* .eng .list_step > li:after {
+	content: "";
+	display: block;
+	position: absolute;
+	left: 50%;
+	bottom: -23px;
+	width: 10px;
+	height: 10px;
+	margin: 0 0 0 -5px;
+	border-left: 2px solid #000;
+	border-bottom: 2px solid #000;
+	transform: rotate(-45deg);
+} */
+
+.eng .list_step.autonomy > li:after{
+    display: none;
+}
+.eng .list_step.labor > li:after{
+    display: none;
+}
+.eng .list_box.psm .step {
+    line-height: 1.5;
+}
+.eng .list_box.icon.percent .txt dd {
+    margin-right: 0;
+}
+.eng .list_step.labor .con {
+    position: relative;
+}
+.eng .list_step.cooperation > li {
+    padding: 32px 32px 32px 0;
+    border: 1px solid #e5e5e5;
+}
+.eng .list_step.cooperation .step_con {
+    position: relative;
+    padding: 0 0 0 116px;
+    border: 0;
+}
+.eng .list_step.cooperation .icon {
+    position: absolute;
+    left: 31px;
+    top: 0;
+}
+.eng .list_step.cooperation .step {
+    height: auto;
+    margin: 0 0 12px;
+    line-height: 1.5;
+}
+.eng .list_step.cooperation .step .sub {
+    display: inline;
+    margin-top: 0;
+}
+.eng .list_step.cooperation .bul_type {
+    margin-top: 16px;
+    padding-left: 116px;
+}
+.eng .list_step.mineral .step_con{
+    position: relative;
+    padding: 0 0 0 116px;
+    border: 0;
+}
+.eng .list_step.autonomy {
+    margin-bottom: 56px;
+}
+.eng .list_step.autonomy > li:first-child::after {
+    display: none;
+}
+.eng .list_step.autonomy .icon{
+    margin-bottom: 42px;
+}
+.eng .list_step.autonomy .arrow:after{
+    top: 50%;
+}
+.cha .list_step.labor .con,
+.chat .list_step.labor .con,
+.jpa .list_step.labor .con {
+    word-break: keep-all;
+}
+.eng .txt_base.more:after {
+    top: 4px;
+}
+.eng .btn_base.small.link:after {
+    margin-top: 0;
+}
+.eng .list_step.complaint p {
+    margin-top: 23px;
+}
+
+/* IE Error Popup */
+.eng .ico_ieOnly {
+    background: url("/img/common/ico_ieOnly_eng.png") no-repeat center;
+}
+
+/* Company */
+.eng .company .tbl_data_view:not(table) dt {
+    width: 32%;
+}
+.eng .company .tbl_data_view:not(table) dd {
+    width: 68%;
+}
+.eng .company .tbl_data_view:not(table) dt:first-child,
+.eng .company .tbl_data_view:not(table) dt:first-child + dd {
+    margin-top: 0;
+}
+.eng .history .tab_area .line {
+    padding-left: 30px;
+}
+.eng .tab_history > li:first-child a.on::before {
+    left: 27px;
+    width: calc(100% - 10px);
+}
+.eng .fixed_wrap.brand .identity_wrap .tit_brand {
+    margin-bottom: 86px;
+}
+
+/* Sustainability */
+.eng .esg_wrap .stit_wrap .con {
+    max-width: 500px;
+}
+.eng .list_dbl .tit {
+    position: relative;
+    display: inline-block;
+    padding-right: 42px;
+}
+.eng .list_dbl .tit:after {
+    position: absolute;
+    right: 0;
+    top: 8px;
+    margin-left: 0;
+}
+.eng .list_dbl .menu:hover .tit:after,
+.eng .list_dbl .menu:focus .tit:after {
+    right: -10px;
+    margin-left: 0;
+    background-image: url(/img/common/ico_more_w02.png);
+}
+.eng .goal_wrap li {
+    width: 360px;
+    vertical-align: top;
+    margin: 0;
+    margin-left: 64px;
+}
+.eng .goal_wrap li:first-child {
+    margin-left: 0;
+}
+.eng .esg_con.type .tit_box {
+    top: 180px;
+    bottom: auto;
+}
+.eng .esg_con.type .tit_box .list_btn {
+    margin: 0;
+}
+.eng .esg_con.type .tit_box .list_btn > li:last-child {
+    margin-bottom: 0;
+}
+.eng .esg_con.type .tit_box .list_btn .menu {
+    width: 100%;
+}
+.eng .esg_con.type02 .tit_box,
+.eng .esg_con.type03 .tit_box {
+    max-width: 574px;
+}
+.eng .esg_con.type02 .tit_box .list_btn .menu,
+.eng .esg_con.type03 .tit_box .list_btn .menu {
+    width: 100%;
+}
+.eng .our_wrap {
+    left: 489px;
+}
+.eng .list_our .our_con .number {
+    font-size: 36px;
+}
+.eng .list_our .our_con .number .unit02 {
+    font-size: 18px;
+}
+.eng .esg_con.type .our_wrap {
+    max-width: 720px;
+}
+.eng .esg_con.type .list_our .our_con {
+    width: 200px;
+    padding-left: 5.773%;
+    padding-right: 0;
+}
+.eng .esg_con.type .list_our {
+    width: 100%;
+    margin-left: -40px;
+}
+.eng .esg_con.type .list_our .our_con .number {
+    left: 40px;
+}
+.eng .esg_con.type02 .our_wrap {
+    left: 40px;
+    max-width: 576px;
+}
+.eng .esg_con.type02 .list_our {
+    width: 100%;
+    margin-left: -32px;
+}
+.eng .esg_con.type02 .list_our .our_con {
+    width: 160px;
+    padding-left: 5.556%;
+    padding-right: 0;
+}
+.eng .esg_con.type02 .list_our .our_con .number {
+    left: 32px;
+}
+.eng .main_sustainability .esg_wrap .esg_con.type {
+    margin-bottom: 246px;
+}
+.eng .list_icon02.footprint .tit_type03 {
+    font-size: 18px;
+    font-weight: 400;
+}
+.eng .diagram_wrap.bcp {
+    padding-top: 51.329%;
+    background-image: url(/img/eng/diagram_bcp.gif);
+}
+.eng .diagram_wrap.bcp02 {
+    background-image: url(/img/eng/diagram_bcp02.gif);
+}
+.eng .diagram_wrap.bcp03 {
+    background-image: url(/img/eng/diagram_bcp03.gif);
+}
+.eng .diagram_wrap.dbl {
+    background-image: url(/img/eng/diagram_dbl01.gif);
+}
+.eng .diagram_wrap.dbl02 {
+    background-image: url(/img/eng/diagram_dbl02.gif);
+}
+.eng .diagram_wrap.dbl03 {
+    background-image: url(/img/eng/diagram_dbl03.gif);
+}
+.eng .diagram_wrap.dbl04 {
+    background-image: url(/img/eng/diagram_dbl04.gif);
+    padding-top: 40.707%;
+}
+.eng .diagram_wrap.dbl05 {
+    background-image: url(/img/eng/diagram_dbl05.gif);
+}
+.eng .diagram_wrap.esg {
+    background-image: url(/img/eng/diagram_esg.gif);
+}
+.eng .diagram_wrap.esg02 {
+    background-image: url(/img/eng/diagram_esg02.gif);
+}
+.eng .diagram_wrap.water {
+    background-image: url(/img/eng/diagram_water01.gif);
+}
+.eng .diagram_wrap.water02 {
+    background-image: url(/img/eng/diagram_water02.gif);
+    padding-top: 67.477%;
+}
+.eng .diagram_wrap.water03 {
+    background-image: url(/img/eng/diagram_water03.gif);
+}
+.eng .diagram_wrap.ictray {
+    background-image: url(/img/eng/diagram_ictray.gif);
+}
+.eng .diagram_wrap.members {
+    background-image: url(/img/eng/diagram_members.gif);
+}
+.eng .diagram_wrap.members02 {
+    background-image: url(/img/eng/diagram_members02.gif);
+}
+.eng .diagram_wrap.members03 {
+    background-image: url(/img/eng/diagram_members03_211014.gif);
+}
+.eng .diagram_wrap.members04 {
+    padding-top: 50.165%;
+    background-image: url(/img/eng/diagram_members04.gif);
+}
+.eng .diagram_wrap.members05 {
+    padding-top: 56.744%;
+    background-image: url(/img/eng/diagram_members05.gif);
+}
+.eng .diagram_wrap.members06 {
+    background-image: url(/img/eng/diagram_members06.gif);
+}
+.eng .diagram_wrap.members07 {
+    background-image: url(/img/eng/diagram_members07.gif);
+}
+.eng .diagram_wrap.members08 {
+    background-image: url(/img/eng/diagram_members08.gif);
+}
+.eng .diagram_wrap.members09 {
+    background-image: url(/img/eng/diagram_members09.gif);
+}
+.eng .diagram_wrap.supply {
+    padding-top: 40.79%;
+    background-image: url(/img/eng/diagram_supply.gif);
+}
+.eng .diagram_wrap.supply02 {
+    background-image: url(/img/eng/diagram_supply02.gif);
+}
+.eng .diagram_wrap.supply03 {
+    padding-top: 37.83%;
+    background-image: url(/img/eng/diagram_supply03.gif);
+}
+.eng .diagram_wrap.supply04 {
+    background-image: url(/img/eng/diagram_supply04.gif);
+}
+.eng .diagram_wrap.compliance {
+    background-image: url(/img/eng/diagram_compliance.gif);
+}
+.eng .diagram_wrap.compliance02 {
+    padding-top: 41.777%;
+    background-image: url(/img/eng/diagram_compliance02.gif);
+}
+.eng .diagram_wrap.compliance03 {
+    padding-top: 58.628%;
+    background-image: url(/img/eng/diagram_compliance03.gif);
+}
+.eng .diagram_wrap.ethical {
+    background-image: url(/img/eng/diagram_ethical_241220.png);
+}
+.eng .diagram_wrap.ethical02 {
+    background-image: url(/img/eng/diagram_ethical02.gif);
+}
+.eng .diagram_wrap.domination {
+    background-image: url(/img/eng/diagram_domination01.gif);
+}
+.eng .diagram_wrap.domination02 {
+    background-image: url(/img/eng/diagram_domination02.gif);
+}
+.eng .diagram_wrap.domination03 {
+    padding-top: 25.997%;
+    background-image: url(/img/eng/diagram_domination03.gif);
+}
+.eng .career_detail .con {
+    width: calc(100% - 140px);
+}
+.eng .btn_wrap.domination .btn_base {
+    float: left;
+    width: calc((100% - 16px) / 2);
+    margin: 8px 8px 0 0;
+}
+.eng .btn_wrap.director .btn_base {
+    float: left;
+    width: calc((100% - 16px) / 2);
+    height: auto;
+    margin: 8px 8px 0 0;
+    line-height: 1.5;
+    padding: 11px 40px 11px 16px;
+}
+.eng .list_thumb .tit_type04 {
+    width: calc(100% - 100px);
+}
+.eng .btn_wrap.director {
+    margin-right: 0;
+}
+.eng .figure_con .box .tit_figure {
+    display: block;
+}
+.eng .figure_con .unit.type {
+    font-size: 22px;
+}
+.eng .img_figure.type03 .img_sc.sc07 {
+    width: 470px;
+}
+.eng .img_sc.sc07 + .figure_wrap .figure_con {
+    width: 375px;
+}
+.eng .diagram_wrap.talent {
+    padding-top: 28.761%;
+    margin-bottom: 128px;
+    background-image: url(/img/eng/diagram_members01.gif);
+}
+
+/* ir */
+.btn_base.btn_eng .txt {
+    min-width: 216px;
+}
+#wrap:not(.kor) .ir_wrap04 .menu_area li .mask .menu.line .txt::after {
+    position: absolute;
+    margin-top: -32px;
+    right: -40px;
+}
+#wrap:not(.kor) .ir_wrap04 .menu_area li .mask .menu.line:hover .txt::after,
+#wrap:not(.kor) .ir_wrap04 .menu_area li .mask .menu.line:focus .txt::after {
+    right: -50px;
+    transition: all 0.5s ease-in-out;
+}
+.eng .tbl_eng .tbl_data_view dt {
+    width: 30%;
+}
+.eng .tbl_eng .tbl_data_view dd {
+    width: 70%;
+}
+.eng .ir_list_bottom .btn_base.link:after {
+    position: absolute;
+    right: 16px;
+}
+
+/* Footer > 유휴장비매각 */
+.eng .etc.equipment .line_wrap .tbl_data_view {width: 100%;}
+.eng .etc.equipment .line_wrap .tbl_data_view dt {width: 26%; margin: 0;}
+.eng .etc.equipment .line_wrap .tbl_data_view dd {width: 23%; margin: 0;}
+
+/* 인권경영 2023년 고충 처리 현황 차트  */
+.eng .humanrights_chart_wrap {
+    max-width: 840px;
+}
+
+/******************** JPA ********************/
+.jpa * {
+    word-break: break-all;
+}
+.jpa .amcharts-amexport-label {
+    word-break: keep-all;
+}
+.jpa .news_wrap .tit_type03{
+    word-break: keep-all;
+}
+
+/* IE Error Popup */
+.jpa .ico_ieOnly {
+    background: url("/img/common/ico_ieOnly_jpa.png") no-repeat center;
+}
+
+/* Layout */
+.jpa .gnb_depth1.sus .gnb_depth2.inline > li {
+    padding-right: 2%;
+}
+.jpa .gnb_depth3 > li {
+    padding-right: 2%;
+}
+.jpa .gnb_depth1 .pc {
+    display: block;
+    margin-top: 4px;
+}
+
+/* 기업정보메뉴(gnb) max-width수정 */
+.jpa .gnb_menu > li:nth-child(1) .gnb_depth1 {
+    max-width: 1140px;
+}
+/* 기업정보메뉴(gnb) padding수정 */
+.jpa .gnb_menu > li:nth-child(1) .gnb_depth1 >li{
+    padding: 0 2.6%;
+}
+
+/* Company */
+.jpa .dot .txt {
+    word-break: keep-all;
+}
+.jpa .layer_area .layer_content .layer_con{
+    word-break: keep-all;
+}
+
+/* Sustainability*/
+.jpa .list_dbl .tit {
+    position: relative;
+    display: inline-block;
+    padding-right: 42px;
+}
+.jpa .list_dbl .tit:after {
+    position: absolute;
+    right: 0;
+    top: 8px;
+    margin-left: 0;
+}
+.jpa .list_dbl .menu:hover .tit:after,
+.eng .list_dbl .menu:focus .tit:after {
+    right: -10px;
+    margin-left: 0;
+    background-image: url(/img/common/ico_more_w02.png);
+}
+
+.jpa .tit_box .txt_type {
+    word-break: break-all;
+}
+.jpa .diagram_wrap.bcp {
+    background-image: url(/img/jpa/diagram_bcp.gif);
+}
+.jpa .diagram_wrap.bcp02 {
+    background-image: url(/img/jpa/diagram_bcp02.gif);
+}
+.jpa .diagram_wrap.bcp03 {
+    background-image: url(/img/jpa/diagram_bcp03.gif);
+}
+.jpa .diagram_wrap.dbl {
+    background-image: url(/img/jpa/diagram_dbl01.gif);
+}
+.jpa .diagram_wrap.dbl02 {
+    background-image: url(/img/jpa/diagram_dbl02.gif);
+}
+.jpa .diagram_wrap.dbl03 {
+    background-image: url(/img/jpa/diagram_dbl03.gif);
+}
+.jpa .diagram_wrap.dbl04 {
+    background-image: url(/img/jpa/diagram_dbl04.gif);
+}
+.jpa .diagram_wrap.dbl05 {
+    background-image: url(/img/jpa/diagram_dbl05.gif);
+}
+.jpa .diagram_wrap.esg {
+    background-image: url(/img/jpa/diagram_esg.gif);
+}
+.jpa .diagram_wrap.esg02 {
+    background-image: url(/img/jpa/diagram_esg02.gif);
+}
+.jpa .diagram_wrap.water {
+    background-image: url(/img/jpa/diagram_water01.gif);
+}
+.jpa .diagram_wrap.water02 {
+    background-image: url(/img/jpa/diagram_water02.gif);
+}
+.jpa .diagram_wrap.water03 {
+    background-image: url(/img/jpa/diagram_water03.gif);
+}
+.jpa .diagram_wrap.ictray {
+    background-image: url(/img/jpa/diagram_ictray.gif);
+}
+.jpa .diagram_wrap.members {
+    background-image: url(/img/jpa/diagram_members.gif);
+}
+.jpa .diagram_wrap.members02 {
+    background-image: url(/img/jpa/diagram_members02.gif);
+}
+.jpa .diagram_wrap.members03 {
+    background-image: url(/img/jpa/diagram_members03_211014.gif);
+}
+.jpa .diagram_wrap.members04 {
+    padding-top: 47.451%;
+    background-image: url(/img/jpa/diagram_members04.gif);
+}
+.jpa .diagram_wrap.members05 {
+    padding-top: 55.757%;
+    background-image: url(/img/jpa/diagram_members05.gif);
+}
+.jpa .diagram_wrap.members06 {
+    background-image: url(/img/jpa/diagram_members06.gif);
+}
+.jpa .diagram_wrap.members07 {
+    padding-top: 17.928%;
+    background-image: url(/img/jpa/diagram_members07.gif);
+}
+.jpa .diagram_wrap.members08 {
+    background-image: url(/img/jpa/diagram_members08.gif);
+}
+.jpa .diagram_wrap.members09 {
+    background-image: url(/img/jpa/diagram_members09.gif);
+}
+.jpa .diagram_wrap.supply {
+    padding-top: 39.639%;
+    background-image: url(/img/jpa/diagram_supply.gif);
+}
+.jpa .diagram_wrap.supply02 {
+    background-image: url(/img/jpa/diagram_supply02.gif);
+}
+.jpa .diagram_wrap.supply03 {
+    padding-top: 36.185%;
+    background-image: url(/img/jpa/diagram_supply03.gif);
+}
+.jpa .diagram_wrap.supply04 {
+    background-image: url(/img/jpa/diagram_supply04.gif);
+}
+.jpa .diagram_wrap.compliance {
+    background-image: url(/img/jpa/diagram_compliance.gif);
+}
+.jpa .diagram_wrap.compliance02 {
+    padding-top: 41.448%;
+    background-image: url(/img/jpa/diagram_compliance02.gif);
+}
+.jpa .diagram_wrap.compliance03 {
+    background-image: url(/img/jpa/diagram_compliance03.gif);
+}
+.jpa .diagram_wrap.ethical {
+    background-image: url(/img/jpa/diagram_ethical_241220.png);
+}
+.jpa .diagram_wrap.ethical02 {
+    background-image: url(/img/jpa/diagram_ethical02.gif);
+}
+.jpa .diagram_wrap.domination {
+    background-image: url(/img/jpa/diagram_domination01.gif);
+}
+.jpa .diagram_wrap.domination02 {
+    background-image: url(/img/jpa/diagram_domination02.gif);
+}
+.jpa .diagram_wrap.domination03 {
+    padding-top: 25.997%;
+    background-image: url(/img/jpa/diagram_domination03.gif);
+}
+.jpa .career_detail .con {
+    width: calc(100% - 140px);
+}
+.jpa .btn_wrap.domination .btn_base {
+    float: left;
+    width: calc((100% - 16px) / 2);
+    margin: 8px 8px 0 0;
+}
+.jpa .list_thumb .tit_type04 {
+    width: calc(100% - 100px);
+}
+.jpa .btn_wrap.director .btn_base {
+    width: 360px;
+}
+.jpa .figure_con .box .tit_figure {
+    display: block;
+}
+.jpa .outlink:after{
+    top: 9px;
+}
+.jpa .ir *,
+.jpa .main_ir *,
+.jpa .ir .tbody .td.item,
+.jpa .box_wrap.director .profile .tit_type03,
+.jpa .box_wrap.director .profile_detail dd,
+.jpa .box_wrap.director .con,
+.jpa .box_wrap.director .con span,
+.jpa .tbl_data_list.BoardDirectors th,
+.jpa .tbl_data_list.BoardDirectors .list_number02 li,
+.jpa .tbl_data_list.keep_all tr td,
+.jpa .tbl_wrap.type.Activ .tbl_data_list th,
+.jpa .tbl_wrap.type.Activ .tbl_data_list td,
+.jpa .tbl_wrap.type.Activ .tbl_data_list.eng_tbl .list_number li,
+.jpa .tbl_wrap.type.Activ .tbl_data_list.eng_tbl .list_number02 li,
+.jpa .list_type.faq .question_con,
+.jpa .tbl_data_view.type .th,
+.jpa .tbl_data_view.type label{
+    word-break: keep-all;
+}
+.jpa .list_file.download .tit_wrap{
+    word-break: normal;
+}
+.jpa .report_box .con{
+    word-break: break-all;
+}
+.jpa .humanrights_box .tit {
+    word-break: keep-all;
+}
+
+.jpa .tbl_eng .tbl_data_view dt {
+    width: 30%;
+}
+.jpa .tbl_eng .tbl_data_view dd {
+    width: 70%;
+}
+
+/* 인권경영 2023년 고충 처리 현황 차트  */
+.jpa .humanrights_chart_wrap {
+    max-width: 710px;
+}
+
+/******************** CHA ********************/
+.cha * {
+    word-break: break-all;
+}
+.cha .amcharts-amexport-label {
+    word-break: keep-all;
+}
+
+/* IE Error Popup */
+.cha .ico_ieOnly {
+    background: url("/img/common/ico_ieOnly_cha.png") no-repeat center;
+}
+
+/* Company */
+.cha .dot .txt {
+    word-break: keep-all;
+}
+
+/* Sustainability*/
+.cha .tit_box .txt_type {
+    word-break: break-all;
+}
+.cha .diagram_wrap.bcp {
+    background-image: url(/img/cha/diagram_bcp.gif);
+}
+.cha .diagram_wrap.bcp02 {
+    background-image: url(/img/cha/diagram_bcp02.gif);
+}
+.cha .diagram_wrap.bcp03 {
+    background-image: url(/img/cha/diagram_bcp03.gif);
+}
+.cha .diagram_wrap.dbl {
+    background-image: url(/img/cha/diagram_dbl01.gif);
+}
+.cha .diagram_wrap.dbl02 {
+    background-image: url(/img/cha/diagram_dbl02.gif);
+}
+.cha .diagram_wrap.dbl03 {
+    background-image: url(/img/cha/diagram_dbl03.gif);
+}
+.cha .diagram_wrap.dbl04 {
+    background-image: url(/img/cha/diagram_dbl04.gif);
+}
+.cha .diagram_wrap.dbl05 {
+    background-image: url(/img/cha/diagram_dbl05.gif);
+}
+.cha .diagram_wrap.esg {
+    background-image: url(/img/cha/diagram_esg.gif);
+}
+.cha .diagram_wrap.esg02 {
+    background-image: url(/img/cha/diagram_esg02.gif);
+}
+.cha .diagram_wrap.water {
+    background-image: url(/img/cha/diagram_water01.gif);
+}
+.cha .diagram_wrap.water02 {
+    background-image: url(/img/cha/diagram_water02.gif);
+}
+.cha .diagram_wrap.water03 {
+    background-image: url(/img/cha/diagram_water03.gif);
+}
+.cha .diagram_wrap.ictray {
+    background-image: url(/img/cha/diagram_ictray.gif);
+}
+.cha .diagram_wrap.members {
+    background-image: url(/img/cha/diagram_members.gif);
+}
+.cha .diagram_wrap.members02 {
+    background-image: url(/img/cha/diagram_members02.gif);
+}
+.cha .diagram_wrap.members03 {
+    background-image: url(/img/cha/diagram_members03_211014.gif);
+}
+.cha .diagram_wrap.members04 {
+    background-image: url(/img/cha/diagram_members04.gif);
+}
+.cha .diagram_wrap.members05 {
+    background-image: url(/img/cha/diagram_members05_220106.gif);
+}
+.cha .diagram_wrap.members06 {
+    background-image: url(/img/cha/diagram_members06.gif);
+}
+.cha .diagram_wrap.members07 {
+    padding-top: 17.928%;
+    background-image: url(/img/cha/diagram_members07.gif);
+}
+.cha .diagram_wrap.members08 {
+    background-image: url(/img/cha/diagram_members08.gif);
+}
+.cha .diagram_wrap.members09 {
+    background-image: url(/img/cha/diagram_members09.gif);
+}
+.cha .diagram_wrap.supply {
+    padding-top: 39.639%;
+    background-image: url(/img/cha/diagram_supply.gif);
+}
+.cha .diagram_wrap.supply02 {
+    background-image: url(/img/cha/diagram_supply02.gif);
+}
+.cha .diagram_wrap.supply03 {
+    padding-top: 35.856%;
+    background-image: url(/img/cha/diagram_supply03.gif);
+}
+.cha .diagram_wrap.supply04 {
+    background-image: url(/img/cha/diagram_supply04.gif);
+}
+.cha .diagram_wrap.compliance {
+    background-image: url(/img/cha/diagram_compliance.gif);
+}
+.cha .diagram_wrap.compliance02 {
+    background-image: url(/img/cha/diagram_compliance02.gif);
+}
+.cha .diagram_wrap.compliance03 {
+    background-image: url(/img/cha/diagram_compliance03.gif);
+}
+.cha .diagram_wrap.ethical {
+    background-image: url(/img/cha/diagram_ethical_241220.png);
+}
+.cha .diagram_wrap.ethical02 {
+    background-image: url(/img/cha/diagram_ethical02.gif);
+}
+.cha .diagram_wrap.domination {
+    background-image: url(/img/cha/diagram_domination01.gif);
+}
+.cha .diagram_wrap.domination02 {
+    background-image: url(/img/cha/diagram_domination02.gif);
+}
+.cha .diagram_wrap.domination03 {
+    padding-top: 23.673%;
+    background-image: url(/img/cha/diagram_domination03.gif);
+}
+.cha .career_detail .con {
+    width: calc(100% - 140px);
+}
+.cha .btn_wrap.domination .btn_base {
+    float: left;
+    width: calc((100% - 16px) / 2);
+    margin: 8px 8px 0 0;
+}
+.cha .figure_con .box .tit_figure {
+    display: block;
+}
+.cha .outlink:after{
+    top: 9px;
+}
+/* .cha .list_step.autonomy .step_con.first .tit{
+	margin-bottom: 36px;
+} */
+.cha .ir *,
+.cha .main_ir *,
+.cha .ir .tbody .td.item,
+.cha .box_wrap.director .profile .tit_type03,
+.cha .box_wrap.director .profile_detail dd,
+.cha .box_wrap.director .con,
+.cha .box_wrap.director .con span,
+.cha .tbl_data_list.BoardDirectors th,
+.cha .tbl_data_list.BoardDirectors .list_number02 li,
+.cha .tbl_data_list.keep_all tr td,
+.cha .tbl_wrap.type.Activ .tbl_data_list th,
+.cha .tbl_wrap.type.Activ .tbl_data_list td,
+.cha .tbl_wrap.type.Activ .tbl_data_list.eng_tbl .list_number li,
+.cha .tbl_wrap.type.Activ .tbl_data_list.eng_tbl .list_number02 li,
+.cha .list_type.faq .question_con,
+.cha .tbl_data_view.type .th,
+.cha .tbl_data_view.type label{
+    word-break: keep-all;
+}
+.cha .list_file.download .tit_wrap {
+    word-break: normal;
+}
+.cha .list_type02.hygineer .con,
+.cha .report_box .con{
+    word-break: break-all;
+}
+.cha .humanrights_box .tit {
+    word-break: keep-all;
+}
+
+.cha .tbl_eng .tbl_data_view dt {
+    width: 30%;
+}
+.cha .tbl_eng .tbl_data_view dd {
+    width: 70%;
+}
+
+/******************** CHAT ********************/
+.chat * {
+    word-break: break-all;
+}
+.chat .amcharts-amexport-label {
+    word-break: keep-all;
+}
+.chat .news_wrap .tag,
+.chat .news_wrap .tit_type03{
+    font-family:'Roboto','NotoSansTC','NotoSansSC',sans-serif;
+}
+/* IE Error Popup */
+.chat .ico_ieOnly {
+    background: url("/img/common/ico_ieOnly_chat.png") no-repeat center;
+}
+
+/* Company */
+.chat .dot .txt {
+    word-break: keep-all;
+}
+
+/* Sustainability*/
+.chat .tit_box .txt_type {
+    word-break: break-all;
+}
+.chat .diagram_wrap.bcp {
+    background-image: url(/img/chat/diagram_bcp.gif);
+}
+.chat .diagram_wrap.bcp02 {
+    background-image: url(/img/chat/diagram_bcp02.gif);
+}
+.chat .diagram_wrap.bcp03 {
+    background-image: url(/img/chat/diagram_bcp03.gif);
+}
+.chat .diagram_wrap.dbl {
+    background-image: url(/img/chat/diagram_dbl01.gif);
+}
+.chat .diagram_wrap.dbl02 {
+    background-image: url(/img/chat/diagram_dbl02.gif);
+}
+.chat .diagram_wrap.dbl03 {
+    background-image: url(/img/chat/diagram_dbl03.gif);
+}
+.chat .diagram_wrap.dbl04 {
+    background-image: url(/img/chat/diagram_dbl04.gif);
+}
+.chat .diagram_wrap.dbl05 {
+    background-image: url(/img/chat/diagram_dbl05.gif);
+}
+.chat .diagram_wrap.esg {
+    background-image: url(/img/chat/diagram_esg.gif);
+}
+.chat .diagram_wrap.esg02 {
+    background-image: url(/img/chat/diagram_esg02.gif);
+}
+.chat .diagram_wrap.water {
+    background-image: url(/img/chat/diagram_water01.gif);
+}
+.chat .diagram_wrap.water02 {
+    background-image: url(/img/chat/diagram_water02.gif);
+}
+.chat .diagram_wrap.water03 {
+    background-image: url(/img/chat/diagram_water03.gif);
+}
+.chat .diagram_wrap.ictray {
+    background-image: url(/img/chat/diagram_ictray.gif);
+}
+.chat .diagram_wrap.members {
+    background-image: url(/img/chat/diagram_members.gif);
+}
+.chat .diagram_wrap.members02 {
+    background-image: url(/img/chat/diagram_members02.gif);
+}
+.chat .diagram_wrap.members03 {
+    background-image: url(/img/chat/diagram_members03_211014.gif);
+}
+.chat .diagram_wrap.members04 {
+    background-image: url(/img/chat/diagram_members04.gif);
+}
+.chat .diagram_wrap.members05 {
+    background-image: url(/img/chat/diagram_members05_220106.gif);
+}
+.chat .diagram_wrap.members06 {
+    background-image: url(/img/chat/diagram_members06.gif);
+}
+.chat .diagram_wrap.members07 {
+    padding-top: 17.928%;
+    background-image: url(/img/chat/diagram_members07.gif);
+}
+.chat .diagram_wrap.members08 {
+    background-image: url(/img/chat/diagram_members08.gif);
+}
+.chat .diagram_wrap.members09 {
+    background-image: url(/img/chat/diagram_members09.gif);
+}
+.chat .diagram_wrap.supply {
+    padding-top: 39.639%;
+    background-image: url(/img/cha/diagram_supply.gif);
+}
+.chat .diagram_wrap.supply02 {
+    background-image: url(/img/cha/diagram_supply02.gif);
+}
+.chat .diagram_wrap.supply03 {
+    padding-top: 35.856%;
+    background-image: url(/img/cha/diagram_supply03.gif);
+}
+.chat .diagram_wrap.supply04 {
+    background-image: url(/img/cha/diagram_supply04.gif);
+}
+.chat .diagram_wrap.compliance {
+    background-image: url(/img/chat/diagram_compliance.gif);
+}
+.chat .diagram_wrap.compliance02 {
+    background-image: url(/img/chat/diagram_compliance02.gif);
+}
+.chat .diagram_wrap.compliance03 {
+    background-image: url(/img/chat/diagram_compliance03.gif);
+}
+.chat .diagram_wrap.ethical {
+    background-image: url(/img/chat/diagram_ethical_241220.png);
+}
+.chat .diagram_wrap.ethical02 {
+    background-image: url(/img/chat/diagram_ethical02.gif);
+}
+.chat .diagram_wrap.domination {
+    background-image: url(/img/chat/diagram_domination01.gif);
+}
+.chat .diagram_wrap.domination02 {
+    background-image: url(/img/chat/diagram_domination02.gif);
+}
+.chat .diagram_wrap.domination03 {
+    padding-top: 23.673%;
+    background-image: url(/img/chat/diagram_domination03.gif);
+}
+.chat .career_detail .con {
+    width: calc(100% - 140px);
+}
+.chat .btn_wrap.domination .btn_base {
+    float: left;
+    width: calc((100% - 16px) / 2);
+    margin: 8px 8px 0 0;
+}
+.chat .figure_con .box .tit_figure {
+    display: block;
+}
+/* .chat .list_step.autonomy .step_con.first .tit{
+	margin-bottom: 36px;
+} */
+.chat .ir *,
+.chat .main_ir *,
+.chat .ir .tbody .td.item,
+.chat .box_wrap.director .profile .tit_type03,
+.chat .box_wrap.director .profile_detail dd,
+.chat .box_wrap.director .con,
+.chat .box_wrap.director .con span,
+.chat .tbl_data_list.BoardDirectors th,
+.chat .tbl_data_list.BoardDirectors .list_number02 li,
+.chat .tbl_data_list.keep_all tr td,
+.chat .tbl_wrap.type.Activ .tbl_data_list th,
+.chat .tbl_wrap.type.Activ .tbl_data_list td,
+.chat .tbl_wrap.type.Activ .tbl_data_list.eng_tbl .list_number li,
+.chat .tbl_wrap.type.Activ .tbl_data_list.eng_tbl .list_number02 li,
+.chat .list_type.faq .question_con,
+.chat .tbl_data_view.type .th,
+.chat .tbl_data_view.type label{
+    word-break: keep-all;
+}
+.chat .list_file.download .tit_wrap {
+    word-break: normal;
+}
+.chat .list_file.spotlight .list_type .subject em,
+.chat .list_file.spotlight .list_type .subject,
+.chat .list_type.faq a,
+.chat .list_type.faq .question_con{
+    font-family:'Roboto','NotoSansTC','NotoSansSC',sans-serif;
+}
+.chat .list_type02.hygineer .tit,
+.chat .list_type02.hygineer .con{
+    font-family:'Roboto','NotoSansTC','NotoSansSC',sans-serif;
+    word-break: break-all;
+}
+.chat .report_box .con{
+    word-break: break-all;
+}
+.chat .humanrights_box .tit {
+    word-break: keep-all;
+}
+
+.chat .tbl_eng .tbl_data_view dt {
+    width: 30%;
+}
+.chat .tbl_eng .tbl_data_view dd {
+    width: 70%;
+}
+
+/* Tablet */
+@media all and (max-width: 1120px) {
+    /* 이사회 구성 현황 및 소위원회표 */
+    .eng .tbl_wrap.type.overflow{
+        overflow-y: auto;
+    }
+}
+@media all and (max-width: 1024px) {
+    /* 지속가능경영 - 최근자료 다운로드 */
+    #wrap:not(.kor) .main_sustainability .list_file.download .list_type .tit_wrap {
+        width: inherit;
+    }
+    #wrap:not(.kor) .main_sustainability .list_file.download .list_type .btn_area {
+        width: inherit;
+    }
+
+    /******************** ENG ********************/
+    /* Common */
+    .eng .allmenu_con {
+        width: 21%;
+    }
+    .eng .allmenu_con.sus {
+        width: 37%;
+    }
+    .eng .allmenu_area .allmenu_depth1,
+    .eng .allmenu_area .allmenu_sa {
+        padding: 20px;
+    }
+    .eng .allmenu_area .stit {
+        width: 90px;
+    }
+    .eng .allmenu_area .allmenu_sa .allmenu_depth1 {
+        padding: 0;
+    }
+    .eng .our_wrap {
+        left: 48px;
+    }
+    .eng .esg_con.type .tit_box {
+        top: 303px;
+        max-width: 632px;
+    }
+    .eng .esg_con.type .tit_box .list_btn {
+        margin: 0 -6px -12px;
+    }
+    .eng .esg_con.type02 .tit_box {
+        max-width: 575px;
+        bottom: auto;
+        top: 304px;
+    }
+    .eng .esg_con.type02 .our_wrap {
+        left: auto;
+        right: 0;
+    }
+    .eng .main_sustainability .esg_wrap .esg_con.type02 {
+        margin-bottom: 296px;
+    }
+    .eng .diagram_wrap.bcp {
+        height: auto;
+        padding-top: 0;
+        background-image: none;
+    }
+    .eng .sa_wrap .con {
+        height: 175px;
+    }
+
+    /* 준법경영 - 주요 활동 및 결과표 */
+    .eng .tbl_wrap.wid890 {
+        overflow-x: auto;
+    }
+    .eng .tbl_wrap.type.wid890 .tbl_data_list {
+        max-width: 900px;
+        width: 900px;
+    }
+
+    /******************** JPA ********************/
+    .jpa .diagram_wrap.bcp {
+        background-image: none;
+    }
+
+    /******************** CHA ********************/
+    .cha .diagram_wrap.bcp {
+        background-image: none;
+    }
+
+    /******************** CHAT ********************/
+    .chat .diagram_wrap.bcp {
+        background-image: none;
+    }
+}
+
+@media (max-width: 985px) {
+    /* Reports & Policies - 정책 및 가이드라인, 인증서 */
+    #wrap:not(.kor) .report_down .list_file.download .list_type .tit_wrap {
+        width: 100%;
+        padding-bottom: 16px;
+    }
+    #wrap:not(.kor) .report_down .list_file.download .list_type .btn_area {
+        width: 100%;
+    }
+}
+
+@media (max-width: 950px) {
+    /* Footer > 유휴장비매각 */
+    /******************** KOR ********************/
+    .kor .etc.equipment .line_wrap .tbl_data_view {
+        width: 100%;
+        margin-right: 0;
+        padding: 24px;
+        margin-bottom: 16px;
+    }
+
+    /******************** ENG ********************/
+    .eng .etc.equipment .line_wrap .tbl_data_view dt {width: 40%;}
+    .eng .etc.equipment .line_wrap .tbl_data_view dd {width: 60%;}
+    .eng .etc.equipment .line_wrap .tbl_data_view dd.ma_left {margin-left: 40%;}
+}
+
+@media (max-width: 840px) {
+    .eng .fixed_wrap.product .box_con:nth-child(3) {
+        margin-top: -300px;
+    }
+}
+
+@media (max-width: 820px) {
+    .eng .list_step.complaint p {
+        margin-top: 10px;
+    }
+}
+
+/* Mobile */
+@media all and (max-width: 768px) {
+    /* 투자정보 주주구성, 재무제표 메뉴부분 */
+    #wrap:not(.kor) .ir_wrap04 .menu_area li .mask .menu .txt .pc {
+        display: inline;
+    }
+    #wrap:not(.kor) .ir_wrap04 .menu_area li .mask .menu.line .txt::after {
+        margin-top: 0;
+        right: 36px;
+    }
+    #wrap:not(.kor) .ir_wrap04 .menu_area li .mask .menu.line:hover .txt::after,
+    #wrap:not(.kor) .ir_wrap04 .menu_area li .mask .menu.line:focus .txt::after {
+        right: 26px;
+        transition: all 0.5s ease-in-out;
+    }
+
+    /********** Commmon **********/
+    .eng #header.header_fixed .gnb_depth1.sus .gnb_depth2.inline > li {
+        padding-right: 0;
+    }
+    .eng .list_top .check_area.video .btn_base.link {
+        right: 0;
+    }
+    .eng .bottom_area .copyright,
+    .jpa .bottom_area .copyright,
+    .cha .bottom_area .copyright,
+    .chat .bottom_area .copyright {
+        float: none;
+        width: auto;
+    }
+    .eng .list_top .search_area .input,
+    .jpa .list_top .search_area .input,
+    .cha .list_top .search_area .input,
+    .chat .list_top .search_area .input {
+        width: calc(100% - 96px);
+    }
+    #wrap:not(.kor) .keep_all th,
+    #wrap:not(.kor) .keep_all td {
+        word-break: keep-all;
+    }
+    #wrap:not(.kor) .product_wrap .con .pc {
+        word-break: keep-all;
+    }
+    #wrap:not(.kor) .diagram_wrap.supply {
+        padding-top: 50%;
+    }
+    .jpa .gnb_depth1 .depth1.esg_link:after,
+    .cha .gnb_depth1 .depth1.esg_link:after,
+    .chat .gnb_depth1 .depth1.esg_link:after {
+        top: 18px;
+        left: 45px;
+    }
+
+    /* 지속가능경영 - 최근자료 다운로드 */
+    #wrap:not(.kor)  .main_sustainability .list_file.download .list_type .tit_wrap {
+        width: inherit;
+    }
+    #wrap:not(.kor)  .main_sustainability .list_file.download .list_type .btn_area {
+        width: inherit;
+    }
+
+    /******************** ENG ********************/
+    /* Common */
+    .eng .btn_base.tag {
+        height: auto;
+        padding: 0 16px;
+        line-height: 2;
+    }
+    .eng .btn_base .txt {
+        vertical-align: top;
+    }
+    .eng .list_top .check_area .select {
+        width: calc(100% - 92px);
+    }
+    .eng .list_step.autonomy {
+        margin-bottom: 32px;
+    }
+    .eng .list_type.btn_type .btn_base.call,
+    .eng .list_type.btn_type .btn_base.link {
+        height: 48px;
+    }
+    .eng .list_step.autonomy > li{
+        float: none;
+        width: 100%;
+        margin: 0 0 32px;
+    }
+    .eng .list_step.autonomy > li:nth-child(4), .eng .list_step.autonomy > li:nth-child(5), .eng .list_step.autonomy > li:nth-child(6){
+        Margin-top: 0;
+    }
+    .eng .list_step.autonomy > li:nth-child(3), .list_step.autonomy > li:nth-child(4), .list_step.autonomy > li:nth-child(5){
+        float: none;
+    }
+
+    .eng .btn_base.small.link:after {
+        margin-top: -6px;
+    }
+
+    /* Main */
+    .kor .text_wrap .txt.type02 span:nth-child(9) {
+        display: block;
+        height: 0;
+    }
+    .kor .text_wrap .txt.type03 span:nth-child(8) {
+        display: block;
+        height: 0;
+    }
+    #wrap:not(.kor) .text_wrap .txt.type span:nth-child(11) {
+        display: block;
+        height: 0;
+    }
+    #wrap:not(.kor) .text_wrap .txt.type03 span:nth-child(13) {
+        display: block;
+        height: 0;
+    }
+    .eng .list_step .step {
+        font-size: 14px;
+    }
+    .eng .list_step.labor > li{
+        float: none;
+        width: 100%;
+    }
+    .list_step.labor > li:nth-child(3){
+        float: none !important;
+    }
+    .eng .list_step.labor .height {
+        padding: 0;
+        border: 0;
+    }
+    .eng .list_step.labor .step_con {
+        position: relative;
+        padding: 24px 24px 24px 94px;
+        border: 1px solid #e5e5e5;
+    }
+    .eng .list_step.labor .step,
+    .eng .list_step.labor .con {
+        float: none;
+    }
+    .eng .list_step.labor .icon {
+        position: absolute;
+        left: 24px;
+        top: 24px;
+    }
+    .eng .list_step.labor .bul_type {
+        margin-top: 0;
+        padding: 16px 0 0 0;
+    }
+    .eng .list_step.cooperation > li {
+        padding: 0;
+        border: 0;
+    }
+    .eng .list_step.cooperation .step_con {
+        padding: 24px;
+        border: 1px solid #e5e5e5;
+    }
+    .eng .list_step.cooperation .icon {
+        position: static;
+        margin-bottom: 24px;
+    }
+    .eng .list_step.cooperation .step {
+        font-size: 16px;
+    }
+    .eng .list_step.cooperation .bul_type {
+        padding-left: 0;
+    }
+    .eng .list_step.mineral .step_con.first{
+        padding: 0 24px;
+    }
+    .eng .list_step.mineral > li:first-child .bul_type > li:before {
+        background-color: #666;
+    }
+    .eng .list_step.mineral .step_con {
+        padding: 0 24px;
+    }
+    .eng .list_step.mineral .step_con .icon {
+        position: static;
+        margin-bottom: 24px;
+    }
+    .eng .list_step.mineral .step {
+        margin-bottom: 8px;
+    }
+    .eng .list_step.mineral .con {
+        top: 0;
+    }
+    .eng .list_step.mineral .bul_type {
+        margin-top: 16px;
+        padding-left: 0 24px;
+    }
+    .eng  .list_step.mineral .step_con.first .step{
+        margin-right: 20px;
+        display: inline-block;
+    }
+    /* .eng .list_step.autonomy .step_con {
+        padding: 24px;
+    } */
+    .eng .list_step.autonomy .con {
+        font-size: 20px;
+    }
+    .eng .list_step.autonomy .icon{
+        margin-bottom: 5px;
+    }
+    .eng .sa_wrap .con {
+        height: auto;
+    }
+    /* 준법경영 영문 자율준수 프로그램 운영원칙의 박스에서 글이 가운데가 아니여서 주석처리 */
+    /* .eng .list_step.autonomy .step_con.first .tit{
+        width: 75%;
+    } */
+
+    /* Company */
+    .eng .company .tbl_data_view:not(table) dt,
+    .eng .company .tbl_data_view:not(table) dd {
+        float: none;
+        width: 100%;
+    }
+    /* 회사소개 페이지의 제품바로가기 버튼 아이콘위치 이상으로 주석처리 */
+    /* .eng .fixed_wrap.product .txt_group .btn_base.link:after {
+        top: 0;
+        vertical-align: middle;
+    } */
+    .eng .fixed_wrap.product .box_con:nth-child(3) {
+        margin-top: 0;
+    }
+    .eng .network_menu > li {
+        width: 132px;
+    }
+    .eng .network_menu > li .menu {
+        padding: 0 18px;
+    }
+
+    /* Sustainability */
+    .eng .main_sustainability .dbl_wrap {
+        height: auto;
+        padding-top: 64px;
+    }
+    .eng .list_dbl {
+        display: block;
+        width: 100%;
+        margin-top: 40px;
+    }
+    .eng .list_dbl + .list_dbl {
+        margin-top: 16px;
+    }
+    .eng .list_dbl .dbl_box {
+        display: block;
+        padding: 0;
+    }
+    .eng .list_dbl .dbl_box + .dbl_box {
+        margin-top: 16px;
+    }
+    .eng .list_dbl .dbl_box:last-child {
+        padding: 0;
+    }
+    .eng .list_our .our_con .number {
+        font-size: 22px;
+    }
+    .eng .list_our .our_con .number .unit02 {
+        font-size: 14px;
+    }
+    .eng .esg_con.type .tit_box,
+    .eng .esg_con.type02 .tit_box,
+    .eng .esg_con.type03 .tit_box {
+        max-width: 100%;
+    }
+    .eng .tit_box .list_btn,
+    .eng .esg_con.type .tit_box .list_btn {
+        margin-bottom: 0;
+    }
+    .eng .esg_con .tit_box .list_btn > li:last-child {
+        margin-bottom: 0;
+    }
+    .eng .main_sustainability .esg_wrap .esg_con.type,
+    .eng .main_sustainability .esg_wrap .esg_con.type02 {
+        margin-bottom: 0;
+    }
+    .eng .esg_con.type .list_our,
+    .eng .esg_con.type02 .list_our {
+        margin-left: 0;
+    }
+    .eng .esg_con.type .list_our .our_con,
+    .eng .esg_con.type02 .list_our .our_con {
+        width: 100%;
+        padding-left: 0;
+    }
+    /** Added by Jeonghwan Oh for UI-FR-SA01 ESG box size */
+    .kor .esg_con.type .list_our .our_con,
+    .kor .esg_con.type02 .list_our .our_con {
+        width: 100%;
+        padding-left: 0;
+    }
+    .jpa .esg_con.type .list_our .our_con,
+    .jpa .esg_con.type02 .list_our .our_con {
+        width: 100%;
+        padding-left: 0;
+    }
+    .cha .esg_con.type .list_our .our_con,
+    .cha .esg_con.type02 .list_our .our_con {
+        width: 100%;
+        padding-left: 0;
+    }
+    .chat .esg_con.type .list_our .our_con,
+    .chat .esg_con.type02 .list_our .our_con {
+        width: 100%;
+        padding-left: 0;
+    }
+    /** */
+    .eng .esg_con .list_our .our_con .number {
+        width: 122px;
+    }
+    .eng .tit_box .header {
+        top: -36px;
+        max-width: 100%;
+        padding: 0;
+        background-color: transparent;
+    }
+    .eng .tit_box .tit_type04 {
+        max-width: 290px;
+        height: 36px;
+        padding: 16px 0 0 16px;
+        background-color: #fff;
+        font-size: 14px;
+        font-weight: 400;
+    }
+    .eng .tit_box .txt_type {
+        margin-right: -32px;
+        padding: 8px 16px 20px;
+    }
+    .diagram_wrap .btn_base {
+        height: 40px;
+        padding: 0;
+    }
+    .eng .diagram_wrap.bcp02 {
+        background-image: url(/img/eng/diagram_bcp02_m.gif);
+    }
+    .eng .diagram_wrap.bcp03 {
+        background-image: url(/img/eng/diagram_bcp03_m.gif);
+    }
+    .eng .diagram_wrap.dbl {
+        background-image: url(/img/eng/diagram_dbl01_m.gif);
+    }
+    .eng .diagram_wrap.dbl02 {
+        background-image: url(/img/eng/diagram_dbl02_m.gif);
+    }
+    .eng .diagram_wrap.dbl03 {
+        background-image: url(/img/eng/diagram_dbl03_m.gif);
+    }
+    .eng .diagram_wrap.dbl04 {
+        height: 532px;
+        background-image: url(/img/eng/diagram_dbl04_m.gif);
+    }
+    .eng .diagram_wrap.dbl05 {
+        background-image: url(/img/eng/diagram_dbl05_m.gif);
+    }
+    .eng .diagram_wrap.esg02 {
+        background-image: url(/img/eng/diagram_esg02_m.gif);
+    }
+    .eng .diagram_wrap.ictray {
+        background-image: url(/img/eng/diagram_ictray_m.gif);
+    }
+    .eng .diagram_wrap.members {
+        background-image: url(/img/eng/diagram_members_m.gif);
+    }
+    .eng .diagram_wrap.members02 {
+        background-image: url(/img/eng/diagram_members02_m.gif);
+    }
+    .eng .diagram_wrap.members03 {
+        background-image: url(/img/eng/diagram_members03_m_211014.gif);
+    }
+    .eng .diagram_wrap.members04 {
+        height: 1076px;
+        background-image: url(/img/eng/diagram_members04_m.gif);
+    }
+    .eng .diagram_wrap.members07 {
+        background-image: url(/img/eng/diagram_members07_m.gif);
+    }
+    .eng .diagram_wrap.members08 {
+        height: 706px;
+        background-image: url(/img/eng/diagram_members08_m.gif);
+    }
+    .eng .diagram_wrap.supply02 {
+        background-image: url(/img/eng/diagram_supply02_m.gif);
+    }
+    .eng .diagram_wrap.supply03 {
+        height: 613px;
+        background-image: url(/img/eng/diagram_supply03_m.gif);
+    }
+    .eng .diagram_wrap.compliance {
+        background-image: url(/img/eng/diagram_compliance_m.gif);
+    }
+    .eng .diagram_wrap.compliance02 {
+        height: 316px;
+        background-image: url(/img/eng/diagram_compliance02_m.gif);
+    }
+    .eng .diagram_wrap.compliance03 {
+        height: 938px;
+        background-image: url(/img/eng/diagram_compliance03_m.gif);
+    }
+    .eng .diagram_wrap.ethical {
+        background-image: url(/img/eng/diagram_ethical_m_230622.png);
+    }
+    .eng .diagram_wrap.ethical02 {
+        background-image: url(/img/eng/diagram_ethical02_m.gif);
+    }
+    .eng .diagram_wrap.domination {
+        height: 348px;
+        background-image: url(/img/eng/diagram_domination01_m.gif);
+    }
+    .eng .diagram_wrap.domination02 {
+        background-image: url(/img/eng/diagram_domination02_m.gif);
+    }
+    .eng .diagram_wrap.domination03 {
+        background-image: url(/img/eng/diagram_domination03_m.gif);
+    }
+    .eng .goal_wrap li {
+        width: 100%;
+        margin: 40px 0 0 0;
+    }
+    .eng .goal_wrap li:first-child {
+        margin-top: 0;
+    }
+    .eng .tbl_wrap.type .tbl_data_list {
+        max-width: 900px;
+        width: 900px;
+    }
+    .eng .figure_con .unit.type {
+        font-size: 18px;
+    }
+    .eng .diagram_wrap.talent {
+        margin: 0 auto 40px;
+        height: 564px;
+        margin-bottom: 64px;
+        background-image: url(/img/eng/diagram_members01_m.gif);
+    }
+
+    /* ir */
+    .eng .ir_wrap04 .menu_area li .mask .menu .txt .pc {
+        display: inline;
+    }
+    .eng .ir_wrap04 .menu_area li .mask .menu.line .txt::after {
+        margin-top: 0;
+        right: 36px;
+    }
+
+    .eng .tbl_eng .tbl_data_view dt,
+    .eng .tbl_eng .tbl_data_view dd {
+        float: none;
+        width: 100%;
+    }
+    .vm:not(.kor).conference_popup .vm-content {
+        max-height: 514px;
+    }
+    .vm:not(.kor).conference_popup .vm-content .box_type {
+        height: 122px;
+    }
+
+    /* Sustainability */
+    .eng .btn_wrap.domination .btn_base {
+        float: none;
+        display: block;
+        width: 100%;
+    }
+    .eng .career_detail .con {
+        width: calc(100% - 114px);
+    }
+    .eng .btn_wrap.director .btn_base {
+        float: none;
+        width: 100%;
+        height: auto;
+        margin: 8px 0 0 0;
+        line-height: 1.5;
+    }
+
+    /* Etc */
+    .eng .list_box.icon .txt dt {
+        width: 116px;
+    }
+
+    /******************** JPA ********************/
+    /* Company */
+    .jpa .main_company #content > .tit_wrap .tit_con,
+    .jpa .main_company #content > .tit_wrap .tit_con .pc {
+        letter-spacing: -0.05em;
+    }
+
+    /* Sustainability */
+    .jpa .btn_wrap.domination .btn_base {
+        float: none;
+        display: block;
+        width: 100%;
+    }
+    .jpa .main_sustainability .dbl_wrap {
+        height: auto;
+        padding-top: 64px;
+    }
+    .jpa .list_dbl {
+        display: block;
+        width: 100%;
+        margin-top: 40px;
+    }
+    .jpa .list_dbl + .list_dbl {
+        margin-top: 16px;
+    }
+    .jpa .list_dbl .dbl_box {
+        display: block;
+        padding: 0;
+    }
+    .jpa .list_dbl .dbl_box + .dbl_box {
+        margin-top: 16px;
+    }
+    .jpa .list_dbl .dbl_box:last-child {
+        padding: 0;
+    }
+    .jpa .diagram_wrap.bcp02 {
+        background-image: url(/img/jpa/diagram_bcp02_m.gif);
+    }
+    .jpa .diagram_wrap.bcp03 {
+        background-image: url(/img/jpa/diagram_bcp03_m.gif);
+    }
+    .jpa .diagram_wrap.dbl {
+        background-image: url(/img/jpa/diagram_dbl01_m.gif);
+    }
+    .jpa .diagram_wrap.dbl02 {
+        background-image: url(/img/jpa/diagram_dbl02_m.gif);
+    }
+    .jpa .diagram_wrap.dbl03 {
+        background-image: url(/img/jpa/diagram_dbl03_m.gif);
+    }
+    .jpa .diagram_wrap.dbl04 {
+        height: 460px;
+        background-image: url(/img/jpa/diagram_dbl04_m.gif);
+    }
+    .jpa .diagram_wrap.dbl05 {
+        background-image: url(/img/jpa/diagram_dbl05_m.gif);
+    }
+    .jpa .diagram_wrap.esg02 {
+        background-image: url(/img/jpa/diagram_esg02_m.gif);
+    }
+    .jpa .diagram_wrap.ictray {
+        background-image: url(/img/jpa/diagram_ictray_m.gif);
+    }
+    .jpa .diagram_wrap.members {
+        background-image: url(/img/jpa/diagram_members_m.gif);
+    }
+    .jpa .diagram_wrap.members02 {
+        background-image: url(/img/jpa/diagram_members02_m.gif);
+    }
+    .jpa .diagram_wrap.members03 {
+        background-image: url(/img/jpa/diagram_members03_m_211014.gif);
+    }
+    .jpa .diagram_wrap.members04 {
+        background-image: url(/img/jpa/diagram_members04_m.gif);
+    }
+    .jpa .diagram_wrap.members07 {
+        background-image: url(/img/jpa/diagram_members07_m.gif);
+    }
+    .jpa .diagram_wrap.members08 {
+        height: 662px;
+        background-image: url(/img/jpa/diagram_members08_m.gif);
+    }
+    .jpa .diagram_wrap.supply02 {
+        background-image: url(/img/jpa/diagram_supply02_m.gif);
+    }
+    .jpa .diagram_wrap.supply03 {
+        background-image: url(/img/jpa/diagram_supply03_m.gif);
+    }
+    .jpa .diagram_wrap.compliance {
+        background-image: url(/img/jpa/diagram_compliance_m.gif);
+    }
+    .jpa .diagram_wrap.compliance02 {
+        background-image: url(/img/jpa/diagram_compliance02_m.gif);
+    }
+    .jpa .diagram_wrap.compliance03 {
+        background-image: url(/img/jpa/diagram_compliance03_m.gif);
+    }
+    .jpa .diagram_wrap.ethical {
+        background-image: url(/img/jpa/diagram_ethical_m_230622.png);
+    }
+    .jpa .diagram_wrap.ethical02 {
+        background-image: url(/img/jpa/diagram_ethical02_m.gif);
+    }
+    .jpa .diagram_wrap.domination {
+        background-image: url(/img/jpa/diagram_domination01_m.gif);
+    }
+    .jpa .diagram_wrap.domination02 {
+        background-image: url(/img/jpa/diagram_domination02_m.gif);
+    }
+    .jpa .diagram_wrap.domination03 {
+        padding-top: 25.997%;
+        background-image: url(/img/jpa/diagram_domination03_m.gif);
+    }
+    .jpa .btn_wrap.director .btn_base {
+        width: 100%;
+    }
+    .jpa .outlink:after{
+        top: 6px;
+    }
+    .jpa .list_step.autonomy .step_con.first .tit{
+        margin-bottom:0;
+        margin-top: 10px;
+    }
+    .jpa .list_step.autonomy .step_con.first .icon{
+        margin-bottom: 0 !important;
+    }
+
+    /* IR */
+    .jpa .tbl_eng .tbl_data_view dt,
+    .jpa .tbl_eng .tbl_data_view dd {
+        float: none;
+        width: 100%;
+    }
+
+    /******************** CHA ********************/
+    .cha .esg_con.type02 .list_our .our_con .number {
+        width: 116px;
+    }
+    .cha .btn_wrap.domination .btn_base{
+        float: none;
+        display: block;
+        width: 100%;
+    }
+    .cha .diagram_wrap.bcp02 {
+        background-image: url(/img/cha/diagram_bcp02_m.gif);
+    }
+    .cha .diagram_wrap.bcp03 {
+        background-image: url(/img/cha/diagram_bcp03_m.gif);
+    }
+    .cha .diagram_wrap.dbl {
+        background-image: url(/img/cha/diagram_dbl01_m.gif);
+    }
+    .cha .diagram_wrap.dbl02 {
+        background-image: url(/img/cha/diagram_dbl02_m.gif);
+    }
+    .cha .diagram_wrap.dbl03 {
+        background-image: url(/img/cha/diagram_dbl03_m.gif);
+    }
+    .cha .diagram_wrap.dbl04 {
+        height: 460px;
+        background-image: url(/img/cha/diagram_dbl04_m.gif);
+    }
+    .cha .diagram_wrap.dbl05 {
+        background-image: url(/img/cha/diagram_dbl05_m.gif);
+    }
+    .cha .diagram_wrap.esg02 {
+        background-image: url(/img/cha/diagram_esg02_m.gif);
+    }
+    .cha .diagram_wrap.ictray {
+        background-image: url(/img/cha/diagram_ictray_m.gif);
+    }
+    .cha .diagram_wrap.members {
+        background-image: url(/img/cha/diagram_members_m.gif);
+    }
+    .cha .diagram_wrap.members02 {
+        background-image: url(/img/cha/diagram_members02_m.gif);
+    }
+    .cha .diagram_wrap.members03 {
+        background-image: url(/img/cha/diagram_members03_m_211014.gif);
+    }
+    .cha .diagram_wrap.members04 {
+        background-image: url(/img/cha/diagram_members04_m.gif);
+    }
+    .cha .diagram_wrap.members07 {
+        background-image: url(/img/cha/diagram_members07_m.gif);
+    }
+    .cha .diagram_wrap.members08 {
+        height: 669px;
+        background-image: url(/img/cha/diagram_members08_m.gif);
+    }
+    .cha .diagram_wrap.supply02 {
+        background-image: url(/img/cha/diagram_supply02_m.gif);
+    }
+    .cha .diagram_wrap.supply03 {
+        background-image: url(/img/cha/diagram_supply03_m.gif);
+    }
+    .cha .diagram_wrap.compliance {
+        background-image: url(/img/cha/diagram_compliance_m.gif);
+    }
+    .cha .diagram_wrap.compliance02 {
+        height: 836px;
+        background-image: url(/img/cha/diagram_compliance02_m.gif);
+    }
+    .cha .diagram_wrap.compliance03 {
+        background-image: url(/img/cha/diagram_compliance03_m.gif);
+    }
+    .cha .diagram_wrap.ethical {
+        background-image: url(/img/cha/diagram_ethical_m_230622.png);
+    }
+    .cha .diagram_wrap.ethical02 {
+        background-image: url(/img/cha/diagram_ethical02_m.gif);
+    }
+    .cha .diagram_wrap.domination {
+        background-image: url(/img/cha/diagram_domination01_m.gif);
+    }
+    .cha .diagram_wrap.domination02 {
+        background-image: url(/img/cha/diagram_domination02_m.gif);
+    }
+    .cha .diagram_wrap.domination03 {
+        padding-top: 25.997%;
+        background-image: url(/img/cha/diagram_domination03_m.gif);
+    }
+    .cha .outlink:after{
+        top: 7px;
+    }
+
+    .cha .list_step.autonomy .step_con.first .tit{
+        margin-bottom:0;
+    }
+    .cha .list_step.autonomy .step_con.first .icon{
+        margin-bottom: 0 !important;
+    }
+    .cha .network_menu .menu {
+        white-space: inherit;
+    }
+
+    /* IR */
+    .cha .tbl_eng .tbl_data_view dt,
+    .cha .tbl_eng .tbl_data_view dd {
+        float: none;
+        width: 100%;
+    }
+    /******************** CHAT ********************/
+    .chat .btn_wrap.domination .btn_base{
+        float: none;
+        display: block;
+        width: 100%;
+    }
+    .chat .diagram_wrap.bcp02 {
+        background-image: url(/img/chat/diagram_bcp02_m.gif);
+    }
+    .chat .diagram_wrap.bcp03 {
+        background-image: url(/img/chat/diagram_bcp03_m.gif);
+    }
+    .chat .diagram_wrap.dbl {
+        background-image: url(/img/chat/diagram_dbl01_m.gif);
+    }
+    .chat .diagram_wrap.dbl02 {
+        background-image: url(/img/chat/diagram_dbl02_m.gif);
+    }
+    .chat .diagram_wrap.dbl03 {
+        background-image: url(/img/chat/diagram_dbl03_m.gif);
+    }
+    .chat .diagram_wrap.dbl04 {
+        height: 460px;
+        background-image: url(/img/chat/diagram_dbl04_m.gif);
+    }
+    .chat .diagram_wrap.dbl05 {
+        background-image: url(/img/chat/diagram_dbl05_m.gif);
+    }
+    .chat .diagram_wrap.esg02 {
+        background-image: url(/img/chat/diagram_esg02_m.gif);
+    }
+    .chat .diagram_wrap.ictray {
+        background-image: url(/img/chat/diagram_ictray_m.gif);
+    }
+    .chat .diagram_wrap.members {
+        background-image: url(/img/chat/diagram_members_m.gif);
+    }
+    .chat .diagram_wrap.members02 {
+        background-image: url(/img/chat/diagram_members02_m.gif);
+    }
+    .chat .diagram_wrap.members03 {
+        background-image: url(/img/chat/diagram_members03_m_211014.gif);
+    }
+    .chat .diagram_wrap.members04 {
+        height: 1070px;
+        background-image: url(/img/chat/diagram_members04_m.gif);
+    }
+    .chat .diagram_wrap.members07 {
+        background-image: url(/img/chat/diagram_members07_m.gif);
+    }
+    .chat .diagram_wrap.members08 {
+        height: 669px;
+        background-image: url(/img/chat/diagram_members08_m.gif);
+    }
+    .chat .diagram_wrap.supply02 {
+        background-image: url(/img/chat/diagram_supply02_m.gif);
+    }
+    .chat .diagram_wrap.supply03 {
+        background-image: url(/img/chat/diagram_supply03_m.gif);
+    }
+    .chat .diagram_wrap.compliance {
+        background-image: url(/img/chat/diagram_compliance_m.gif);
+    }
+    .chat .diagram_wrap.compliance02 {
+        background-image: url(/img/chat/diagram_compliance02_m.gif);
+    }
+    .chat .diagram_wrap.compliance03 {
+        background-image: url(/img/chat/diagram_compliance03_m.gif);
+    }
+    .chat .diagram_wrap.ethical {
+        background-image: url(/img/chat/diagram_ethical_m_230622.png);
+    }
+    .chat .diagram_wrap.ethical02 {
+        background-image: url(/img/chat/diagram_ethical02_m.gif);
+    }
+    .chat .diagram_wrap.domination {
+        background-image: url(/img/chat/diagram_domination01_m.gif);
+    }
+    .chat .diagram_wrap.domination02 {
+        background-image: url(/img/chat/diagram_domination02_m.gif);
+    }
+    .chat .diagram_wrap.domination03 {
+        padding-top: 25.997%;
+        background-image: url(/img/chat/diagram_domination03_m.gif);
+    }
+    .chat .outlink:after{
+        top: 7px;
+    }
+    .chat .list_step.autonomy .step_con.first .tit{
+        margin-bottom:0;
+    }
+    .chat .list_step.autonomy .step_con.first .icon{
+        margin-bottom: 0 !important;
+    }
+    .chat .network_menu .menu {
+        white-space: inherit;
+    }
+
+    /* IR */
+    .chat .tbl_eng .tbl_data_view dt,
+    .chat .tbl_eng .tbl_data_view dd {
+        float: none;
+        width: 100%;
+    }
+}
+
+.eng .layer_pop .er_con .date, .jpa .layer_pop .er_con .date, .cha .layer_pop .er_con .date, .chat .layer_pop .er_con .date {
+    margin: 20px 0 40px;
+}
+
+@media all and (max-width: 585px) {
+    /* ir */
+    /* 주주구성 원그래프 */
+    #wrap:not(.kor) .shareholder_chart_wrap .chart_area {
+        height: 400px;
+    }
+}
+
+/* Mobile */
+@media all and (max-width: 440px) {
+    .eng .esg_con.type02 .list_our .our_con .number {
+        height: 60px;
+    }
+
+    /* IR */
+    .cha .ir_top_area .tit_con {
+        font-size: 25px;
+    }
+
+    /* Footer > 유휴장비매각 */
+    .eng .etc.equipment .line_wrap .tbl_data_view dt {
+        width: 100%;
+        margin-bottom: 24px;
+    }
+    .eng .etc.equipment .line_wrap .tbl_data_view dd.ma_left {margin-left: 0;}
+}
+@media all and (max-width: 350px) {
+    /* Company */
+    .kor .main_company,
+    .eng .main_company,
+    .jpa .main_company {
+        background-size: auto 450px;
+    }
+
+    .eng .diagram_wrap.ethical {
+        padding-top: 284%;
+    }
+
+    /* IR */
+    #wrap:not(.kor) .ir_top_area .tit_con {
+        line-height: 1.3;
+    }
+
+    .eng .list_step .step_con.first .tit{
+        font-size: 18px;
+    }
+}
+
+@media all and (max-width: 290px) {
+    /* IR */
+    #wrap:not(.kor) .ir_top_area .tit_con {
+        padding: 45px 15px 8px;
+    }
+}

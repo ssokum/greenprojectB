@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/exampleLayout}">
+
+<th:block layout:fragment="script">
+
+  <script>
+
+  </script>
+</th:block>>
+<th:block layout:fragment="css">
+  <style>
+    .container {
+      text-align: center;
+      max-width: 1300px;
+    }
+    hr{
+      text-align: center;
+      margin: 0px auto;
+    }
+    .bodyText {
+      text-align: center;
+      margin: 0px auto;
+    }
+  </style>
+</th:block>>
+
+
+<div layout:fragment="content" class="container text-center">
+
+
+  <div class="container text-center mb-3">
+    <!-- 헤더 섹션 -->
+    <div class="company-header p-4 mb-4">
+      <div class="col-md-3 text-center">
+        <img src="/images/enterprise/logo8.jpg" class="company-logo" style="width:1200px" alt="기업 로고">
+      </div>
+    </div>
+    <p></p>
+    <!-- 본문 섹션 -->
+    <div class="p-4">
+      <h3><b>CEO 인삿말</b></h3>
+      <h5><em><span style="color:grey"></span></em></h5>
+      <hr style="width:100px">
+      <p><br></p>
+      <div style="font-size:17px;color:#333" class="bodyText">안녕하세요, HeavenBank에 오신 것을 환영합니다.<br><p></p>
+        저희 HeavenBank은 고객의 신뢰를 바탕으로 성장해온 금융기관으로, 항상 고객의 목소리에 귀 기울이며 최상의 금융 서비스를 제공하기 위해 노력하고 있습니다. 우리는 고객의 다양한 금융 니즈를 충족시키기 위해 혁신적인 솔루션과 맞춤형 서비스를 개발하고 있습니다.<br><p></p>
+        우리의 목표는 단순히 금융 거래를 넘어서, 고객의 삶의 질을 향상시키는 것입니다. 앞으로도 HeavenBank는 고객과 함께 성장하며, 지속 가능한 금융 서비스를 통해 사회에 기여하는 은행이 되겠습니다. 여러분의 많은 관심과 성원을 부탁드립니다.<br><p></p>
+        감사합니다.</div>
+      <div style="font-size:17px;color:#333" class="bodyText"><b>HeavenBank CEO E.L</b></div>
+    </div>
+    <p><br></p>
+    <div class="row">
+      <div class="col"><img src="/images/enterprise/8-2.png" alt="기업이미지" style="width:300px;height:300px"></div>
+      <div class="col"><img src="/images/enterprise/8-3.jpg" alt="기업이미지" style="width:300px;height:300px"></div>
+      <div class="col"><img src="/images/enterprise/8-4.jpg" alt="기업이미지" style="width:300px;height:300px"></div>
+    </div>
+    <p><br></p>
+    <div class="row">
+      <div class="col"><button type="button" class="btn btn-dark">개인 금융 서비스</button><br><p></p><span style="color:#222;font-size:15px">예금, 대출, 카드 서비스 등 다양한 개인 맞춤형 금융 상품을 제공합니다.</span></div>
+      <div class="col"><button type="button" class="btn btn-dark">기업 금융 서비스</button><br><p></p><span style="color:#222;font-size:15px">중소기업부터 대기업까지, 기업의 성장과 발전을 지원하는 다양한 금융 솔루션을 제공합니다.</span></div>
+      <div class="col"><button type="button" class="btn btn-dark">자산 관리</button><br><p></p><span style="color:#222;font-size:15px">고객의 자산을 안전하게 관리하고, 투자 기회를 제공하여 재정적 성공을 돕습니다.</span></div>
+    </div >
+    <p><br></p>
+    <hr style="width:1000px">
+
+
+    <h3 style="margin-top:200px"><b>비전과 미션</b></h3>
+    <hr style="width:100px">
+    <p><br></p>
+    <div class="">
+      <div class=""><img src="/images/enterprise/8-6.png" alt="기업이미지"></div>
+    </div>
+    <p><br></p>
+    <hr style="width:1000px">
+    <p><br></p>
+    <h3 style="margin-top:200px"><b>혁신과 기술</b></h3>
+    <hr style="width:100px">
+    <p><br></p>
+    <div style="font-size:17px;color:#333" class="bodyText">
+      HeavenBank는 최신 금융 기술을 적극 도입하여 고객에게 더 나은 서비스를 제공합니다. 인공지능(AI) 기반의 상담 서비스와 빅데이터 분석을 통해 고객의 니즈를 정확히 파악하고, 맞춤형 서비스를 제공하는 데 힘쓰고 있습니다.
+    </div>
+    <h3 style="margin-top:200px"><b>사회적 책임</b></h3>
+    <hr style="width:100px">
+    <p><br></p>
+    <div style="font-size:17px;color:#333" class="bodyText">
+      HeavenBank는 지속 가능한 금융 서비스를 통해 사회에 기여하고 있습니다. 우리는 지역 사회와 함께 성장하며, 다양한 사회 공헌 활동을 통해 긍정적인 변화를 만들어가고 있습니다.<br><p></p>
+
+      HeavenBank는 고객의 삶을 더 풍요롭게 만드는 금융 서비스를 제공하며, 여러분의 믿음직한 파트너가 되겠습니다.
+    </div>
+
+    </div>
+      <div class="company-footer text-center" style="background-color:#161179;color:white;margin-top:200px;padding:150px">
+        <div class="">
+        <p>CONTECT HeavenBank</p>
+        <button type="button" class="btn btn-outline-danger">문의하기</button>
+        <p>영업문의 010-8888-9999 / 기술문의 070-7077-8888 / 대표전화 070-8888-8888 / Email. contact_at_heavenbank@gmail.com</p>
+        <p>contact_at_<a href="https://www.hanalife.co.kr/" target="_blank">www.hanalife.co.kr(이미지 출처:하나은행)</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+</html>

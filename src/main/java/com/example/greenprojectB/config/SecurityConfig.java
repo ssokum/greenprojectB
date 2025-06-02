@@ -34,7 +34,10 @@ public class SecurityConfig {
                     .ignoringRequestMatchers("/professional/**")
                     .ignoringRequestMatchers("/faq/**")
                     .ignoringRequestMatchers("/recruit/**")
+                    .ignoringRequestMatchers("/notice/**")
                     .ignoringRequestMatchers("/ckeditor/**") // CKEditor 업로드 경로 제외
+                    .ignoringRequestMatchers("/equipment/**")
+                    .ignoringRequestMatchers("/equipmentImage/**")
                     // CSRF 토큰을 쿠키로 저장, HttpOnly 설정 비활성화
                     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
           .formLogin(form -> form
@@ -63,10 +66,12 @@ public class SecurityConfig {
             .requestMatchers("/ckeditor/**").permitAll()
             .requestMatchers("/company/**").permitAll()
             .requestMatchers("/company/companyLogin").permitAll()
+            .requestMatchers("/equipment/**").permitAll()
+            .requestMatchers("/equipmentImage/**").permitAll()
             .requestMatchers("/notice/**").permitAll()
             .requestMatchers("/professional/**").hasRole("ADMIN") //나중에 바꾸기
-            .requestMatchers("/recruit/recruitInput").hasRole("ENTERPRISE")
-            .requestMatchers("/notice/noticeWrite", "/notice/noticeUpdate","/faq/**").hasRole("ADMIN")
+            .requestMatchers("/recruit/recruitInput").hasRole("COMPANY")
+            .requestMatchers("/notice/noticeWrite", "/notice/noticeUpdate","/faq/**","/equipment/**").hasRole("ADMIN")
             .requestMatchers("/admin/**").hasRole("ADMIN")
             .anyRequest().authenticated());
 
