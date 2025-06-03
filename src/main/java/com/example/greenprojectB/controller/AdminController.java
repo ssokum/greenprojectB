@@ -3,6 +3,7 @@ package com.example.greenprojectB.controller;
 import com.example.greenprojectB.Handler.TimeHandler;
 import com.example.greenprojectB.dto.SummarySensorDto;
 import com.example.greenprojectB.entity.Company;
+import com.example.greenprojectB.entity.Member;
 import com.example.greenprojectB.entity.Sensor;
 import com.example.greenprojectB.entity.Threshold;
 import com.example.greenprojectB.service.AdminService;
@@ -17,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @lombok.extern.slf4j.Slf4j
 @Controller
@@ -30,48 +33,31 @@ public class AdminController {
     private final AdminService adminService;
 
     @GetMapping("/index")
-    public String adminIndexGet(Model model, HttpServletRequest request) {
+    public String adminPageGet(HttpServletRequest request, Model model){
+        //String sName = (String)request.getAttribute("sName");
+        String sName = "1000003";
+
+        Member member = adminService.getMemberId(sName);
+        ArrayList<Member> members = adminService.getMembers();
+
+        System.out.println("member ========================================================================> "+member);
+        System.out.println("sName ========================================================================> "+sName);
+
+        model.addAttribute("member", member);
+        model.addAttribute("members", members);
+
         return "admin/index";
     }
 
-    @GetMapping("/register-device")
-    public String adminRegisterDeviceGet(Model model) {
-        return "admin/register-device";
-    }
-
-    @GetMapping("/setup-device")
-    public String adminSetupDeviceGet(Model model) {
-        return "admin/setup-device";
-    }
-
     @ResponseBody
-    @PostMapping("/getCompany")
-    public Company getCompanyPost(String companyId) {
-        return adminService.getCompany(companyId);
+    @PostMapping("/deleteMember")
+    public int deleteMemberPost(String memberId){
+        System.out.println("deleteMemberId ========================================================================> "+memberId);
+        int res = adminService.setDeleteMember(memberId);
+        System.out.println("deleteres ========================================================================> "+res);
+
+        return adminService.setDeleteMember(memberId);
     }
-
-    @ResponseBody
-    @PostMapping("/getDeviceCode")
-    public List<String> getDeviceCodePost(String companyId) {
-        return adminService.getDeviceCode(companyId);
-    }
-
-    @ResponseBody
-    @PostMapping("/getThreshold")
-    public ArrayList<Threshold> getThresholdPost(String companyId, String deviceCode) {
-        return adminService.getThreshold(companyId, deviceCode);
-    }
-
-    @ResponseBody
-    @PostMapping("/updateSensorByExcel")
-    public String updateSensorByExcelPost(MultipartFile fName) {
-        String oFileName = fName.getOriginalFilename();
-        //System.out.println("==============>> oFileName : " + oFileName);
-        adminService.fileCsvToMysql(fName);
-
-        return "1";
-    }
-
 
 
 }

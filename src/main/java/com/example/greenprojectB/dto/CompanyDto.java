@@ -25,10 +25,6 @@ public class CompanyDto {
   @NotEmpty(message = "아이디는 필수입력 입니다.")
   private String companyId;
 
-  @NotEmpty(message = "비밀번호는 필수입력 입니다.")
-  @Length(min = 4, max = 20, message = "비밀번호는 4~20 이하로 입력해 주세요")
-  private String password;
-
   @NotEmpty(message = "이름은 필수입력 입니다.")
   private String companyName;
 
@@ -37,7 +33,13 @@ public class CompanyDto {
 
 
   private String ceoName;
+
   private String address;
+  private String postCode;
+  private String address１;
+  private String address２;
+
+
 
   @NotEmpty(message = "이메일은 필수입력 입니다.")
   @Email(message = "이메일 형식을 확인하세요")
@@ -55,10 +57,14 @@ public class CompanyDto {
   private int isDeleted;
   private LocalDateTime createdAt;
   private LocalDateTime updateAt;
-  private Role role;
+  private String role;
+
+  @Transient
+  private String password;
+
 
   // Entity to DTO
-  public static CompanyDto createMemberDto(Optional<Company> opCompany ) {
+  public static CompanyDto createCompanyDto(Optional<Company> opCompany ) {
 //    Member member = Member.builder()
 //            .build();
 
@@ -67,7 +73,6 @@ public class CompanyDto {
     return CompanyDto.builder()
             .companyIdx(opCompany.get().getCompanyIdx())
             .companyId(opCompany.get().getCompanyId())
-            .password(opCompany.get().getPassword())
             .companyName(opCompany.get().getCompanyName())
             .businessNumber(opCompany.get().getBusinessNumber())
             .ceoName(opCompany.get().getCeoName())

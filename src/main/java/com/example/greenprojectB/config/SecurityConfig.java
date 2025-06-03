@@ -29,6 +29,7 @@ public class SecurityConfig {
                     .csrfTokenRequestHandler(requestHandler)
                     // /register 경로에 대해 CSRF 보호 비활성화
                     .ignoringRequestMatchers("/register")
+                    .ignoringRequestMatchers("/member/**")
                     .ignoringRequestMatchers("/company/**")
                     .ignoringRequestMatchers("/admin/**")
                     .ignoringRequestMatchers("/professional/**")

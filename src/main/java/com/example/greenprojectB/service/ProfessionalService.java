@@ -2,6 +2,7 @@ package com.example.greenprojectB.service;
 
 import com.example.greenprojectB.dto.SummarySensorDto;
 import com.example.greenprojectB.entity.Company;
+import com.example.greenprojectB.entity.EventLog;
 import com.example.greenprojectB.entity.Sensor;
 import com.example.greenprojectB.dto.Stats;
 import com.example.greenprojectB.entity.Threshold;
@@ -135,6 +136,11 @@ public class ProfessionalService {
                 thresholdRepository.save(threshold);
             }
         }
+
+    }
+
+    public EventLog createEventLog(EventLog eventLog) {
+        return eventLogRepository.save(eventLog);
     }
 
     public void inputThreshold(Threshold threshold){

@@ -35,7 +35,7 @@ public class EventLog {
   @Column(name = "event_type", length = 100)
   private String eventType;
 
-  @Column(name = "event_subtype", length = 100)
+  @Column(name = "event_subtype", length = 100, columnDefinition = "sensor")
   private String eventSubtype;
 
   @Column(length = 100)

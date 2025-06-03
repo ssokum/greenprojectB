@@ -4,12 +4,14 @@ import com.example.greenprojectB.Handler.TimeHandler;
 import com.example.greenprojectB.dto.SummarySensorDto;
 import com.example.greenprojectB.dto.ThresholdDto;
 import com.example.greenprojectB.entity.Company;
+import com.example.greenprojectB.entity.EventLog;
 import com.example.greenprojectB.entity.Sensor;
 import com.example.greenprojectB.entity.Threshold;
 import com.example.greenprojectB.service.CompanyService;
 import com.example.greenprojectB.service.ProfessionalService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -267,6 +269,29 @@ public class ProfessionalController {
     }
 
     return summarySensors;
+  }
+
+  @Transactional
+  @PostMapping("/createEventLog")
+  public int createEventLogPost(HttpServletRequest request ,LocalDateTime time, String type, String deviceCode, double data) {
+    EventLog eventLog = new EventLog();
+
+    //String sName = request.getAttribute("sName");
+    String sName = "1000003";
+
+    eventLog.setCompanyId(sName);
+    eventLog.setEventType("Threshold");
+    eventLog.setEventSubtype(type);
+    eventLog.setEventTime(time);
+    eventLog.setDeviceCode(deviceCode);
+    eventLog.setData(data);
+    eventLog.setMessage("데이터가 임계값을 벗어남");
+
+    EventLog res = professionalService.createEventLog(eventLog);
+    if(res != null)
+      return 1;
+    else
+      return 0;
   }
 
 }

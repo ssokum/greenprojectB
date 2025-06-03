@@ -2,7 +2,9 @@ package com.example.greenprojectB.controller;
 
 import com.example.greenprojectB.constant.Role;
 import com.example.greenprojectB.dto.MemberDto;
+import com.example.greenprojectB.entity.Company;
 import com.example.greenprojectB.entity.Member;
+import com.example.greenprojectB.service.CompanyService;
 import com.example.greenprojectB.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -10,8 +12,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,10 +19,10 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.Random;
 
 
 @Controller
@@ -32,6 +32,7 @@ import java.util.Random;
 public class MemberController {
 
   private final MemberService memberService;
+  private final CompanyService companyService;
   private final PasswordEncoder passwordEncoder;
 
 //  @Autowired
@@ -96,28 +97,57 @@ public class MemberController {
                                  RedirectAttributes rttr) {
     // Spring Security에서 사용자 정보를 가져온다.
     String id = authentication.getName().toString();
-    System.out.println("================> 로그인post통과(id) : " + id);
+
+    // 1. 멤버에서 조회
     Member member = memberService.getMemberDto(id);
-    System.out.println("================> 로그인post통과(dto) : " + member);
-    rttr.addFlashAttribute("message", member.getMemberName() + "님 로그인 되었습니다.");
+    System.out.println("================> 로그인post통과(id) : " + id + " , member.getRole() : " + member.getRole());
 
-    // 세션처리....
-    HttpSession session = request.getSession();
-    session.setAttribute("sName", member.getMemberName());
+    if(member != null) {
 
-    // 쿠키처리....
+      System.out.println("================> 로그인post통과(dto) : " + member);
+      rttr.addFlashAttribute("message", member.getMemberName() + "님 로그인 되었습니다.");
 
-    // 등급(레벨) 처리
-    String strLevel = member.getRole().toString();
-    if(strLevel.equals("ADMIN")) strLevel = "관리자";
-    else if(strLevel.equals("OPERATOR")) strLevel = "운영자";
-    else if(strLevel.equals("USER")) strLevel = "정회원";
+      // 세션처리....
+      HttpSession session = request.getSession();
+      session.setAttribute("sName", member.getMemberName());
 
-    log.info("====================>> 회원 등급 : " + strLevel + " , sName : " + member.getMemberName());
-    session.setAttribute("strLevel", strLevel);
+      // 쿠키처리....
 
-    return "redirect:/";
+      // 등급(레벨) 처리
+      String strLevel = member.getRole().toString();
+      if(strLevel.equals("ADMIN")) strLevel = "관리자";
+      else if(strLevel.equals("OPERATOR")) strLevel = "운영자";
+      else if(strLevel.equals("USER")) strLevel = "정회원";
+
+      log.info("====================>> 회원 등급 : " + strLevel + " , sName : " + member.getMemberName());
+      session.setAttribute("strLevel", strLevel);
+
+      return "redirect:/";
+
+    } else {
+      //2. 멤버가 아니면 회사에서 조회
+      Company company = companyService.getCompanyDto(id);
+      if(company != null) {
+        //회사 로그인 처리
+        rttr.addFlashAttribute("message", company.getCompanyName() + "님 (기업) 로그인 되었습니다.");
+        HttpSession session = request.getSession();
+        session.setAttribute("sCName", company.getCompanyName());
+
+        // 등급(레벨) 처리
+//        String strLevel = company.getRole().toString();
+//        if(strLevel.equals("ADMIN")) strLevel = "관리자";
+//        else if(strLevel.equals("OPERATOR")) strLevel = "운영자";
+//        else if(strLevel.equals("USER")) strLevel = "정회원";
+//
+//        log.info("====================>> 회원 등급 : " + strLevel + " , sName : " + company.getCompanyName());
+//        session.setAttribute("strLevel", strLevel);
+
+
+      }
+      return "redirect:/";
+    }
   }
+
 
   @GetMapping("/memberLogout")
   public String memberLogoutGet(HttpServletRequest request, HttpServletResponse response,

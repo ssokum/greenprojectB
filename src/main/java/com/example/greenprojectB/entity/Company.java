@@ -33,9 +33,6 @@ public class Company {
   @Column(name = "company_id", length = 20, nullable = false, unique = true)
   private String companyId;
 
-  @NotNull
-  private String password;
-
   @Column(name = "company_name",length = 255, nullable = false)
   private String companyName;
 
@@ -51,7 +48,7 @@ public class Company {
   @Column(name = "company_email",unique = true, length = 50)
   private String companyEmail;
 
-  @Column(name = "company_homepage",length = 50, nullable = false)
+  @Column(name = "company_homepage",length = 50)
   private String companyHomepage;
 
   @Column(name = "phone_number",unique = true, length = 50)
@@ -75,11 +72,12 @@ public class Company {
   @Column(name = "update_at")
   private LocalDateTime updateAt;
 
-  private Role role;
+  @Column(name = "role")
+  private String role;
 
 
   // dto to Entity
-  public static Company createCompany(CompanyDto dto, PasswordEncoder passwordEncoder) {
+  public static Company createCompany(CompanyDto dto) {
 //    Member member = Member.builder()
 //            .build();
 
@@ -88,7 +86,6 @@ public class Company {
     return Company.builder()
             .companyIdx(dto.getCompanyIdx())
             .companyId(dto.getCompanyId())
-            .password(passwordEncoder.encode(dto.getPassword()))
             .companyName(dto.getCompanyName())
             .businessNumber(dto.getBusinessNumber())
             .ceoName(dto.getCeoName())
@@ -101,7 +98,7 @@ public class Company {
             .isDeleted(0)
             .createdAt(null)
             .updateAt(null)
-            .role(Role.COMPANY)
+            .role("COMPANY")
             .build();
   }
 }

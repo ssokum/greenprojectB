@@ -63,11 +63,14 @@
         <input type="hidden" th:value="${deviceCode[0]}" name="deviceCode" id="deviceCode"/>
 
         <!-- nav -->
-        <ul class="nav nav-tabs" id="device-nav" th:each="dc: ${deviceCode}">
-          <li class="nav-item">
-            <a class="nav-link" href="#" onclick="getDeviceCode(this)" th:text="${dc}"></a>
-          </li>
-        </ul>
+        <th:block th:if="${deviceCode == null}">
+          <input type="hidden" th:value="${deviceCode[0]}" id="deviceCode"/>
+          <ul class="nav nav-tabs dv_nav" id="device-nav" th:each="dc: ${deviceCode}">
+            <li class="nav-item">
+              <a class="nav-link" href="#" onclick="getDeviceCode(this)" th:text="${dc}"></a>
+            </li>
+          </ul>
+        </th:block>
 
         <button type="submit" class="btn btn-success" id="input_btn" style="display: none;">저장</button>
 

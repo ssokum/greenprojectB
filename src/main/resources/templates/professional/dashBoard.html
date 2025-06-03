@@ -25,57 +25,128 @@
 
 <th:block layout:fragment="css">
     <style th:inline="css">
-        .bodyCenter {
-            width: 80%;
+        .bodyCenter{
+            width: 90%;
             margin: 0px auto;
+            display: flex;
+        }
+
+        .div-top{
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .dashboard{
+            display: flex;
+            flex-direction: column;
+            width: 80%;
+            margin: 40px 30px;
         }
 
         .card-header{
           display: flex;
           justify-content: space-between;
         }
+        .db-menu{
+            width: 14%;
+            border-right: 1px solid black;
+            padding: 40px 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .dashboard{
+            width: 80%;
+        }
+
+        #apiTable{
+            border-collapse: collapse;
+            width: 480px;
+            margin: 33px 40px;
+        }
+        #apiTable th, #apiTable td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+        #apiTable th {
+            background-color: #eee;
+        }
+        .chart-box{
+            display: flex
+        }
+        .chart{
+            width: 850px;
+        }
+        .db_nav a{
+            margin-bottom: 25px;
+        }
+        .dv_nav li{
+            border-top-right-radius: 12px;
+            border-top-left-radius: 12px;
+            background-color: #e8dcfd;
+        }
+
+        .dv_nav a:hover{
+            background-color: #c7a6ff;
+        }
+
+        .db_main{
+            padding: 30px 20px 0px 20px;
+        }
+;
     </style>
 </th:block>
 
 <div class="bodyCenter" layout:fragment="content">
+    <div class="db-menu">
     <!-- tokens -->
     <div>
         <input type="hidden" th:value="${_csrf.token}" name="csrfToken" id="csrfToken"/>
         <input type="hidden" th:value="${_csrf.headerName}" name="csrfHeader" id="csrfHeader"/>
         <input type="hidden" th:value="${sName}" name="sName" id="sName"/>
     </div>
-
-    <div class="cp_pf-nav">
-        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling"
-                aria-controls="offcanvasScrolling">Enable body scrolling
-        </button>
-
-        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-             id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Offcanvas with body scrolling</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <div class="nav-item">
-                    <a th:href="@{/professional/dashBoard}" class="dropdown-item">Dash Board</a>
-                    <a th:href="@{/professional/register-device}" class="dropdown-item">Register Device</a>
-                    <a th:href="@{/professional/setup-device}" class="dropdown-item">Setup Device</a>
-                </div>
-            </div>
+        <div class="nav-item db_nav">
+            <a th:href="@{/professional/dashBoard}" class="dropdown-item">Dash Board</a>
+            <a th:href="@{/professional/register-device}" class="dropdown-item">Register Device</a>
+            <a th:href="@{/professional/setup-device}" class="dropdown-item">Setup Device</a>
         </div>
     </div>
-
+    <div class="dashboard">
     <!-- nav -->
-    <input type="hidden" th:value="${deviceCode[0]}" id="deviceCode"/>
-    <ul class="nav nav-tabs" id="device-nav" th:each="dc: ${deviceCode}">
-        <li class="nav-item">
-            <a class="nav-link" href="#" onclick="getDeviceCode(this)" th:text="${dc}"></a>
-        </li>
-    </ul>
+        <th:block th:if="${deviceCode == null}">
+            <input type="hidden" th:value="${deviceCode[0]}" id="deviceCode"/>
+            <ul class="nav nav-tabs dv_nav" id="device-nav" th:each="dc: ${deviceCode}">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="getDeviceCode(this)" th:text="${dc}"></a>
+                </li>
+            </ul>
+        </th:block>
 
+        <div class="div-top">
+            <div class="left">
+                <ul class="nav nav-tabs dv_nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">ㅇㅇㅇㅇㅇㅇㅇㅇㅇ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">ㅇㅇㅇㅇㅇㅇㅇㅇㅇ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">ㅇㅇㅇㅇㅇㅇㅇㅇㅇ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">ㅇㅇㅇㅇㅇㅇㅇㅇㅇ</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="right">
+                <button type="button" class="btn btn-outline-primary" style="width: 65px; margin-right: 25px;" onclick="window.print()">인쇄</button>
+            </div>
+        </div>
+
+        <div class="db_main">
     <!-- Chart -->
-    <div class="row">
+    <div class="row db-chart">
         <div id="date-filter">
             <label for="df_start-date">시작일:</label>
             <input type="datetime-local" id="df_start-date" name="startDate">
@@ -85,23 +156,30 @@
 
             <button type="button" onclick="getChart()" class="btn btn-outline-success">조회</button>
         </div>
-        <div class="col-xl-6" style="width: 100%;">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <div class="left">
-                        <i class="fas fa-chart-area me-1"></i>
-                        <span class="card-title" th:text="${sensorValue[0]}"></span>
+        <div class="chart-box">
+            <div class="col-xl-6 chart" style="width: 810px;">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="left">
+                            <i class="fas fa-chart-area me-1"></i>
+                            <span class="card-title" th:text="${sensorValue[0]}"></span>
+                        </div>
+                        <div class="right">
+                            <select class="card-select">
+                                <option th:each="sv : ${sensorValue}" th:value="${sv}" th:text="${sv}"></option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="right">
-                        <select class="card-select">
-                            <option th:each="sv : ${sensorValue}" th:value="${sv}" th:text="${sv}"></option>
-                        </select>
+                    <div class="chart-failed" style="display: none;"></div>
+                    <div class="card-body">
+                        <canvas id="myAreaChart" width="810px" height="40px"></canvas>
                     </div>
                 </div>
-                <div class="chart-failed" style="display: none;"></div>
-                <div class="card-body">
-                    <canvas id="myAreaChart" width="100%" height="40px"></canvas>
-                </div>
+            </div>
+            <div>
+                <table id="apiTable">
+
+                </table>
             </div>
         </div>
     </div>
@@ -110,7 +188,7 @@
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            DataTable Example
+            Sensor DataTable
         </div>
         <div class="card-body">
             <table id="datatablesSimple"  class="table table-bordered">
@@ -124,16 +202,6 @@
                     <th>이벤트</th>
                 </tr>
                 </thead>
-                <tfoot>
-                <tr>
-                    <th>번호</th>
-                    <th>센서</th>
-                    <th>최솟값</th>
-                    <th>평균값</th>
-                    <th>최댓값</th>
-                    <th>이벤트</th>
-                </tr>
-                </tfoot>
                 <tbody class="sensor_table">
                     <tr>
                         <td>.</td>
@@ -141,6 +209,7 @@
                 </tbody>
             </table>
         </div>
+    </div>
     </div>
 
     <!-- Modal -->
@@ -163,6 +232,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <!-- script  -->
@@ -282,6 +352,10 @@
                                     if (myLineChart.data.labels.length > 3000) {
                                         myLineChart.data.labels.shift();
                                         myLineChart.data.datasets[0].data.shift();
+                                    }
+
+                                    if(sensor[type] < lowThreshold || sensor[type] < highThreshold){
+                                        updateEventLog(datetime, type, deviceCode, sensor[type]);
                                     }
                                 });
                             } else {
@@ -644,6 +718,72 @@
             getThreshold();
             updateSensorData("create");
           }
+
+    function createEventLog(time, type, deviceCode, data){
+        $.ajax({
+            url  : "/professional/createEventLog",
+            type : "post",
+            data : {time: time, type: type, deviceCode: deviceCode, data: data} ,
+            processData: false,
+            contentType: false,
+            beforeSend : function(xhr) { xhr.setRequestHeader(header, token); },
+            success:function(res) {
+              if(res != "0") {
+                alert(type+"가 임계값을 벗어났습니다("+time+")");
+              }
+              else console.log("event_log 저장 실패");
+            },
+            error : function() { alert("전송오류!"); }
+        });
+
+    }
+
+
+    API_URL = 'http://apis.data.go.kr/6430000/realtimeStandbyInfoService/getRealtimeStandbyInfo?serviceKey=25dB2HLk%2FnXLEM5tsaYjAahwEUzZgYn1ReLe98LeWhGwQBxtXzIgcNEAq1d6X5P5HFiiK%2Bd3x%2Bszc%2BVbpOkodA%3D%3D&currentPage=1&perPage=10&CODE=533112'; // ✅ 여기에 실제 API 주소 입력
+
+   fetch(API_URL)
+    .then(response => response.json())
+    .then(data => {
+        const body = data.body;
+        const table = document.querySelector("#apiTable");
+
+        // 기존 테이블 초기화
+        table.innerHTML = "";
+
+        // 새 구조: tbody 없이 전체를 새로 만듦
+        const headers = {
+            TIME: "TIME",
+            SO2: "SO₂",
+            MINU: "PM10",
+            OZ: "O₃",
+            NO2: "NO₂",
+            CMO: "CO",
+            ULFPTC: "초미세먼지"
+        };
+
+        // tbody 생성
+        const tbody = document.createElement("tbody");
+
+        // body[0] 기준으로 세로 행 생성
+        const item = body[0];
+
+        for (const key in headers) {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <th>${headers[key]}</th>
+                <td>${item[key]}</td>
+            `;
+            tbody.appendChild(row);
+        }
+
+        table.appendChild(tbody);
+    })
+    .catch(error => {
+        console.error("API 호출 실패:", error);
+        document.querySelector("#apiTable").innerHTML = "<tr><td colspan='2'>데이터 로드 실패</td></tr>";
+    });
+
+
 
         </script>
     </th:block>

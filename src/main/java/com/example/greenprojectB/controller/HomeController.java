@@ -1,10 +1,7 @@
 package com.example.greenprojectB.controller;
 
-import com.example.greenprojectB.service.AdminService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,13 +14,11 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@RequiredArgsConstructor
 @Controller
 public class HomeController {
-  private final AdminService adminService;
 
   // ckeditor에서의 파일 업로드 처리
-  @PostMapping("/ckeditor/imageUploadCompany")
+  @PostMapping("/ckeditor/imageUpload")
   @ResponseBody
   public void imageUploadPost(@RequestParam("upload") MultipartFile upload,
                               @RequestParam("CKEditorFuncNum") String callback,
@@ -120,18 +115,18 @@ public class HomeController {
   }
 
   // ckeditor에서의 파일 업로드 처리
-  @PostMapping("/ckeditor/imageUploadEquipment")
+  @PostMapping("/ckeditor/imageUploadCompany")
   @ResponseBody
-  public void imageUploadEquipmentPost(@RequestParam("upload") MultipartFile upload,
-                                       @RequestParam("CKEditorFuncNum") String callback,
-                                       HttpServletRequest request,
-                                       HttpServletResponse response) throws IOException {
+  public void imageUploadCompanyPost(@RequestParam("upload") MultipartFile upload,
+                                   @RequestParam("CKEditorFuncNum") String callback,
+                                   HttpServletRequest request,
+                                   HttpServletResponse response) throws IOException {
 
     response.setCharacterEncoding("utf-8");
     response.setContentType("text/html;charset=utf-8");
 
     // 저장 경로 (실제 경로에 맞게 조정)
-    String realPathPath = request.getServletContext().getRealPath("/equipmentImage/");
+    String realPathPath = request.getServletContext().getRealPath("/company/");
     File folder = new File(realPathPath);
     if (!folder.exists()) folder.mkdirs();
 
@@ -141,7 +136,7 @@ public class HomeController {
     File file = new File(realPathPath, newName);
     upload.transferTo(file);
 
-    String fileUrl = request.getContextPath() + "/equipmentImage/" + newName;
+    String fileUrl = request.getContextPath() + "/company/" + newName;
 
     // 콜백 응답
     PrintWriter out = response.getWriter();
@@ -150,5 +145,7 @@ public class HomeController {
     out.println("</script>");
     out.flush();
   }
+
+
 
 }
